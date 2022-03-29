@@ -1,4 +1,4 @@
-import { Component, createSignal, For } from "solid-js";
+import { Component, createSignal, For, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { defaultList, IListFile } from "../components/ListFile";
 import { createStore, unwrap } from "solid-js/store";
@@ -10,6 +10,7 @@ import {
 } from "../components/KeyPair";
 import { loadFile, writeFile } from "../components/filesystem-abstract";
 import { decryptJsonFile, encryptJsonFile } from "../components/Crypto";
+import { ILoaded } from "../components/utils";
 
 const [saved, setSaved] = createSignal(true);
 
@@ -19,7 +20,11 @@ const Home: Component = () => {
     loaded: false,
   });
 
-  const [keys, setKeys] = createSignal<IKeyPair>();
+  const [keys, setKeys] = createStore<IKeyPair & ILoaded>({
+    iv: null as any,
+    key: null as any,
+    loaded: false,
+  });
 
   async function NewKeypair() {
     const PAIR = await createNewKeypair();
@@ -27,27 +32,19 @@ const Home: Component = () => {
   }
 
   async function NewList() {
-    const key = keys();
-
-    if (!key) {
-      return alert("Load a keypair first");
-    }
-    
-    const enc = await encryptJsonFile(key, JSON.stringify(defaultList));
+    const enc = await encryptJsonFile(keys, JSON.stringify(defaultList));
     await writeFile(enc, ".bin");
   }
 
   async function LoadKeypair() {
-    setKeys(await loadKeyPair());
+    const kp = await loadKeyPair();
+
+    setKeys((prev) => ({ ...prev, ...kp, loaded: true }));
   }
 
   async function LoadList() {
-    const k = keys();
-
-    if (!k) return alert("Load a keypair first");
-
     const file = await loadFile(".bin");
-    const dec = await decryptJsonFile<IListFile>(k, file);
+    const dec = await decryptJsonFile<IListFile>(keys, file);
     setList((prev) => ({ ...prev, ...dec, loaded: true }));
   }
 
@@ -56,11 +53,7 @@ const Home: Component = () => {
   }
 
   async function Save() {
-    const k = keys();
-
-    if (!k) return alert("Load a keypair first");
-
-    const enc = await encryptJsonFile(k, JSON.stringify(unwrap(list)));
+    const enc = await encryptJsonFile(keys, JSON.stringify(unwrap(list)));
 
     await writeFile(enc, ".bin");
   }
@@ -75,39 +68,40 @@ const Home: Component = () => {
       />
       <div>
         <button onClick={NewKeypair}>New Keypair</button>
-        <button onClick={NewList}>New List</button>
+        <Show when={keys.loaded}>
+          <button onClick={NewList}>New List</button>
+        </Show>
       </div>
       <div>
         <button onClick={LoadKeypair}>Load Keypair</button>
-        <button onClick={LoadList}>Load List</button>
-      </div>
-      <div>
-        <p>{keys() != null ? "KeyPair Loaded" : "KeyPair Unloaded"}</p>
-        <p>{list.loaded ? "List Loaded" : "List Unloaded"}</p>
+        <Show when={keys.loaded}>
+          <button onClick={LoadList}>Load List</button>
+        </Show>
       </div>
       <Browser>
         {/* <Pre>{JSON.stringify(keys(), null, 2)}</Pre> */}
         {/* <Pre>{JSON.stringify(list, null, 2)}</Pre> */}
-
-        <For each={list.ideas}>
-          {(todo, i) => (
-            <TodoContainer>
-              <TextField
-                value={todo}
-                onChange={(e) => setList("ideas", i(), e.currentTarget.value)}
-              />
-              <button
-                onClick={() =>
-                  setList("ideas", (prev) =>
-                    prev.filter((t, ind) => ind != i())
-                  )
-                }
-              >
-                X
-              </button>
-            </TodoContainer>
-          )}
-        </For>
+        <Show when={list.loaded}>
+          <For each={list.ideas}>
+            {(todo, i) => (
+              <TodoContainer>
+                <TextField
+                  value={todo}
+                  onChange={(e) => setList("ideas", i(), e.currentTarget.value)}
+                />
+                <button
+                  onClick={() =>
+                    setList("ideas", (prev) =>
+                      prev.filter((t, ind) => ind != i())
+                    )
+                  }
+                >
+                  X
+                </button>
+              </TodoContainer>
+            )}
+          </For>
+        </Show>
       </Browser>
     </>
   );
