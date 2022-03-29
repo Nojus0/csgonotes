@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsxImportSource": "solid-js",
+    "types": ["vite/client", "@types/wicg-file-system-access"],
+    "noEmit": true,
+    "isolatedModules": true
+  }
+}
