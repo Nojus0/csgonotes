@@ -6,11 +6,24 @@ export const Input = styled.input(() => ({
   outline: "none",
   fontSize: "1.2rem",
   padding: ".5rem 0 .5rem .5rem",
-  border: ".1rem solid #dadada",
+  border: ".1rem solid #949494",
   margin: ".5rem",
   color: "#efefef",
   fontWeight: 400,
   "&::placeholder": {
-    color: "#dadada",
+    color: "#949494",
   },
 }));
+
+export const TextArea = styled.textarea({
+  resize: "none",
+  height: "100%",
+  background: "transparent",
+  border: "none",
+  outline: "none",
+  color: "white",
+  fontSize: "1.4rem",
+  "&::selection": {
+    background: "#2c2c2c80",
+  },
+});

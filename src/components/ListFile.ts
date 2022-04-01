@@ -17,7 +17,7 @@ export function createNewList(): IListFile {
 
 export function defaultListStore(): ListFileStore {
   return {
-    ideas: [],
+    ideas: ["Start typing here..."],
     loaded: DEBUG_ALL_LOADED,
     name: "",
   };
