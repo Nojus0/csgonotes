@@ -1,6 +1,14 @@
 /* @refresh reload */
-
-import { batch, Component, For, Show } from "solid-js";
+import {
+  Accessor,
+  batch,
+  Component,
+  createEffect,
+  createSignal,
+  For,
+  on,
+  Show,
+} from "solid-js";
 import { styled } from "solid-styled-components";
 import {
   createNewList,
@@ -19,14 +27,34 @@ import {
 import { loadFile, writeFile } from "../components/filesystem-abstract";
 import { decryptJsonFile, encryptJsonFile } from "../components/Crypto";
 import { GreenButton, TextButton } from "../components/Button";
-import { Input } from "../components/Input";
+import { Input, TextArea } from "../components/Input";
 import { userInteracted } from "../utils/ChromeAudio";
 import { ButtonSounds } from "../utils/ButtonSounds";
-import { PlaySync } from "../utils/Audio";
+import { getRandomScene, IScene, Scenes } from "../utils/RandomScene";
 
 const Home: Component = () => {
   const [liststore, setList] = createStore<ListFileStore>(defaultListStore());
   const [keystore, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
+  const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
+  let i = 0;
+
+  addEventListener("keyup", (e) => {
+    if (e.key == "n") {
+      setScene(Scenes[i]);
+      i = (i + 1) % Scenes.length;
+      ButtonSounds.onClick();
+    }
+
+    if (e.key == "b") {
+      // Roll over
+      if (i < 1) i = Scenes.length - 1;
+
+      setScene(Scenes[i]);
+      i = (i - 1) % Scenes.length;
+      ButtonSounds.onClick();
+    }
+    console.log(i);
+  });
 
   async function NewKeypair() {
     ButtonSounds.onClick();
@@ -86,15 +114,35 @@ const Home: Component = () => {
     });
   }
 
+  function Delete(i: Accessor<number>) {
+    ButtonSounds.onClick();
+    setList("ideas", (prev) => prev.filter((t, ind) => ind != i()));
+  }
+
+  function sourceChanged(e: HTMLVideoElement | HTMLAudioElement) {
+    createEffect(
+      on(SCENE, () => {
+        e.load();
+      })
+    );
+  }
+
   return (
     <Container>
-      <Video autoplay muted draggable={false}>
-        <source type="video/webm" src="/video/vertigo540.webm" />
+      <Video
+        preload="auto"
+        ref={sourceChanged}
+        loop
+        autoplay
+        muted
+        draggable={false}
+      >
+        <source type="video/webm" src={SCENE().video} />
       </Video>
 
       <Show when={userInteracted()}>
-        <audio loop autoplay>
-          <source type="audio/ogg" src="/sound/bg_vertigo_01.ogg" />
+        <audio ref={sourceChanged} loop autoplay>
+          <source type="audio/ogg" src={SCENE().audio} />
         </audio>
       </Show>
 
@@ -161,7 +209,7 @@ const Home: Component = () => {
             {(todo, i) => (
               <CardWrapper>
                 <Card>
-                  <TextField
+                  <TextArea
                     cols={30}
                     rows={10}
                     value={todo}
@@ -169,15 +217,13 @@ const Home: Component = () => {
                       setList("ideas", i(), e.currentTarget.value)
                     }
                   />
-                  {/* <button
-                  onClick={() =>
-                    setList("ideas", (prev) =>
-                      prev.filter((t, ind) => ind != i())
-                    )
-                  }
-                >
-                  X
-                </button> */}
+                  <DeleteButton
+                    padding=".5rem 1rem"
+                    {...ButtonSounds}
+                    onClick={() => Delete(i)}
+                  >
+                    Delete
+                  </DeleteButton>
                 </Card>
               </CardWrapper>
             )}
@@ -187,6 +233,14 @@ const Home: Component = () => {
     </Container>
   );
 };
+
+const DeleteButton = styled(TextButton)({
+  position: "absolute",
+  bottom: 0,
+  fontWeight: 400,
+  fontSize: "1.15rem",
+  right: 0,
+});
 
 const FlexGrowWrapper = styled.div({
   flexGrow: 1,
@@ -232,30 +286,7 @@ const Video = styled.video({
   width: "100%",
 });
 
-const ImageBackground = styled.img({
-  backgroundSize: "cover",
-  position: "absolute",
-  top: 0,
-  objectFit: "fill",
-  // filter: "blur(10px)",
-  // transform: "scale(1.1)",
-  left: 0,
-  userSelect: "none",
-  height: "100%",
-  width: "100%",
-  backgroundRepeat: "no-repeat",
-});
-
 // TODO Seperate file
-const TextField = styled.textarea({
-  resize: "none",
-  height: "100%",
-  background: "transparent",
-  border: "none",
-  outline: "none",
-  color: "white",
-  fontSize: "1.75rem",
-});
 
 const Browser = styled.div({
   display: "flex",

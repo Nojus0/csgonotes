@@ -25,14 +25,17 @@ export const GreenButton = styled.button(
 );
 
 export const TextButton = styled.button(
-  ({ margin = ".5rem", padding = ".75rem 1.15rem" }: IBasicButtonProps) => ({
+  ({
+    margin = ".5rem",
+    padding = ".75rem 1.15rem",
+  }: IBasicButtonProps) => ({
     border: "none",
     margin,
     padding,
+    fontSize: "1rem",
     color: "white",
     cursor: "pointer",
     fontWeight: 500,
-    fontSize: "1rem",
     outline: "none",
     borderRadius: ".2rem",
     background:
