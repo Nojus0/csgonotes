@@ -1,9 +1,24 @@
+import { DEBUG_ALL_LOADED } from "../utils/debug";
+import { ILoaded } from "./utils";
+
 export interface IListFile {
   ideas: string[];
   name: string;
 }
 
-export const defaultList = {
-  ideas: ["Default List"],
-  name: "Default List",
-};
+export type ListFileStore = IListFile & ILoaded;
+
+export function createNewList(): IListFile {
+  return {
+    ideas: ["Start typing here..."],
+    name: "",
+  };
+}
+
+export function defaultListStore(): ListFileStore {
+  return {
+    ideas: [],
+    loaded: DEBUG_ALL_LOADED,
+    name: "",
+  };
+}

@@ -1,5 +1,7 @@
 // TODO HANDLE CANCELATION !
 
+import { playErrorSound } from "../utils/Sounds";
+
 export async function loadJsonFile<T>(): Promise<T> {
   const options: OpenFilePickerOptions = {
     multiple: false,
@@ -12,12 +14,16 @@ export async function loadJsonFile<T>(): Promise<T> {
       },
     ],
   };
+  try {
+    const [handle] = await showOpenFilePicker(options);
+    const file = await handle.getFile();
+    const text = await file.text();
 
-  const [handle] = await showOpenFilePicker(options);
-  const file = await handle.getFile();
-  const text = await file.text();
-
-  return JSON.parse(text) as T;
+    return JSON.parse(text) as T;
+  } catch (err) {
+    playErrorSound();
+    throw new Error("User cancelled");
+  }
 }
 
 export async function loadFile(ext: ".json" | ".bin"): Promise<ArrayBuffer> {
@@ -39,11 +45,15 @@ export async function loadFile(ext: ".json" | ".bin"): Promise<ArrayBuffer> {
           },
     ],
   };
+  try {
+    const [handle] = await showOpenFilePicker(options);
+    const file = await handle.getFile();
 
-  const [handle] = await showOpenFilePicker(options);
-  const file = await handle.getFile();
-
-  return file.arrayBuffer();
+    return file.arrayBuffer();
+  } catch (err) {
+    playErrorSound();
+    throw new Error("User cancelled");
+  }
 }
 
 export async function writeFile<T>(
@@ -68,10 +78,14 @@ export async function writeFile<T>(
           },
     ],
   };
+  try {
+    const handle = await showSaveFilePicker(options);
+    const writable = await handle.createWritable();
 
-  const handle = await showSaveFilePicker(options);
-  const writable = await handle.createWritable();
-
-  await writable.write(data);
-  await writable.close();
+    await writable.write(data);
+    await writable.close();
+  } catch (err) {
+    playErrorSound();
+    throw new Error("User cancelled");
+  }
 }

@@ -1,16 +1,32 @@
 html,
-body {
+body, #root {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 *,
 *::before,
 *::after {
-  font-family: "Poppins", sans-serif;
   box-sizing: border-box;
+  font-family: "stratum", sans-serif;
 }
 
 a {
   text-decoration: none;
+}
+
+@font-face {
+  font-family: "stratum";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/stratum2medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "stratum";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/stratum2regular.ttf") format("truetype");
 }

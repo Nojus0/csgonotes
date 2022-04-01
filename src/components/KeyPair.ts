@@ -1,5 +1,7 @@
 import base64 from "base64-js";
+import { DEBUG_ALL_LOADED } from "../utils/debug";
 import { loadJsonFile, writeFile } from "./filesystem-abstract";
+import { ILoaded } from "./utils";
 
 export const AES_IV_BYTES = 128;
 export const AES_KEY_BITS = 256;
@@ -13,6 +15,14 @@ export interface IKeyPair {
   key: CryptoKey;
   iv: Uint8Array;
 }
+
+export type KeyPairStore = IKeyPair & ILoaded;
+
+export const defaultKeyPairStore = () => ({
+  iv: null as any,
+  key: null as any,
+  loaded: DEBUG_ALL_LOADED,
+});
 
 export const createNewKeypair = async () => {
   const CRYPTO_KEY = await crypto.subtle.generateKey(
@@ -61,6 +71,6 @@ export async function exportKeyPair(keypair: IKeyPair) {
     key: base64.fromByteArray(KEY_BUF),
     iv: base64.fromByteArray(keypair.iv),
   };
-
+  
   await writeFile(JSON.stringify(SERIALIZED_KEYPAIR, null, 2), ".json");
 }
