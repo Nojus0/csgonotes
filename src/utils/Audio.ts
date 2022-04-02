@@ -6,7 +6,7 @@ const audioLoadList = [
   "/sound/itemtile_rollover_09.wav",
 ];
 
-export async function preload() {
+export async function preloadPrimitiveAudio() {
   for (const url of audioLoadList) {
     preloadAudio(url);
   }
