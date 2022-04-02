@@ -1,5 +1,6 @@
 html,
-body, #root {
+body,
+#root {
   margin: 0;
   padding: 0;
   background: #7b7b7b;

@@ -5,7 +5,7 @@ export const Input = styled.input(() => ({
   background: "transparent",
   outline: "none",
   fontSize: "1.2rem",
-  padding: ".5rem 0 .5rem .5rem",
+  padding: ".5rem",
   border: ".1rem solid #949494",
   margin: ".5rem",
   color: "#efefef",
