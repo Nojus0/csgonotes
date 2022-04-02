@@ -7,6 +7,7 @@ import {
   createSignal,
   For,
   on,
+  onMount,
   Show,
 } from "solid-js";
 import { styled } from "solid-styled-components";
@@ -31,12 +32,17 @@ import { Input, TextArea } from "../components/Input";
 import { userInteracted } from "../utils/ChromeAudio";
 import { ButtonSounds } from "../utils/ButtonSounds";
 import { getRandomScene, IScene, Scenes } from "../utils/RandomScene";
+import { preloadAudio } from "../utils/Audio";
 
 const Home: Component = () => {
   const [liststore, setList] = createStore<ListFileStore>(defaultListStore());
   const [keystore, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
   const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
   let i = 0;
+
+  onMount(() => {
+    preloadAudio(SCENE().audio);
+  });
 
   addEventListener("keyup", (e) => {
     if (e.key == "n") {
@@ -53,7 +59,6 @@ const Home: Component = () => {
       i = (i - 1) % Scenes.length;
       ButtonSounds.onClick();
     }
-    console.log(i);
   });
 
   async function NewKeypair() {
