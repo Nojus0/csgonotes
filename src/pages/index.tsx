@@ -38,6 +38,8 @@ const Home: Component = () => {
   const [liststore, setList] = createStore<ListFileStore>(defaultListStore());
   const [keystore, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
   const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
+  const [muted, setMuted] = createSignal(false);
+  
   let i = 0;
 
   onMount(() => {
@@ -59,6 +61,10 @@ const Home: Component = () => {
       setScene(Scenes[i]);
       i = (i - 1) % Scenes.length;
       ButtonSounds.onClick();
+    }
+
+    if (e.key == "m") {
+      setMuted((prev) => !prev);
     }
   });
 
@@ -146,7 +152,7 @@ const Home: Component = () => {
         <source type="video/webm" src={SCENE().video} />
       </Video>
 
-      <Show when={userInteracted()}>
+      <Show when={userInteracted() && !muted()}>
         <audio ref={sourceChanged} loop autoplay>
           <source type="audio/ogg" src={SCENE().audio} />
         </audio>
