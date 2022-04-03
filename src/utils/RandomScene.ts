@@ -50,11 +50,11 @@ export const Scenes: IScene[] = [
     video: "/video/sirocco_night540.webm",
     audio: "/sound/bg_chlorine_01.ogg",
   },
-  {
-    name: "Search",
-    video: "/video/search540.webm",
-    audio: "/sound/bg_blacksite_01.ogg"
-  },
+  // {
+  //   name: "Search",
+  //   video: "/video/search540.webm",
+  //   audio: "/sound/bg_blacksite_01.ogg"
+  // },
 ];
 
 export function getRandomScene(): IScene {
