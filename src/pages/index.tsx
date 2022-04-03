@@ -39,7 +39,7 @@ const Home: Component = () => {
   const [keystore, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
   const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
   const [muted, setMuted] = createSignal(false);
-  
+
   let i = 0;
 
   onMount(() => {
@@ -310,6 +310,20 @@ const Browser = styled.div({
   alignItems: "flex-start",
   justifyContent: "flex-start",
   width: "100%",
+  "&::-webkit-scrollbar": {
+    width: "10px",
+  },
+  "&::-webkit-scrollbar-track": {
+    // borderRadius: "15rem",
+    background: "rgba(82, 82, 82, 0.5)",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    borderRadius: "5rem",
+    background: "#2e2e2e",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    background: "#2e2e2e",
+  },
 });
 
 export default Home;

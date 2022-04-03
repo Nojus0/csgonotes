@@ -81,7 +81,6 @@ export async function writeFile<T>(
   try {
     const handle = await showSaveFilePicker(options);
     const writable = await handle.createWritable();
-
     await writable.write(data);
     await writable.close();
   } catch (err) {
