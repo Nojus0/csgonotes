@@ -45,28 +45,36 @@ const Home: Component = () => {
   onMount(() => {
     preloadPrimitiveAudio();
     preloadAudio(SCENE().audio);
+    addEventListener("keyup", onShortcutKey);
   });
 
-  addEventListener("keyup", (e) => {
-    if (e.key == "n") {
-      setScene(Scenes[i]);
-      i = (i + 1) % Scenes.length;
-      ButtonSounds.onClick();
+  function onShortcutKey(e: KeyboardEvent) {
+    if (
+      e.target instanceof HTMLTextAreaElement ||
+      e.target instanceof HTMLInputElement
+    ) {
+      return;
     }
 
-    if (e.key == "b") {
-      // Roll over
-      if (i < 1) i = Scenes.length - 1;
+    switch (e.key) {
+      case "n":
+        i = (i + 1) % Scenes.length;
+        setScene(Scenes[i]);
+        ButtonSounds.onClick();
+        break;
 
-      setScene(Scenes[i]);
-      i = (i - 1) % Scenes.length;
-      ButtonSounds.onClick();
-    }
+      case "b":
+        i = i < 1 ? Scenes.length - 1 : (i - 1) % Scenes.length;
+        setScene(Scenes[i]);
+        ButtonSounds.onClick();
+        break;
 
-    if (e.key == "m") {
-      setMuted((prev) => !prev);
+      case "m":
+        setMuted((prev) => !prev);
+        ButtonSounds.onClick();
+        break;
     }
-  });
+  }
 
   async function NewKeypair() {
     ButtonSounds.onClick();
@@ -276,6 +284,8 @@ const TopBar = styled.div({
   display: "flex",
   flexWrap: "wrap",
   width: "100%",
+  position: "relative",
+  zIndex: 10,
   alignItems: "center",
   padding: "1rem 2rem",
 });
@@ -292,6 +302,7 @@ const Video = styled.video({
   position: "absolute",
   top: 0,
   left: 0,
+  zIndex: 0,
   objectFit: "cover",
   userSelect: "none",
   height: "100%",
@@ -306,6 +317,7 @@ const Browser = styled.div({
   position: "relative",
   flexWrap: "wrap",
   flexGrow: 1,
+  zIndex: 10,
   padding: "0 1.5rem",
   alignItems: "flex-start",
   justifyContent: "flex-start",
