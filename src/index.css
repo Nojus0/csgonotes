@@ -12,6 +12,7 @@ body,
 *::before,
 *::after {
   box-sizing: border-box;
+  font-display: swap;
   font-family: "stratum", sans-serif;
 }
 
