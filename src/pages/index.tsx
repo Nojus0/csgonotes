@@ -9,11 +9,13 @@ import {
   on,
   onMount,
   Show,
+  untrack,
 } from "solid-js";
 import { styled } from "solid-styled-components";
 import {
   createNewList,
   defaultListStore,
+  getListName,
   IListFile,
   ListFileStore,
 } from "../components/ListFile";
@@ -81,23 +83,24 @@ const Home: Component = () => {
 
     const PAIR = await createNewKeypair();
     await exportKeyPair(PAIR);
+
+    setKeys({ ...PAIR, loaded: true });
   }
 
   async function NewList() {
     ButtonSounds.onClick();
 
-    const enc = await encryptJsonFile(
-      keystore,
-      JSON.stringify(createNewList())
-    );
-    await writeFile(enc, ".bin");
+    const LIST = createNewList();
+    const enc = await encryptJsonFile(keystore, JSON.stringify(LIST));
+    await writeFile(enc, getListName(), ".bin");
+    setList({ ...LIST, loaded: true });
   }
 
   async function LoadKeypair() {
     ButtonSounds.onClick();
 
     const kp = await loadKeyPair();
-    setKeys((prev) => ({ ...prev, ...kp, loaded: true }));
+    setKeys({ ...kp, loaded: true });
   }
 
   async function LoadList() {
@@ -105,7 +108,7 @@ const Home: Component = () => {
 
     const file = await loadFile(".bin");
     const dec = await decryptJsonFile<IListFile>(keystore, file);
-    setList((prev) => ({ ...prev, ...dec, loaded: true }));
+    setList({ ...dec, loaded: true });
   }
 
   async function AddTodo() {
@@ -122,7 +125,7 @@ const Home: Component = () => {
       JSON.stringify(unwrap(liststore))
     );
 
-    await writeFile(enc, ".bin");
+    await writeFile(enc, getListName(), ".bin");
   }
 
   function Unload() {
@@ -276,6 +279,7 @@ const Card = styled.div({
   backdropFilter: "blur(40px)",
   minWidth: "calc(100% / 3)",
   padding: "1rem",
+  position: "relative",
 });
 
 const TopBar = styled.div({

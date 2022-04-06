@@ -2,6 +2,7 @@ import base64 from "base64-js";
 import { DEBUG_ALL_LOADED } from "../utils/debug";
 import { loadJsonFile, writeFile } from "./filesystem-abstract";
 import { ILoaded } from "./utils";
+import bs58 from "bs58";
 
 export const AES_IV_BYTES = 32;
 export const AES_KEY_BITS = AES_IV_BYTES * 8;
@@ -81,5 +82,18 @@ export async function exportKeyPair(keypair: IKeyPair) {
     version: keypair.version,
   };
 
-  await writeFile(JSON.stringify(SERIALIZED_KEYPAIR, null, 2), ".json");
+  await writeFile(
+    JSON.stringify(SERIALIZED_KEYPAIR, null, 2),
+    getKeypairName(),
+    ".json"
+  );
+}
+
+export function getKeypairName() {
+  const a = crypto.getRandomValues(new Uint8Array(4));
+
+  const id = bs58.encode(a);
+  const date = new Date();
+  const name = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-Keypair-${id}.json`;
+  return name;
 }
