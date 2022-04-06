@@ -33,7 +33,7 @@ import { Input, TextArea } from "../components/Input";
 import { userInteracted } from "../utils/ChromeAudio";
 import { ButtonSounds } from "../utils/ButtonSounds";
 import { getRandomScene, IScene, Scenes } from "../utils/RandomScene";
-// import { preloadPrimitiveAudio, preloadAudio } from "../utils/Audio";
+import { preloadPrimitiveAudio, preloadAudio } from "../utils/Audio";
 
 const Home: Component = () => {
   const [liststore, setList] = createStore<ListFileStore>(defaultListStore());
@@ -44,8 +44,8 @@ const Home: Component = () => {
   let i = 0;
 
   onMount(() => {
-    // preloadPrimitiveAudio();
-    // preloadAudio(SCENE().audio);
+    preloadPrimitiveAudio();
+    preloadAudio(SCENE().audio);
     addEventListener("keyup", onShortcutKey);
   });
 
