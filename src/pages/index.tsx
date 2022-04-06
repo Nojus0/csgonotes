@@ -278,7 +278,7 @@ const Card = styled.div({
   background: "rgba(82, 82, 82, 0.79)",
   backdropFilter: "blur(40px)",
   minWidth: "calc(100% / 3)",
-  padding: "1rem",
+  padding: "1rem 1rem 2.85rem 1rem",
   position: "relative",
 });
 
