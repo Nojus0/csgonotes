@@ -25,10 +25,4 @@ export function play(src: string, vol: number = 1.0) {
 export async function preloadAudio(src: string) {
   var audio = new Audio();
   audio.src = src;
-
-  function loaded() {
-    audio.removeEventListener("canplaythrough", loaded);
-  }
-
-  audio.addEventListener("canplaythrough", loaded);
 }

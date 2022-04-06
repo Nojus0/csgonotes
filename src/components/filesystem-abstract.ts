@@ -2,31 +2,15 @@
 
 import { playErrorSound } from "../utils/Sounds";
 
-export async function loadJsonFile<T>(): Promise<T> {
-  const options: OpenFilePickerOptions = {
-    multiple: false,
-    types: [
-      {
-        description: "Json file",
-        accept: {
-          "application/json": [".json"],
-        },
-      },
-    ],
-  };
-  try {
-    const [handle] = await showOpenFilePicker(options);
-    const file = await handle.getFile();
-    const text = await file.text();
+export type FileExt = ".json" | ".bin";
 
-    return JSON.parse(text) as T;
-  } catch (err) {
-    playErrorSound();
-    throw new Error("User cancelled");
-  }
+export async function loadJsonFile<T>(): Promise<T> {
+  const a = await loadFile(".json");
+
+  return JSON.parse(new TextDecoder().decode(a)) as T;
 }
 
-export async function loadFile(ext: ".json" | ".bin"): Promise<ArrayBuffer> {
+export async function loadFile(ext: FileExt): Promise<ArrayBuffer> {
   const options: OpenFilePickerOptions = {
     multiple: false,
     types: [
@@ -46,10 +30,16 @@ export async function loadFile(ext: ".json" | ".bin"): Promise<ArrayBuffer> {
     ],
   };
   try {
-    const [handle] = await showOpenFilePicker(options);
-    const file = await handle.getFile();
+    if ("showOpenFilePicker" in window) {
+      const [handle] = await showOpenFilePicker(options);
+      const file = await handle.getFile();
 
-    return file.arrayBuffer();
+      return file.arrayBuffer();
+    } else {
+      const f = await openBlob(ext);
+
+      return f;
+    }
   } catch (err) {
     playErrorSound();
     throw new Error("User cancelled");
@@ -57,11 +47,12 @@ export async function loadFile(ext: ".json" | ".bin"): Promise<ArrayBuffer> {
 }
 
 export async function writeFile<T>(
-  data: FileSystemWriteChunkType,
-  ext: ".json" | ".bin"
+  data: ArrayBuffer | string,
+  name: string,
+  ext: FileExt
 ) {
-  const options: OpenFilePickerOptions = {
-    multiple: false,
+  const options: SaveFilePickerOptions = {
+    suggestedName: name,
     types: [
       ext == ".json"
         ? {
@@ -79,12 +70,46 @@ export async function writeFile<T>(
     ],
   };
   try {
-    const handle = await showSaveFilePicker(options);
-    const writable = await handle.createWritable();
-    await writable.write(data);
-    await writable.close();
+    if ("showSaveFilePicker" in window) {
+      const handle = await showSaveFilePicker(options);
+      const writable = await handle.createWritable();
+      await writable.write(data);
+      await writable.close();
+    } else {
+      downloadBlob(new Blob([data]), name);
+    }
   } catch (err) {
     playErrorSound();
     throw new Error("User cancelled");
   }
+}
+
+async function openBlob(ext: FileExt) {
+  const a = document.createElement("input");
+  a.type = "file";
+  a.accept = ext == ".json" ? "application/json" : "application/octet-stream";
+  a.style.display = "none";
+  a.click();
+
+  const file = await new Promise<File>((resolve, reject) => {
+    a.onchange = () => {
+      if (a.files.length == 0) {
+        reject("No file selected");
+      } else {
+        resolve(a.files[0]);
+      }
+    };
+  });
+
+  return await file.arrayBuffer();
+}
+
+function downloadBlob(blob: Blob, name: string) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.style.display = "none";
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  a.remove();
 }

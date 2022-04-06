@@ -1,3 +1,4 @@
+import base58 from "bs58";
 import { DEBUG_ALL_LOADED } from "../utils/debug";
 import { ILoaded } from "./utils";
 
@@ -21,4 +22,12 @@ export function defaultListStore(): ListFileStore {
     loaded: DEBUG_ALL_LOADED,
     name: "",
   };
+}
+
+export function getListName() {
+  const date = new Date();
+  const a = crypto.getRandomValues(new Uint8Array(4));
+  const id = base58.encode(a);
+  const name = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-List-${id}.bin`;
+  return name;
 }
