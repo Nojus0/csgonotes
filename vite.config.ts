@@ -13,8 +13,25 @@ export default defineConfig({
         "apple-touch-icon.png",
       ],
       workbox: {
-        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
-        globPatterns: ["**/*.{js,css,png,jpg,jpeg,ttf,wav,html,ogg,webm}"],
+        // maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
+        globPatterns: ["**/*.{js,css,html,png,jpg,jpeg,ttf,wav}"],
+        runtimeCaching: [
+          {
+            handler: "CacheFirst",
+            // ogg or webm files
+            urlPattern: /\.(?:ogg|webm)$/,
+            options: {
+              cacheName: "content-cache",
+              expiration: {
+                maxEntries: 500,
+                maxAgeSeconds: 60 * 60 * 24 * 365 * 2, // 2 years
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
       },
       manifest: {
         name: "Encrypted Todos",
