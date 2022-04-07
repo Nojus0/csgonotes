@@ -17,7 +17,7 @@ import {
   getListName,
   IListFile,
   ListFileStore,
-} from "../components/ListFile";
+} from "../common/crypto/listfile";
 import { createStore, unwrap } from "solid-js/store";
 import {
   createNewKeypair,
@@ -25,15 +25,15 @@ import {
   exportKeyPair,
   KeyPairStore,
   loadKeyPair,
-} from "../components/KeyPair";
-import { loadFile, writeFile } from "../components/filesystem-abstract";
-import { decryptJsonFile, encryptJsonFile } from "../components/Crypto";
+} from "../common/crypto/keypair";
+import { loadFile, writeFile } from "../common/filesystem";
+import { decryptJsonFile, encryptJsonFile } from "../common/crypto";
 import { GreenButton, TextButton } from "../components/Button";
 import { Input, TextArea } from "../components/Input";
-import { userInteracted } from "../utils/ChromeAudio";
-import { ButtonSounds } from "../utils/ButtonSounds";
-import { getRandomScene, IScene, Scenes } from "../utils/RandomScene";
-import { preloadPrimitiveAudio, preloadAudio } from "../utils/Audio";
+import { userInteracted } from "../common/audio/chrome";
+import { ButtonSounds } from "../common/audio/button";
+import { getRandomScene, IScene, Scenes } from "../common/scene";
+import { preloadPrimitiveAudio, preloadAudio } from "../common/audio";
 
 const Home: Component = () => {
   const [liststore, setList] = createStore<ListFileStore>(defaultListStore());
@@ -105,14 +105,14 @@ const Home: Component = () => {
   async function LoadList() {
     ButtonSounds.onClick();
 
-    const file = await loadFile(".bin");
+    const [file, handle] = await loadFile(".bin");
     const dec = await decryptJsonFile<IListFile>(keystore, file);
-    setList({ ...dec, loaded: true });
+
+    setList({ ...dec, loaded: true, handle });
   }
 
   async function AddTodo() {
     ButtonSounds.onClick();
-
     setList("ideas", (prev) => [...prev, "New Todo"]);
   }
 
@@ -124,7 +124,11 @@ const Home: Component = () => {
       JSON.stringify(unwrap(liststore))
     );
 
-    await writeFile(enc, getListName(), ".bin");
+    if (!liststore.handle) return await writeFile(enc, getListName(), ".bin");
+
+    const writable = await liststore.handle.createWritable();
+    await writable.write(enc);
+    await writable.close();
   }
 
   function Unload() {
@@ -141,7 +145,7 @@ const Home: Component = () => {
     setList("ideas", (prev) => prev.filter((t, ind) => ind != i()));
   }
 
-  function sourceChanged(e: HTMLVideoElement | HTMLAudioElement) {
+  function onSourceChange(e: HTMLVideoElement | HTMLAudioElement) {
     createEffect(
       on(SCENE, () => {
         e.load();
@@ -153,7 +157,7 @@ const Home: Component = () => {
     <Container>
       <Video
         preload="auto"
-        ref={sourceChanged}
+        ref={onSourceChange}
         loop
         autoplay
         muted
@@ -163,7 +167,7 @@ const Home: Component = () => {
       </Video>
 
       <Show when={userInteracted() && !muted()}>
-        <audio ref={sourceChanged} loop autoplay>
+        <audio ref={onSourceChange} loop autoplay>
           <source type="audio/ogg" src={SCENE().audio} />
         </audio>
       </Show>

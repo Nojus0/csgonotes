@@ -1,7 +1,6 @@
-import base64 from "base64-js";
-import { DEBUG_ALL_LOADED } from "../utils/debug";
-import { loadJsonFile, writeFile } from "./filesystem-abstract";
-import { ILoaded } from "./utils";
+import { DEBUG_ALL_LOADED } from "../debug";
+import { loadJsonFile, writeFile } from "../filesystem";
+import { ILoaded } from "../utils";
 import bs58 from "bs58";
 
 export const AES_IV_BYTES = 32;
@@ -53,11 +52,11 @@ export async function loadKeyPair() {
   const a = await loadJsonFile<IKeyPairSerialized>();
 
   const PAIR: IKeyPair = {
-    iv: base64.toByteArray(a.iv),
+    iv: bs58.decode(a.iv),
     version: a.version,
     key: await crypto.subtle.importKey(
       "raw",
-      base64.toByteArray(a.key),
+      bs58.decode(a.key),
       {
         name: "AES-GCM",
         hash: "SHA-512",
@@ -77,8 +76,8 @@ export async function exportKeyPair(keypair: IKeyPair) {
   );
 
   const SERIALIZED_KEYPAIR: IKeyPairSerialized = {
-    key: base64.fromByteArray(KEY_BUF),
-    iv: base64.fromByteArray(keypair.iv),
+    key: bs58.encode(KEY_BUF),
+    iv: bs58.encode(keypair.iv),
     version: keypair.version,
   };
 

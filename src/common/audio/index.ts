@@ -1,4 +1,4 @@
-import { userInteracted } from "./ChromeAudio";
+import { userInteracted } from "./chrome";
 
 const audioLoadList = [
   "/sound/generic_press_01.wav",
