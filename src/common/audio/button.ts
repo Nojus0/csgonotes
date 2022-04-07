@@ -1,4 +1,4 @@
-import { play } from "./Audio";
+import { play } from ".";
 
 export const ButtonSounds = {
   onClick: () => play("/sound/generic_press_01.wav"),

@@ -1,4 +1,4 @@
-import { IKeyPair } from "./KeyPair";
+import { IKeyPair } from "./keypair";
 
 export async function decryptJsonFile<T>(k: IKeyPair, f: ArrayBuffer) {
   const a: ArrayBuffer = await crypto.subtle.decrypt(

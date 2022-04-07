@@ -1,16 +1,16 @@
-// TODO HANDLE CANCELATION !
-
-import { playErrorSound } from "../utils/Sounds";
+import { playErrorSound } from "../audio/error";
 
 export type FileExt = ".json" | ".bin";
 
 export async function loadJsonFile<T>(): Promise<T> {
-  const a = await loadFile(".json");
+  const [a] = await loadFile(".json");
 
   return JSON.parse(new TextDecoder().decode(a)) as T;
 }
 
-export async function loadFile(ext: FileExt): Promise<ArrayBuffer> {
+export async function loadFile(
+  ext: FileExt
+): Promise<[ArrayBuffer, FileSystemFileHandle]> {
   const options: OpenFilePickerOptions = {
     multiple: false,
     types: [
@@ -33,12 +33,9 @@ export async function loadFile(ext: FileExt): Promise<ArrayBuffer> {
     if ("showOpenFilePicker" in window) {
       const [handle] = await showOpenFilePicker(options);
       const file = await handle.getFile();
-
-      return file.arrayBuffer();
+      return [await file.arrayBuffer(), handle];
     } else {
-      const f = await openBlob(ext);
-
-      return f;
+      return [await openBlob(ext), null];
     }
   } catch (err) {
     playErrorSound();

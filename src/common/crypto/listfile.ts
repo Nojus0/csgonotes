@@ -1,13 +1,14 @@
 import base58 from "bs58";
-import { DEBUG_ALL_LOADED } from "../utils/debug";
-import { ILoaded } from "./utils";
+import { DEBUG_ALL_LOADED } from "../debug";
+import { ILoaded } from "../utils";
 
 export interface IListFile {
   ideas: string[];
   name: string;
 }
 
-export type ListFileStore = IListFile & ILoaded;
+export type ListFileStore = IListFile &
+  ILoaded & { handle: FileSystemFileHandle };
 
 export function createNewList(): IListFile {
   return {
@@ -21,6 +22,7 @@ export function defaultListStore(): ListFileStore {
     ideas: ["Start typing here..."],
     loaded: DEBUG_ALL_LOADED,
     name: "",
+    handle: null,
   };
 }
 
