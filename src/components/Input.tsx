@@ -1,19 +1,27 @@
 import { styled } from "solid-styled-components";
 
-export const Input = styled.input(() => ({
-  borderRadius: ".2rem",
-  background: "transparent",
-  outline: "none",
-  fontSize: "1.2rem",
-  padding: ".5rem",
-  border: ".1rem solid #949494",
-  margin: ".5rem",
-  color: "#efefef",
-  fontWeight: 400,
-  "&::placeholder": {
-    color: "#949494",
-  },
-}));
+export interface IInput {
+  margin?: string;
+  width?: string;
+}
+
+export const Input = styled.input(
+  ({ margin = ".5rem", width = "10rem" }: IInput) => ({
+    margin,
+    width,
+    borderRadius: ".2rem",
+    background: "transparent",
+    outline: "none",
+    fontSize: "1.2rem",
+    padding: ".5rem",
+    border: ".1rem solid #949494",
+    color: "#efefef",
+    fontWeight: 400,
+    "&::placeholder": {
+      color: "#949494",
+    },
+  })
+);
 
 export const TextArea = styled.textarea({
   resize: "none",
