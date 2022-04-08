@@ -216,16 +216,21 @@ const Home: Component = () => {
         )}
 
         <Show when={keystore.loaded && liststore.loaded}>
-          <FlexGrowWrapper>
-            <Input
-              value={liststore.name}
-              placeholder="List name"
-              onInput={(e) => setList("name", e.currentTarget.value)}
-            />
-          </FlexGrowWrapper>
-          <TextButton {...ButtonSounds} onClick={Unload}>
-            Unload
-          </TextButton>
+          <TopBarRightWrapper>
+            <InputResponsiveWrapper>
+              <Input
+                width="100%"
+                margin="0"
+                value={liststore.name}
+                placeholder="List name"
+                onInput={(e) => setList("name", e.currentTarget.value)}
+              />
+            </InputResponsiveWrapper>
+
+            <TextButton {...ButtonSounds} onClick={Unload}>
+              Unload
+            </TextButton>
+          </TopBarRightWrapper>
         </Show>
       </TopBar>
       <Browser>
@@ -267,9 +272,15 @@ const DeleteButton = styled(TextButton)({
   right: 0,
 });
 
-const FlexGrowWrapper = styled.div({
-  flexGrow: 1,
+const InputResponsiveWrapper = styled.div({
+  margin: ".5rem",
+  maxWidth: "14rem",
+});
+
+const TopBarRightWrapper = styled.div({
   display: "flex",
+  flexGrow: 1,
+  justifyContent: "space-between",
 });
 
 const CardWrapper = styled.div({
@@ -325,6 +336,9 @@ const Browser = styled.div({
   flexGrow: 1,
   zIndex: 10,
   padding: "0 1.5rem",
+  "@media (max-width: 30rem)": {
+    padding: "0",
+  },
   alignItems: "flex-start",
   justifyContent: "flex-start",
   width: "100%",
