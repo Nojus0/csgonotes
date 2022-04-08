@@ -33,3 +33,11 @@ a {
   font-weight: 400;
   src: url("/stratum2regular.ttf") format("truetype");
 }
+
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
