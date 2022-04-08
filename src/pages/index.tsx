@@ -291,7 +291,7 @@ const Card = styled.div({
   background: "rgba(82, 82, 82, 0.79)",
   backdropFilter: "blur(40px)",
   minWidth: "calc(100% / 3)",
-  padding: "1rem 1rem 2.85rem 1rem",
+  padding: "1rem 1rem 2.9rem 1rem",
   position: "relative",
 });
 
@@ -343,7 +343,7 @@ const Browser = styled.div({
   justifyContent: "flex-start",
   width: "100%",
   "&::-webkit-scrollbar": {
-    width: "10px",
+    width: "14px",
   },
   "&::-webkit-scrollbar-track": {
     // borderRadius: "15rem",
@@ -352,9 +352,13 @@ const Browser = styled.div({
   "&::-webkit-scrollbar-thumb": {
     borderRadius: "5rem",
     background: "#2e2e2e",
+    backgroundClip: "content-box",
+    border: "4px solid transparent",
   },
   "&::-webkit-scrollbar-thumb:hover": {
     background: "#2e2e2e",
+    backgroundClip: "content-box",
+    border: "3px solid transparent",
   },
 });
 
