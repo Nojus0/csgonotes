@@ -14,11 +14,11 @@ export const Input = styled.input(
     outline: "none",
     fontSize: "1.2rem",
     padding: ".5rem",
-    border: ".1rem solid #949494",
+    border: ".1rem solid #b6b6b6",
     color: "#efefef",
     fontWeight: 400,
     "&::placeholder": {
-      color: "#949494",
+      color: "#b6b6b6",
     },
   })
 );
@@ -47,8 +47,12 @@ export const TextArea = styled.textarea({
   "&::-webkit-scrollbar-thumb": {
     borderRadius: "5rem",
     background: "#2e2e2e",
+    backgroundClip: "content-box",
+    border: "3px solid transparent",
   },
   "&::-webkit-scrollbar-thumb:hover": {
     background: "#2e2e2e",
+    backgroundClip: "content-box",
+    border: "1px solid transparent",
   },
 });
