@@ -13,7 +13,5 @@ You now need to create the list file. This is where your encrypted todos are sto
 Now your todo list is set up, you now can add a new todo by pressing the *Add* button and rename the list by changing the text in the textbox near the *Add* button,
 after you add your todos save them by pressing the *Save* button and overwriting the original list file or saving it as a new file.
 
-# Possible QOL Improvements
-You may have already noticed that when you create a new key pair or a list, you need to load it manually after you create it, so after you create them, they are not automatically loaded.
-
-The second possible improvement is to give Chrome permission to access the key pair and list file so you don't have to load them every time you need to add a new todo.
+# Future Improvements
+Make the web app a PWA.
