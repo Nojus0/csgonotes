@@ -1,4 +1,3 @@
-/* @refresh reload */
 import {
   Accessor,
   batch,
@@ -34,13 +33,16 @@ import { userInteracted } from "../common/audio/chrome";
 import { ButtonSounds } from "../common/audio/button";
 import { getRandomScene, IScene, Scenes } from "../common/scene";
 import { preloadPrimitiveAudio, preloadAudio } from "../common/audio";
+import QuitIcon from "../components/QuitIcon";
+import SettingsIcon from "../components/SettingsIcon";
+import SaveIcon from "../components/SaveIcon";
+import { playErrorSound } from "../common/audio/error";
 
 const Home: Component = () => {
   const [liststore, setList] = createStore<ListFileStore>(defaultListStore());
   const [keystore, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
   const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
   const [muted, setMuted] = createSignal(false);
-
   let i = 0;
 
   onMount(() => {
@@ -106,9 +108,12 @@ const Home: Component = () => {
     ButtonSounds.onClick();
 
     const [file, handle] = await loadFile(".bin");
-    const dec = await decryptJsonFile<IListFile>(keystore, file);
-
-    setList({ ...dec, loaded: true, handle });
+    try {
+      const dec = await decryptJsonFile<IListFile>(keystore, file);
+      setList({ ...dec, loaded: true, handle });
+    } catch (err) {
+      playErrorSound();
+    }
   }
 
   async function AddTodo() {
@@ -131,7 +136,7 @@ const Home: Component = () => {
     await writable.close();
   }
 
-  function Unload() {
+  function Unload(e: MouseEvent) {
     ButtonSounds.onClick();
 
     batch(() => {
@@ -174,45 +179,30 @@ const Home: Component = () => {
 
       <TopBar>
         {!keystore.loaded && !liststore.loaded && (
-          <GreenButton {...ButtonSounds} onClick={LoadKeypair}>
-            Load Keypair
-          </GreenButton>
+          <GreenButton onClick={LoadKeypair}>Load Keypair</GreenButton>
         )}
 
         {keystore.loaded && !liststore.loaded && (
           <>
-            <GreenButton {...ButtonSounds} onClick={LoadList}>
-              Load List
-            </GreenButton>
-            <GreenButton {...ButtonSounds} onClick={NewList}>
-              New List
-            </GreenButton>
+            <GreenButton onClick={LoadList}>Load List</GreenButton>
+            <GreenButton onClick={NewList}>New List</GreenButton>
           </>
         )}
 
         {liststore.loaded && (
           <>
-            <GreenButton
-              {...ButtonSounds}
-              padding=".75rem 1.75rem"
-              onClick={AddTodo}
-            >
+            <GreenButton padding=".65rem 1.75rem" onClick={AddTodo}>
               Add
             </GreenButton>
-            <GreenButton
-              {...ButtonSounds}
-              padding=".75rem 1.75rem"
-              onClick={Save}
-            >
+            <GreenButton padding=".65rem 1.75rem" onClick={Save}>
+              <SaveMargined height="1.25rem" />
               Save
             </GreenButton>
           </>
         )}
 
         {!keystore.loaded && (
-          <GreenButton {...ButtonSounds} onClick={NewKeypair}>
-            New Keypair
-          </GreenButton>
+          <GreenButton onClick={NewKeypair}>New Keypair</GreenButton>
         )}
 
         <Show when={keystore.loaded && liststore.loaded}>
@@ -226,10 +216,13 @@ const Home: Component = () => {
                 onInput={(e) => setList("name", e.currentTarget.value)}
               />
             </InputResponsiveWrapper>
-
-            <TextButton {...ButtonSounds} onClick={Unload}>
-              Unload
-            </TextButton>
+            <Icons>
+              <Quit
+                {...ButtonSounds}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={Unload}
+              />
+            </Icons>
           </TopBarRightWrapper>
         </Show>
       </TopBar>
@@ -247,11 +240,7 @@ const Home: Component = () => {
                       setList("ideas", i(), e.currentTarget.value)
                     }
                   />
-                  <DeleteButton
-                    padding=".5rem 1rem"
-                    {...ButtonSounds}
-                    onClick={() => Delete(i)}
-                  >
+                  <DeleteButton padding=".5rem 1rem" onClick={() => Delete(i)}>
                     Delete
                   </DeleteButton>
                 </Card>
@@ -264,6 +253,21 @@ const Home: Component = () => {
   );
 };
 
+const Icons = styled.div({
+  display: "flex",
+  justifyContent: "flex-end",
+  flexGrow: 1,
+});
+
+const SaveMargined = styled(SaveIcon)({
+  margin: "0 .2rem 0 0",
+});
+
+const Quit = styled(QuitIcon)({
+  margin: "0 .5rem",
+  cursor: "pointer",
+});
+
 const DeleteButton = styled(TextButton)({
   position: "absolute",
   bottom: 0,
@@ -275,12 +279,13 @@ const DeleteButton = styled(TextButton)({
 const InputResponsiveWrapper = styled.div({
   margin: ".5rem",
   maxWidth: "14rem",
+  display: "flex",
 });
 
 const TopBarRightWrapper = styled.div({
   display: "flex",
   flexGrow: 1,
-  justifyContent: "space-between",
+  alignItems: "center",
 });
 
 const CardWrapper = styled.div({
@@ -304,7 +309,7 @@ const TopBar = styled.div({
   position: "relative",
   zIndex: 10,
   alignItems: "center",
-  padding: "1rem 2rem",
+  padding: ".45rem 2rem",
 });
 
 const Container = styled.div({

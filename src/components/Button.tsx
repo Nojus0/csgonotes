@@ -1,11 +1,19 @@
+import { Component, JSX } from "solid-js";
 import { styled } from "solid-styled-components";
+import { ButtonSounds } from "../common/audio/button";
 
 interface IBasicButtonProps {
   padding?: string;
   margin?: string;
 }
 
-export const GreenButton = styled.button(
+export const GreenButton: Component<
+  IBasicButtonProps & JSX.ButtonHTMLAttributes<HTMLButtonElement>
+> = (p) => {
+  return <GreenButtonStyle {...ButtonSounds} {...p} />;
+};
+
+const GreenButtonStyle = styled.button(
   ({ margin = ".5rem", padding = ".75rem 1.15rem" }: IBasicButtonProps) => ({
     margin,
     padding,
@@ -13,6 +21,9 @@ export const GreenButton = styled.button(
     color: "white",
     border: "none",
     fontWeight: 500,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     fontSize: "1rem",
     fontFamily: "stratum, sans-serif",
     outline: "none",
@@ -24,14 +35,18 @@ export const GreenButton = styled.button(
   })
 );
 
-export const TextButton = styled.button(
-  ({
-    margin = ".5rem",
-    padding = ".75rem 1.15rem",
-  }: IBasicButtonProps) => ({
+export const TextButton: Component<
+  IBasicButtonProps & JSX.ButtonHTMLAttributes<HTMLButtonElement>
+> = (p) => {
+  return <TextButtonStyle {...ButtonSounds} {...p} />;
+};
+
+const TextButtonStyle = styled.button(
+  ({ margin = ".5rem", padding = ".75rem 1.15rem" }: IBasicButtonProps) => ({
     border: "none",
     margin,
     padding,
+    userSelect: "none",
     fontSize: "1rem",
     color: "white",
     cursor: "pointer",

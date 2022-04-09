@@ -1,14 +1,21 @@
 {
-  "name": "vite-template-solid",
-  "version": "0.0.0",
-  "description": "",
+  "name": "encrypted-todo-list",
+  "version": "1.0.0",
+  "description": "A Todo List that is encrypted and stored locally with a CS:GO type theme.",
+  "info": "I wanted to make a todo list that doesn't store any of the todos in the cloud that is secure and encrypted so even if the website goes down your todo list wont be lost because the todos are stored locally you could still decrypt your todos with your keypair. I also wanted make the background have video background and ambient sounds so I decided to use the CS:GO menu background videos, and ambient sounds.",
+  "homepage": "https://encryptedtodos.netlify.app/",
+  "contributors": [],
+  "keywords": [
+    "solidhack",
+    "best_student_project"
+  ],
   "scripts": {
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
   },
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "devDependencies": {
     "@types/bs58": "^4.0.1",
     "@types/wicg-file-system-access": "^2020.9.5",
