@@ -15,3 +15,23 @@ after you add your todos save them by pressing the *Save* button and overwriting
 
 # Future Improvements
 Make the web app a PWA.
+
+# Shortcuts
+*M* Mute audio
+
+*N* Next scene
+
+*B* Previous scene
+
+# Images
+![Load Keypair](https://i.imgur.com/11XMB51.png)
+![Nuke](https://i.imgur.com/lY9rTbT.png)
+![Apollo](https://i.imgur.com/Xf1PDr9.png)
+![Sirocco](https://i.imgur.com/IXNV3Rb.png)
+![Ancient](https://i.imgur.com/v6RjV2O.png)
+![Swamp](https://i.imgur.com/J1kCwF3.png)
+![Blacksite](https://i.imgur.com/JGZlTo7.png)
+![Mutiny](https://i.imgur.com/vXU6yAD.png)
+![Cobblestone](https://i.imgur.com/EGlRod6.png)
+![Anubis](https://i.imgur.com/kdwQmdz.png)
+![Vertigo](https://i.imgur.com/02NKJR2.png)
