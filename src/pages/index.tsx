@@ -93,8 +93,9 @@ const Home: Component = () => {
 
     const LIST = createNewList();
     const enc = await encryptJsonFile(keystore, JSON.stringify(LIST));
-    await writeFile(enc, getListName(), ".bin");
-    setList({ ...LIST, loaded: true });
+    const handle = await writeFile(enc, getListName(), ".bin");
+
+    setList({ ...LIST, handle, loaded: true });
   }
 
   async function LoadKeypair() {
