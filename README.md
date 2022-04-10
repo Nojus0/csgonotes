@@ -1,6 +1,8 @@
 # Encrypted Todo List
 A Web app that allows you to store todos securely using AES256 encryption.
 
+[Deployed](https://encryptedtodos.netlify.app/)
+
 # User Interface
 You may already know from which game the user interface was imitated, I was trying to make the user interface look as similar to the CS:GO menu interface as possible.
 
