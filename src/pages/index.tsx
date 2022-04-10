@@ -1,3 +1,5 @@
+/* @refresh reload */
+
 import {
   Accessor,
   batch,
@@ -6,6 +8,7 @@ import {
   createSignal,
   For,
   on,
+  onCleanup,
   onMount,
   Show,
 } from "solid-js";
@@ -34,7 +37,6 @@ import { ButtonSounds } from "../common/audio/button";
 import { getRandomScene, IScene, Scenes } from "../common/scene";
 import { preloadPrimitiveAudio, preloadAudio } from "../common/audio";
 import QuitIcon from "../components/QuitIcon";
-import SettingsIcon from "../components/SettingsIcon";
 import SaveIcon from "../components/SaveIcon";
 import { playErrorSound } from "../common/audio/error";
 
@@ -43,12 +45,21 @@ const Home: Component = () => {
   const [keystore, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
   const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
   const [muted, setMuted] = createSignal(false);
+
+  // For initial load
+  const [showVideo, setShowVideo] = createSignal(false);
+
   let i = 0;
 
   onMount(() => {
     preloadPrimitiveAudio();
     preloadAudio(SCENE().audio);
     addEventListener("keyup", onShortcutKey);
+    setShowVideo(true);
+  });
+
+  onCleanup(() => {
+    setShowVideo(false);
   });
 
   function onShortcutKey(e: KeyboardEvent) {
@@ -161,16 +172,18 @@ const Home: Component = () => {
 
   return (
     <Container>
-      <Video
-        preload="auto"
-        ref={onSourceChange}
-        loop
-        autoplay
-        muted
-        draggable={false}
-      >
-        <source type="video/webm" src={SCENE().video} />
-      </Video>
+      <Show when={showVideo()}>
+        <Video
+          preload="auto"
+          ref={onSourceChange}
+          loop
+          autoplay
+          muted
+          draggable={false}
+        >
+          <source type="video/webm" src={SCENE().video} />
+        </Video>
+      </Show>
 
       <Show when={userInteracted() && !muted()}>
         <audio ref={onSourceChange} loop autoplay>
