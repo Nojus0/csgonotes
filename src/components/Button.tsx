@@ -14,7 +14,7 @@ export const GreenButton: Component<
 };
 
 const GreenButtonStyle = styled.button(
-  ({ margin = ".5rem", padding = ".75rem 1.15rem" }: IBasicButtonProps) => ({
+  ({ margin = ".5rem", padding = ".65rem 1.15rem" }: IBasicButtonProps) => ({
     margin,
     padding,
     backgroundColor: "#4caf50",

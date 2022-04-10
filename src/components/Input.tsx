@@ -13,7 +13,7 @@ export const Input = styled.input(
     background: "transparent",
     outline: "none",
     fontSize: "1.15rem",
-    padding: ".485rem",
+    padding: ".35rem",
     color: "#efefef",
     border: ".1rem solid #b6b6b6",
     fontWeight: 400,
