@@ -192,13 +192,11 @@ const Home: Component = () => {
 
         {liststore.loaded && (
           <>
-            <GreenButton padding=".65rem 1.75rem" onClick={AddTodo}>
-              Add
-            </GreenButton>
-            <GreenButton padding=".65rem 1.75rem" onClick={Save}>
+            <AdaptiveGreenButton onClick={AddTodo}>Add</AdaptiveGreenButton>
+            <AdaptiveGreenButton onClick={Save}>
               <SaveMargined height="1.2rem" />
               Save
-            </GreenButton>
+            </AdaptiveGreenButton>
           </>
         )}
 
@@ -254,6 +252,13 @@ const Home: Component = () => {
   );
 };
 
+const AdaptiveGreenButton = styled(GreenButton)({
+  padding: ".65rem 1.75rem",
+  "@media (max-width: 30rem)": {
+    padding: ".65rem 1rem",
+  },
+});
+
 const Icons = styled.div({
   display: "flex",
   justifyContent: "flex-end",
@@ -305,12 +310,14 @@ const TopBar = styled.div({
   background: "rgba(82, 82, 82, 0.5)",
   backdropFilter: "blur(40px)",
   display: "flex",
-  flexWrap: "wrap",
   width: "100%",
   position: "relative",
   zIndex: 10,
   alignItems: "center",
   padding: ".45rem 2rem",
+  "@media (max-width: 30rem)": {
+    padding: ".45rem .5rem",
+  },
 });
 
 const Container = styled.div({
