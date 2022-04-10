@@ -195,7 +195,7 @@ const Home: Component = () => {
               Add
             </GreenButton>
             <GreenButton padding=".65rem 1.75rem" onClick={Save}>
-              <SaveMargined height="1.25rem" />
+              <SaveMargined height="1.2rem" />
               Save
             </GreenButton>
           </>
