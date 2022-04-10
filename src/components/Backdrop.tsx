@@ -1,29 +1,54 @@
-import { Component, Show } from "solid-js";
+import { Component, onCleanup, Setter, Show } from "solid-js";
 import { styled } from "solid-styled-components";
+import { ButtonSounds } from "../common/audio/button";
 import { TextButton } from "./Button";
+import { Transition } from "solid-transition-group";
+import { getFadeAnimation } from "../common/animations/fade";
 
 export interface IBackdrop {
   when: boolean;
+  setWhen: Setter<boolean>;
 }
 
 // ! UNUSED !
 const Backdrop: Component<IBackdrop> = (p) => {
   return (
-    <Show when={p.when}>
-      <Darken>
-        <PopupWrapper>
-          <Header>
-            <HeaderText>Settings</HeaderText>
-          </Header>
-          <Description>
-          </Description>
-          <ButtonRow>
-            <TextButton>Static</TextButton>
-            <TextButton>Dynamic</TextButton>
-          </ButtonRow>
-        </PopupWrapper>
-      </Darken>
-    </Show>
+    <Transition {...getFadeAnimation(150)}>
+      <Show when={p.when}>
+        <Darken>
+          <PopupWrapper
+            ref={(el) => {
+              const onClick = (e: MouseEvent) => {
+                if (el.contains(e.target as Node)) return;
+                p.setWhen(false);
+              };
+
+              document.body.addEventListener("click", onClick);
+
+              onCleanup(() =>
+                document.body.removeEventListener("click", onClick)
+              );
+            }}
+          >
+            <Header>
+              <HeaderText>Settings</HeaderText>
+            </Header>
+            <Description>Example</Description>
+            <ButtonRow>
+              <TextButton
+                onClick={() => {
+                  p.setWhen((prev) => !prev);
+                  ButtonSounds.onClick();
+                }}
+              >
+                Close
+              </TextButton>
+              <TextButton>Ok</TextButton>
+            </ButtonRow>
+          </PopupWrapper>
+        </Darken>
+      </Show>
+    </Transition>
   );
 };
 
@@ -65,6 +90,10 @@ const PopupWrapper = styled.div({
   border: ".1rem solid #444444",
 });
 
+interface IDarken {
+  opacity: number;
+}
+
 const Darken = styled.div({
   height: "100vh",
   width: "100vw",
@@ -73,6 +102,7 @@ const Darken = styled.div({
   justifyContent: "center",
   zIndex: 1020,
   position: "absolute",
+  // transition: "500ms opacity ease-in-out",
   top: 0,
   left: 0,
   background: "rgba(0, 0, 0, 0.5)",
