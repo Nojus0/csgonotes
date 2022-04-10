@@ -47,7 +47,7 @@ export async function writeFile<T>(
   data: ArrayBuffer | string,
   name: string,
   ext: FileExt
-) {
+): Promise<FileSystemFileHandle | null> {
   const options: SaveFilePickerOptions = {
     suggestedName: name,
     types: [
@@ -72,8 +72,10 @@ export async function writeFile<T>(
       const writable = await handle.createWritable();
       await writable.write(data);
       await writable.close();
+      return handle;
     } else {
       downloadBlob(new Blob([data]), name);
+      return null;
     }
   } catch (err) {
     playErrorSound();
