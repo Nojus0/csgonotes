@@ -1,20 +1,39 @@
 import base58 from "bs58";
+import { playErrorSound } from "../audio/error";
 import { DEBUG_ALL_LOADED } from "../debug";
+import { loadFile } from "../filesystem";
 import { ILoaded } from "../utils";
+import { decryptList, KeyPair } from "./keypair";
 
-export interface IListFile {
+export interface List {
   ideas: string[];
   name: string;
 }
 
-export type ListFileStore = IListFile &
-  ILoaded & { handle: FileSystemFileHandle };
+export type ListFileStore = List & ILoaded & { handle: FileSystemFileHandle };
 
-export function createNewList(): IListFile {
+export function createNewList(): List {
   return {
     ideas: ["Start typing here..."],
     name: "",
   };
+}
+
+export async function loadList(
+  pair: KeyPair
+): Promise<[List, FileSystemFileHandle] | null> {
+  const [file, handle] = await loadFile(".bin");
+  try {
+    const a = await decryptList(pair, file);
+    const b: List = {
+      ideas: a.ideas,
+      name: a.name,
+    };
+    return [b, handle];
+  } catch (err) {
+    playErrorSound();
+    return null;
+  }
 }
 
 export function defaultListStore(): ListFileStore {

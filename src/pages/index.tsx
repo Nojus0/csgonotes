@@ -17,19 +17,22 @@ import {
   createNewList,
   defaultListStore,
   getListName,
-  IListFile,
+  List,
   ListFileStore,
+  loadList,
 } from "../common/crypto/listfile";
 import { createStore, unwrap } from "solid-js/store";
 import {
   createNewKeypair,
+  decryptList,
   defaultKeyPairStore,
+  encryptList,
   exportKeyPair,
   KeyPairStore,
   loadKeyPair,
 } from "../common/crypto/keypair";
 import { loadFile, writeFile } from "../common/filesystem";
-import { decryptJsonFile, encryptJsonFile } from "../common/crypto";
+import { decryptJsonObject, encryptJsonObject } from "../common/crypto";
 import { GreenButton, TextButton } from "../components/Button";
 import { Input, TextArea } from "../components/Input";
 import { userInteracted } from "../common/audio/chrome";
@@ -41,8 +44,8 @@ import SaveIcon from "../components/SaveIcon";
 import { playErrorSound } from "../common/audio/error";
 
 const Home: Component = () => {
-  const [liststore, setList] = createStore<ListFileStore>(defaultListStore());
-  const [keystore, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
+  const [list, setList] = createStore<ListFileStore>(defaultListStore());
+  const [pair, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
   const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
   const [muted, setMuted] = createSignal(false);
 
@@ -93,39 +96,36 @@ const Home: Component = () => {
   async function NewKeypair() {
     ButtonSounds.onClick();
 
-    const PAIR = await createNewKeypair();
-    await exportKeyPair(PAIR);
+    const NEW_PAIR = await createNewKeypair();
+    await exportKeyPair(NEW_PAIR);
 
-    setKeys({ ...PAIR, loaded: true });
+    setKeys({ ...NEW_PAIR, loaded: true });
   }
 
   async function NewList() {
     ButtonSounds.onClick();
 
-    const LIST = createNewList();
-    const enc = await encryptJsonFile(keystore, JSON.stringify(LIST));
+    const NEW_ILIST = createNewList();
+    const enc = await encryptJsonObject(pair, NEW_ILIST);
     const handle = await writeFile(enc, getListName(), ".bin");
 
-    setList({ ...LIST, handle, loaded: true });
+    setList({ ...NEW_ILIST, handle, loaded: true });
   }
 
   async function LoadKeypair() {
     ButtonSounds.onClick();
 
-    const kp = await loadKeyPair();
-    setKeys({ ...kp, loaded: true });
+    setKeys({ ...(await loadKeyPair()), loaded: true });
   }
 
   async function LoadList() {
     ButtonSounds.onClick();
 
-    const [file, handle] = await loadFile(".bin");
-    try {
-      const dec = await decryptJsonFile<IListFile>(keystore, file);
-      setList({ ...dec, loaded: true, handle });
-    } catch (err) {
-      playErrorSound();
-    }
+    const e = await loadList(pair);
+
+    if (e == null) return playErrorSound();
+    const [listFile, handle] = e;
+    setList({ ...listFile, loaded: true, handle });
   }
 
   async function AddTodo() {
@@ -136,15 +136,16 @@ const Home: Component = () => {
   async function Save() {
     ButtonSounds.onClick();
 
-    const enc = await encryptJsonFile(
-      keystore,
-      JSON.stringify(unwrap(liststore))
-    );
+    const CIPHER = await encryptList(pair, list);
 
-    if (!liststore.handle) return await writeFile(enc, getListName(), ".bin");
+    if (!list.handle) {
+      const newHandle = await writeFile(CIPHER, getListName(), ".bin");
+      setList("handle", newHandle);
+      return;
+    }
 
-    const writable = await liststore.handle.createWritable();
-    await writable.write(enc);
+    const writable = await list.handle.createWritable();
+    await writable.write(CIPHER);
     await writable.close();
   }
 
@@ -192,18 +193,18 @@ const Home: Component = () => {
       </Show>
 
       <TopBar>
-        {!keystore.loaded && !liststore.loaded && (
+        {!pair.loaded && !list.loaded && (
           <GreenButton onClick={LoadKeypair}>Load Keypair</GreenButton>
         )}
 
-        {keystore.loaded && !liststore.loaded && (
+        {pair.loaded && !list.loaded && (
           <>
             <GreenButton onClick={LoadList}>Load List</GreenButton>
             <GreenButton onClick={NewList}>New List</GreenButton>
           </>
         )}
 
-        {liststore.loaded && (
+        {list.loaded && (
           <>
             <AdaptiveGreenButton onClick={AddTodo}>Add</AdaptiveGreenButton>
             <AdaptiveGreenButton onClick={Save}>
@@ -213,17 +214,17 @@ const Home: Component = () => {
           </>
         )}
 
-        {!keystore.loaded && (
+        {!pair.loaded && (
           <GreenButton onClick={NewKeypair}>New Keypair</GreenButton>
         )}
 
-        <Show when={keystore.loaded && liststore.loaded}>
+        <Show when={pair.loaded && list.loaded}>
           <TopBarRightWrapper>
             <InputResponsiveWrapper>
               <Input
                 width="100%"
                 margin="0"
-                value={liststore.name}
+                value={list.name}
                 placeholder="List name"
                 onInput={(e) => setList("name", e.currentTarget.value)}
               />
@@ -239,8 +240,8 @@ const Home: Component = () => {
         </Show>
       </TopBar>
       <Browser>
-        <Show when={liststore.loaded}>
-          <For each={liststore.ideas}>
+        <Show when={list.loaded}>
+          <For each={list.ideas}>
             {(todo, i) => (
               <CardWrapper>
                 <Card>
