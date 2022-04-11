@@ -25,9 +25,12 @@ Make the web app a PWA.
 
 *B* Previous scene
 
+*CTRL + C* Serialize the list and the keypair into a shareable link.
+
 # Images
 ![Load Keypair](https://i.imgur.com/11XMB51.png)
 ![Nuke](https://i.imgur.com/lY9rTbT.png)
+![Link](https://i.imgur.com/LkJuPKd.png)
 ![Apollo](https://i.imgur.com/Xf1PDr9.png)
 ![Sirocco](https://i.imgur.com/IXNV3Rb.png)
 ![Ancient](https://i.imgur.com/v6RjV2O.png)
