@@ -1,4 +1,4 @@
-import { Component, onCleanup, Setter, Show } from "solid-js";
+import { Component, JSX, onCleanup, Setter, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { ButtonSounds } from "../common/audio/button";
 import { TextButton } from "./Button";
@@ -8,6 +8,8 @@ import { getFadeAnimation } from "../common/animations/fade";
 export interface IBackdrop {
   when: boolean;
   setWhen: Setter<boolean>;
+  title: string;
+  description: JSX.Element;
 }
 
 // ! UNUSED !
@@ -31,20 +33,12 @@ const Backdrop: Component<IBackdrop> = (p) => {
             }}
           >
             <Header>
-              <HeaderText>Settings</HeaderText>
+              <HeaderText>{p.title}</HeaderText>
             </Header>
-            <Description>Example</Description>
-            <ButtonRow>
-              <TextButton
-                onClick={() => {
-                  p.setWhen((prev) => !prev);
-                  ButtonSounds.onClick();
-                }}
-              >
-                Close
-              </TextButton>
-              <TextButton>Ok</TextButton>
-            </ButtonRow>
+            <DescriptionContainer>
+              <Description>{p.description}</Description>
+            </DescriptionContainer>
+            <ButtonRow>{p.children}</ButtonRow>
           </PopupWrapper>
         </Darken>
       </Show>
@@ -52,7 +46,11 @@ const Backdrop: Component<IBackdrop> = (p) => {
   );
 };
 
-// export default Backdrop;
+export default Backdrop;
+
+const DescriptionContainer = styled.div({
+  margin: "1rem 1.5rem .5rem 1.5rem",
+});
 
 const ButtonRow = styled.div({
   display: "flex",
@@ -75,11 +73,11 @@ const Header = styled.div({
   background: "#252525",
 });
 
-const Description = styled.p({
+export const Description = styled.p({
   lineHeight: "24px",
   color: "#CCCCCC",
   userSelect: "none",
-  margin: "1.5rem",
+  margin: ".25rem 0",
 });
 
 const PopupWrapper = styled.div({

@@ -99,7 +99,7 @@ export async function loadKeyPair() {
   return PAIR;
 }
 
-export async function exportKeyPair(keypair: KeypairFile) {
+export async function serializeKeyPair(keypair: KeypairFile) {
   const KEY_BUF = new Uint8Array(
     await crypto.subtle.exportKey("raw", keypair.key)
   );
@@ -110,11 +110,12 @@ export async function exportKeyPair(keypair: KeypairFile) {
     version: keypair.version,
   };
 
-  await writeFile(
-    JSON.stringify(SERIALIZED_KEYPAIR, null, 2),
-    getKeypairName(),
-    ".json"
-  );
+  return SERIALIZED_KEYPAIR;
+}
+
+export async function exportKeyPair(keypair: KeypairFile) {
+  const s = await serializeKeyPair(keypair);
+  await writeFile(JSON.stringify(s, null, 2), getKeypairName(), ".json");
 }
 
 export function getKeypairName() {
