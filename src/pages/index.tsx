@@ -246,7 +246,7 @@ const Home: Component = () => {
         description={
           <>
             <Description>
-              Convert the list and the keypair to a link.
+              Serialize the list and the keypair into a shareable link.
             </Description>
             <Description>
               NOTE: Anyone with the link can access the list.
