@@ -2,6 +2,8 @@ import { DEBUG_ALL_LOADED } from "../debug";
 import { loadJsonFile, writeFile } from "../filesystem";
 import { ILoaded } from "../utils";
 import bs58 from "bs58";
+import { List as ListFile } from "./listfile";
+import { decryptJsonObject, encryptJsonObject } from ".";
 
 export const AES_IV_BYTES = 32;
 export const AES_KEY_BITS = AES_IV_BYTES * 8;
@@ -13,18 +15,45 @@ export interface IKeyPairSerialized {
   version: number;
 }
 
-export interface IKeyPair {
+export interface KeyPair {
   key: CryptoKey;
   iv: Uint8Array;
+}
+
+export interface KeypairFile extends KeyPair {
   version: number;
 }
 
-export type KeyPairStore = IKeyPair & ILoaded;
+export type KeyPairStore = KeypairFile & ILoaded;
 
 export const defaultKeyPairStore = () =>
   ({
     loaded: DEBUG_ALL_LOADED,
+    version: VERSION,
   } as KeyPairStore);
+
+export function encryptList(pair: KeyPair, s: ListFile) {
+  const a: ListFile = {
+    ideas: s.ideas,
+    name: s.name,
+  };
+
+  return encryptJsonObject(pair, a);
+}
+
+export async function decryptList(
+  pair: KeyPair,
+  f: ArrayBuffer
+): Promise<ListFile> {
+  const a = await decryptJsonObject<ListFile>(pair, f);
+
+  const b: ListFile = {
+    ideas: a.ideas,
+    name: a.name,
+  };
+
+  return b;
+}
 
 export const createNewKeypair = async () => {
   const CRYPTO_KEY = await crypto.subtle.generateKey(
@@ -39,7 +68,7 @@ export const createNewKeypair = async () => {
     ["encrypt", "decrypt"]
   );
 
-  const a: IKeyPair = {
+  const a: KeypairFile = {
     key: CRYPTO_KEY,
     version: VERSION,
     iv: crypto.getRandomValues(new Uint8Array(AES_IV_BYTES)),
@@ -50,27 +79,27 @@ export const createNewKeypair = async () => {
 
 export async function loadKeyPair() {
   const a = await loadJsonFile<IKeyPairSerialized>();
-
-  const PAIR: IKeyPair = {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    bs58.decode(a.key),
+    {
+      name: "AES-GCM",
+      hash: "SHA-512",
+      length: AES_KEY_BITS,
+    },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  const PAIR: KeypairFile = {
+    key,
     iv: bs58.decode(a.iv),
     version: a.version,
-    key: await crypto.subtle.importKey(
-      "raw",
-      bs58.decode(a.key),
-      {
-        name: "AES-GCM",
-        hash: "SHA-512",
-        length: AES_KEY_BITS,
-      },
-      true,
-      ["encrypt", "decrypt"]
-    ),
   };
 
   return PAIR;
 }
 
-export async function exportKeyPair(keypair: IKeyPair) {
+export async function exportKeyPair(keypair: KeypairFile) {
   const KEY_BUF = new Uint8Array(
     await crypto.subtle.exportKey("raw", keypair.key)
   );
