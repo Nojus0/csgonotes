@@ -31,7 +31,6 @@ export async function loadList(
     };
     return [b, handle];
   } catch (err) {
-    playErrorSound();
     return null;
   }
 }
