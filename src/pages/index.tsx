@@ -11,7 +11,6 @@ import {
   onCleanup,
   onMount,
   Show,
-  untrack,
 } from "solid-js";
 import { styled } from "solid-styled-components";
 import {
@@ -22,7 +21,7 @@ import {
   ListFileStore,
   loadList,
 } from "../common/crypto/listfile";
-import { createStore, unwrap } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import {
   AES_KEY_BITS,
   createNewKeypair,
@@ -36,7 +35,7 @@ import {
   serializeKeyPair,
   VERSION,
 } from "../common/crypto/keypair";
-import { writeFile } from "../common/filesystem";
+import { endings, mime, writeFile } from "../common/filesystem";
 import { encryptJsonObject } from "../common/crypto";
 import { GreenButton, TextButton } from "../components/Button";
 import { Input, TextArea } from "../components/Input";
@@ -148,7 +147,7 @@ const Home: Component = () => {
 
     const NEW_LIST = createNewList();
     const enc = await encryptJsonObject(pair, NEW_LIST);
-    const handle = await writeFile(enc, getListName(), ".bin");
+    const handle = await writeFile(enc, mime.bin, endings.bin, getListName(), "list");
 
     setList({ ...NEW_LIST, handle, loaded: true });
   }
@@ -176,7 +175,7 @@ const Home: Component = () => {
     const CIPHER = await encryptList(pair, list);
 
     if (!list.handle) {
-      const newHandle = await writeFile(CIPHER, getListName(), ".bin");
+      const newHandle = await writeFile(CIPHER, mime.bin, endings.bin, getListName(), "list");
       setList("handle", newHandle);
       return;
     }

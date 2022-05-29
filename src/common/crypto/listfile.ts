@@ -1,7 +1,7 @@
 import base58 from "bs58";
 import { playErrorSound } from "../audio/error";
 import { DEBUG_ALL_LOADED } from "../debug";
-import { loadFile } from "../filesystem";
+import { endings, loadFile, mime } from "../filesystem";
 import { ILoaded } from "../utils";
 import { decryptList, KeyPair } from "./keypair";
 
@@ -22,7 +22,7 @@ export function createNewList(): List {
 export async function loadList(
   pair: KeyPair
 ): Promise<[List, FileSystemFileHandle] | null> {
-  const [file, handle] = await loadFile(".bin");
+  const [file, handle] = await loadFile(mime.bin, endings.bin, "list");
   try {
     const a = await decryptList(pair, file);
     const b: List = {
