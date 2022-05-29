@@ -1,5 +1,5 @@
 import { DEBUG_ALL_LOADED } from "../debug";
-import { loadJsonFile, writeFile } from "../filesystem";
+import { endings, loadFile,  mime,  writeFile } from "../filesystem";
 import { ILoaded } from "../utils";
 import bs58 from "bs58";
 import { List as ListFile } from "./listfile";
@@ -78,10 +78,12 @@ export const createNewKeypair = async () => {
 };
 
 export async function loadKeyPair() {
-  const a = await loadJsonFile<IKeyPairSerialized>();
+  const [jsonBuffer] = await loadFile(mime.json, endings.json, "keypair");
+  const s_Keypair = JSON.parse(new TextDecoder().decode(jsonBuffer));
+
   const key = await crypto.subtle.importKey(
     "raw",
-    bs58.decode(a.key),
+    bs58.decode(s_Keypair.key),
     {
       name: "AES-GCM",
       hash: "SHA-512",
@@ -92,8 +94,8 @@ export async function loadKeyPair() {
   );
   const PAIR: KeypairFile = {
     key,
-    iv: bs58.decode(a.iv),
-    version: a.version,
+    iv: bs58.decode(s_Keypair.iv),
+    version: s_Keypair.version,
   };
 
   return PAIR;
@@ -115,7 +117,7 @@ export async function serializeKeyPair(keypair: KeypairFile) {
 
 export async function exportKeyPair(keypair: KeypairFile) {
   const s = await serializeKeyPair(keypair);
-  await writeFile(JSON.stringify(s, null, 2), getKeypairName(), ".json");
+  await writeFile(JSON.stringify(s, null, 2), mime.json, endings.json, getKeypairName(), "keypair");
 }
 
 export function getKeypairName() {

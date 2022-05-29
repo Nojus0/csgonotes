@@ -2,40 +2,36 @@ import { playErrorSound } from "../audio/error";
 
 export type FileExt = ".json" | ".bin";
 
-export async function loadJsonFile<T>(): Promise<T> {
-  const [a] = await loadFile(".json");
-
-  return JSON.parse(new TextDecoder().decode(a)) as T;
+export const mime = {
+  json: "application/json",
+  bin: "application/octet-stream"
 }
 
-export async function loadFile(
-  ext: FileExt
-): Promise<[ArrayBuffer, FileSystemFileHandle]> {
-  const options: OpenFilePickerOptions = {
+export const endings = {
+  json: [".json"],
+  bin: [".bin"]
+}
+
+export async function loadFile(mime: string, endings: string[], id: string): Promise<[ArrayBuffer, FileSystemFileHandle]> {
+  const options = {
     multiple: false,
+    id,
     types: [
-      ext == ".json"
-        ? {
-            description: "Json file",
-            accept: {
-              "application/json": [".json"],
-            },
-          }
-        : {
-            description: "Binary file",
-            accept: {
-              "application/octet-stream": [".bin"],
-            },
-          },
+      {
+        accept: {
+          [mime]: endings,
+        }
+      }
     ],
-  };
+  } as OpenFilePickerOptions
+
   try {
     if ("showOpenFilePicker" in window) {
       const [handle] = await showOpenFilePicker(options);
       const file = await handle.getFile();
       return [await file.arrayBuffer(), handle];
     } else {
-      return [await openBlob(ext), null];
+      return [await openBlob(endings), null];
     }
   } catch (err) {
     playErrorSound();
@@ -43,29 +39,26 @@ export async function loadFile(
   }
 }
 
+
 export async function writeFile<T>(
   data: ArrayBuffer | string,
-  name: string,
-  ext: FileExt
+  mime: string,
+  endings: string[],
+  suggestedName: string,
+  id: string
 ): Promise<FileSystemFileHandle | null> {
-  const options: SaveFilePickerOptions = {
-    suggestedName: name,
+  const options = {
+    suggestedName,
+    id,
     types: [
-      ext == ".json"
-        ? {
-            description: "Json file",
-            accept: {
-              "application/json": [".json"],
-            },
-          }
-        : {
-            description: "Binary file",
-            accept: {
-              "application/octet-stream": [".bin"],
-            },
-          },
+      {
+        accept: {
+          [mime]: endings,
+        }
+      }
     ],
-  };
+  } as SaveFilePickerOptions
+
   try {
     if ("showSaveFilePicker" in window) {
       const handle = await showSaveFilePicker(options);
@@ -74,7 +67,7 @@ export async function writeFile<T>(
       await writable.close();
       return handle;
     } else {
-      downloadBlob(new Blob([data]), name);
+      downloadBlob(new Blob([data]), suggestedName);
       return null;
     }
   } catch (err) {
@@ -83,10 +76,10 @@ export async function writeFile<T>(
   }
 }
 
-async function openBlob(ext: FileExt) {
+async function openBlob(endings: string[]) {
   const a = document.createElement("input");
   a.type = "file";
-  a.accept = ext == ".json" ? "application/json" : "application/octet-stream";
+  a.accept = endings.join(",")
   a.style.display = "none";
   a.click();
 
