@@ -1,4 +1,5 @@
 import base58 from "bs58";
+import { get, set } from "idb-keyval";
 import { playErrorSound } from "../audio/error";
 import { DEBUG_ALL_LOADED } from "../debug";
 import { endings, loadFile, mime } from "../filesystem";
@@ -10,7 +11,7 @@ export interface List {
   name: string;
 }
 
-export type ListFileStore = List & ILoaded & { handle: FileSystemFileHandle };
+export type ListFileStore = List & ILoaded
 
 export function createNewList(): List {
   return {
@@ -19,17 +20,34 @@ export function createNewList(): List {
   };
 }
 
+async function resolveListfile(): Promise<ArrayBuffer> {
+  const listHandle: FileSystemFileHandle = await get("list");
+
+  if (listHandle == null) {
+    const [bin, handle] = await loadFile(mime.bin, endings.bin, "list");
+    await set("list", handle);
+    return bin;
+  }
+
+  if ((await listHandle.queryPermission({ mode: "readwrite" })) == "prompt") {
+    await listHandle.requestPermission({ mode: "readwrite" });
+    set("list", listHandle)
+  }
+
+  // * If does not have permission exception will be thrown. *
+  return (await listHandle.getFile()).arrayBuffer()
+}
+
 export async function loadList(
   pair: KeyPair
-): Promise<[List, FileSystemFileHandle] | null> {
-  const [file, handle] = await loadFile(mime.bin, endings.bin, "list");
+): Promise<List | null> {
+  const file = await resolveListfile()
   try {
     const a = await decryptList(pair, file);
-    const b: List = {
+    return {
       ideas: a.ideas,
       name: a.name,
-    };
-    return [b, handle];
+    }
   } catch (err) {
     return null;
   }
@@ -39,7 +57,6 @@ export function defaultListStore(): ListFileStore {
   return {
     ...createNewList(),
     loaded: DEBUG_ALL_LOADED,
-    handle: null,
   };
 }
 
