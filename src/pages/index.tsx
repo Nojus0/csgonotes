@@ -48,13 +48,14 @@ import SaveIcon from "../components/SaveIcon";
 import { playErrorSound } from "../common/audio/error";
 import Backdrop, { Description } from "../components/Backdrop";
 import base58 from "bs58";
+import { clear, del, delMany, get, set } from "idb-keyval";
 
 const Home: Component = () => {
   const [list, setList] = createStore<ListFileStore>(defaultListStore());
   const [pair, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
   const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
   const [muted, setMuted] = createSignal(false);
-
+  const [showRestore, setRestore] = createSignal(false);
   // For initial load
   const [showVideo, setShowVideo] = createSignal(false);
   const [when, setWhen] = createSignal(false);
@@ -72,6 +73,14 @@ const Home: Component = () => {
     const key = params.get("key");
     const iv = params.get("iv");
     const list = params.get("list");
+
+    const [keypair_handle, list_handle]: FileSystemFileHandle[] =
+      await Promise.all([get("keypair"), get("list")]);
+
+    if (keypair_handle != null && list_handle != null) {
+      setRestore(true);
+      // await LoadList()
+    }
 
     if (!key || !iv || !list) return;
 
@@ -95,7 +104,7 @@ const Home: Component = () => {
 
     batch(() => {
       setKeys({ ...keypair, loaded: true });
-      setList({ ...listfile, loaded: true, handle: null });
+      setList({ ...listfile, loaded: true });
     });
   });
 
@@ -143,57 +152,57 @@ const Home: Component = () => {
     setKeys({ ...NEW_PAIR, loaded: true });
   }
   async function NewList() {
-    ButtonSounds.onClick();
-
     const NEW_LIST = createNewList();
     const enc = await encryptJsonObject(pair, NEW_LIST);
-    const handle = await writeFile(enc, mime.bin, endings.bin, getListName(), "list");
+    await writeFile(enc, mime.bin, endings.bin, getListName(), "list");
 
-    setList({ ...NEW_LIST, handle, loaded: true });
+    setList({ ...NEW_LIST, loaded: true });
   }
   async function LoadKeypair() {
-    ButtonSounds.onClick();
-
     setKeys({ ...(await loadKeyPair()), loaded: true });
   }
   async function LoadList() {
-    ButtonSounds.onClick();
+    const list = await loadList(pair);
+    if (list == null) return playErrorSound();
 
-    const e = await loadList(pair);
-
-    if (e == null) return playErrorSound();
-    const [listFile, handle] = e;
-    setList({ ...listFile, loaded: true, handle });
+    setList({ ...list, loaded: true });
   }
   async function AddTodo() {
-    ButtonSounds.onClick();
     setList("ideas", (prev) => [...prev, "New Todo"]);
   }
   async function Save() {
-    ButtonSounds.onClick();
-
     const CIPHER = await encryptList(pair, list);
+    const hn: FileSystemFileHandle = await get("list");
 
-    if (!list.handle) {
-      const newHandle = await writeFile(CIPHER, mime.bin, endings.bin, getListName(), "list");
-      setList("handle", newHandle);
+    if (!hn) {
+      // TODO SET NAME TO LOADED ONE
+      const newHandle = await writeFile(
+        CIPHER,
+        mime.bin,
+        endings.bin,
+        getListName(),
+        "list"
+      );
       return;
     }
 
-    const writable = await list.handle.createWritable();
-    await writable.write(CIPHER);
-    await writable.close();
+    try {
+      const writable = await hn.createWritable();
+      await writable.write(CIPHER);
+      await writable.close();
+    } catch (err) {
+      playErrorSound();
+    }
   }
-  function Unload(e: MouseEvent) {
-    ButtonSounds.onClick();
+  async function Unload() {
     history.replaceState(null, "", location.origin);
     batch(() => {
       setList(defaultListStore());
       setKeys(defaultKeyPairStore());
     });
+    delMany(["keypair", "list"])
   }
-  function Delete(i: Accessor<number>) {
-    ButtonSounds.onClick();
+  async function Delete(i: Accessor<number>) {
     setList("ideas", (prev) => prev.filter((t, ind) => ind != i()));
   }
   function onSourceChange(e: HTMLVideoElement | HTMLAudioElement) {
@@ -274,6 +283,37 @@ const Home: Component = () => {
           {text()}
         </TextButton>
       </Backdrop>
+      <Backdrop
+        title="Restore"
+        description={
+          <>
+            <Description>Restore your previous session?</Description>
+          </>
+        }
+        setWhen={setRestore}
+        when={showRestore()}
+      >
+        <TextButton
+          onClick={() => {
+            setRestore(false);
+            Unload()
+            ButtonSounds.onClick();
+          }}
+        >
+          No
+        </TextButton>
+        <TextButton
+          onClick={async () => {
+            ButtonSounds.onClick();
+            setRestore(false);
+            await LoadKeypair();
+            await LoadList();
+          }}
+        >
+          Yes
+        </TextButton>
+      </Backdrop>
+
       <Show when={showVideo()}>
         <Video
           preload="auto"
@@ -295,20 +335,26 @@ const Home: Component = () => {
 
       <TopBar>
         {!pair.loaded && !list.loaded && (
-          <GreenButton onClick={LoadKeypair}>Load Keypair</GreenButton>
+          <GreenButton onClick={() => LoadKeypair() && ButtonSounds.onClick()}>
+            Load Keypair
+          </GreenButton>
         )}
 
         {pair.loaded && !list.loaded && (
           <>
-            <GreenButton onClick={LoadList}>Load List</GreenButton>
-            <GreenButton onClick={NewList}>New List</GreenButton>
+            <GreenButton onClick={() => LoadList() && ButtonSounds.onClick()}>
+              Load List
+            </GreenButton>
+            <GreenButton onClick={() => NewList() && ButtonSounds.onClick()}>
+              New List
+            </GreenButton>
           </>
         )}
 
         {list.loaded && (
           <>
-            <AdaptiveGreenButton onClick={AddTodo}>Add</AdaptiveGreenButton>
-            <AdaptiveGreenButton onClick={Save}>
+            <AdaptiveGreenButton onClick={() => AddTodo() && ButtonSounds.onClick()}>Add</AdaptiveGreenButton>
+            <AdaptiveGreenButton onClick={() => Save() && ButtonSounds.onClick()}>
               <SaveMargined height="1.2rem" />
               Save
             </AdaptiveGreenButton>
@@ -316,7 +362,7 @@ const Home: Component = () => {
         )}
 
         {!pair.loaded && (
-          <GreenButton onClick={NewKeypair}>New Keypair</GreenButton>
+          <GreenButton onClick={() => NewKeypair() && ButtonSounds.onClick()}>New Keypair</GreenButton>
         )}
 
         <Show when={pair.loaded && list.loaded}>
@@ -334,7 +380,7 @@ const Home: Component = () => {
               <Quit
                 {...ButtonSounds}
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={Unload}
+                onClick={() => Unload() && ButtonSounds.onClick()}
               />
             </Icons>
           </TopBarRightWrapper>
@@ -354,7 +400,7 @@ const Home: Component = () => {
                       setList("ideas", i(), e.currentTarget.value)
                     }
                   />
-                  <DeleteButton padding=".5rem 1rem" onClick={() => Delete(i)}>
+                  <DeleteButton padding=".5rem 1rem" onClick={() => Delete(i) && ButtonSounds.onClick()}>
                     Delete
                   </DeleteButton>
                 </Card>

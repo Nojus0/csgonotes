@@ -1,10 +1,10 @@
 import { DEBUG_ALL_LOADED } from "../debug";
-import { endings, loadFile,  mime,  writeFile } from "../filesystem";
+import { endings, loadFile, mime, writeFile } from "../filesystem";
 import { ILoaded } from "../utils";
 import bs58 from "bs58";
 import { List as ListFile } from "./listfile";
 import { decryptJsonObject, encryptJsonObject } from ".";
-
+import { get, set } from "idb-keyval";
 export const AES_IV_BYTES = 32;
 export const AES_KEY_BITS = AES_IV_BYTES * 8;
 export const VERSION = 1;
@@ -77,9 +77,38 @@ export const createNewKeypair = async () => {
   return a;
 };
 
+async function resolveKeyPair(): Promise<[ArrayBuffer, boolean]> {
+  const idb_keypair: FileSystemFileHandle = await get("keypair");
+
+  if (idb_keypair == null) {
+    const [jsonBuffer, handle] = await loadFile(
+      mime.json,
+      endings.json,
+      "keypair"
+    );
+    await set("keypair", handle);
+    return [jsonBuffer, true];
+  }
+
+  const IDB_KEYPAIR_PERM = await idb_keypair.queryPermission({ mode: "read" })
+  console.log(IDB_KEYPAIR_PERM)
+
+  if (IDB_KEYPAIR_PERM == "prompt") {
+    console.log(`Requesting keypair permission.`)
+    await idb_keypair.requestPermission({ mode: "read" });
+    set("keypair", idb_keypair)
+  }
+
+  // * If does not have permission exception will be thrown. *
+  const f = await idb_keypair.getFile();
+  const bin = await f.arrayBuffer();
+  return [bin, true];
+}
+
 export async function loadKeyPair() {
-  const [jsonBuffer] = await loadFile(mime.json, endings.json, "keypair");
-  const s_Keypair = JSON.parse(new TextDecoder().decode(jsonBuffer));
+  const [keypairBuffer, success] = await resolveKeyPair();
+
+  const s_Keypair = JSON.parse(new TextDecoder().decode(keypairBuffer));
 
   const key = await crypto.subtle.importKey(
     "raw",
@@ -117,7 +146,13 @@ export async function serializeKeyPair(keypair: KeypairFile) {
 
 export async function exportKeyPair(keypair: KeypairFile) {
   const s = await serializeKeyPair(keypair);
-  await writeFile(JSON.stringify(s, null, 2), mime.json, endings.json, getKeypairName(), "keypair");
+  await writeFile(
+    JSON.stringify(s, null, 2),
+    mime.json,
+    endings.json,
+    getKeypairName(),
+    "keypair"
+  );
 }
 
 export function getKeypairName() {
