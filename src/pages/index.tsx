@@ -37,36 +37,32 @@ import {
 } from "../common/crypto/keypair";
 import { endings, mime, writeFile } from "../common/filesystem";
 import { encryptJsonObject } from "../common/crypto";
-import { GreenButton, TextButton } from "../components/Button";
-import { Input, TextArea } from "../components/Input";
+import { GreenButton, TextButton } from "../components/Primitive/Button";
+import { Input, TextArea } from "../components/Primitive/Input";
 import { userInteracted } from "../common/audio/chrome";
 import { ButtonSounds } from "../common/audio/button";
 import { getRandomScene, IScene, Scenes } from "../common/scene";
 import { preloadPrimitiveAudio, preloadAudio } from "../common/audio";
-import QuitIcon from "../components/QuitIcon";
-import SaveIcon from "../components/SaveIcon";
+import QuitIcon from "../components/Svg/QuitIcon";
+import SaveIcon from "../components/Svg/SaveIcon";
 import { playErrorSound } from "../common/audio/error";
 import Backdrop, { Description } from "../components/Backdrop";
 import base58 from "bs58";
 import { clear, del, delMany, get, set } from "idb-keyval";
-
+import { useStateContext } from "../components/Context/StateContext";
 const Home: Component = () => {
-  const [list, setList] = createStore<ListFileStore>(defaultListStore());
-  const [pair, setKeys] = createStore<KeyPairStore>(defaultKeyPairStore());
-  const [SCENE, setScene] = createSignal<IScene>(getRandomScene());
-  const [muted, setMuted] = createSignal(false);
-  const [showRestore, setRestore] = createSignal(false);
-  // For initial load
-  const [showVideo, setShowVideo] = createSignal(false);
-  const [when, setWhen] = createSignal(false);
   let i = 0;
+  const ctx = useStateContext()
 
+  createEffect(() => {
+    console.log(`dsa`, ctx.showVideo);
+  });
+  
   onMount(async () => {
     preloadPrimitiveAudio();
-    preloadAudio(SCENE().audio);
+    preloadAudio(ctx.scene.audio);
     addEventListener("keyup", onShortcutKey);
-    setShowVideo(true);
-
+    ctx.setVideo(true);
     const url = new URL(location.href);
     const params = url.searchParams;
 
@@ -78,8 +74,8 @@ const Home: Component = () => {
       await Promise.all([get("keypair"), get("list")]);
 
     if (keypair_handle != null && list_handle != null) {
-      setRestore(true);
-      // await LoadList()
+      console.log(`restore`)
+      ctx.setRestore(true);
     }
 
     if (!key || !iv || !list) return;
@@ -103,13 +99,9 @@ const Home: Component = () => {
     const listfile = await decryptList(keypair, base58.decode(list));
 
     batch(() => {
-      setKeys({ ...keypair, loaded: true });
-      setList({ ...listfile, loaded: true });
+      ctx.setKeyPair({ ...keypair, loaded: true });
+      ctx.setList({ ...listfile, loaded: true });
     });
-  });
-
-  onCleanup(() => {
-    setShowVideo(false);
   });
 
   function onShortcutKey(e: KeyboardEvent) {
@@ -123,22 +115,22 @@ const Home: Component = () => {
     switch (e.key) {
       case "n":
         i = (i + 1) % Scenes.length;
-        setScene(Scenes[i]);
+        ctx.setScene(Scenes[i]);
         ButtonSounds.onClick();
         break;
 
       case "b":
         i = i < 1 ? Scenes.length - 1 : (i - 1) % Scenes.length;
-        setScene(Scenes[i]);
+        ctx.setScene(Scenes[i]);
         ButtonSounds.onClick();
         break;
 
-      case e.ctrlKey && pair.loaded && list.loaded && "c":
-        setWhen(true);
+      case e.ctrlKey && ctx.keypair.loaded && ctx.list.loaded && "c":
+        ctx.setCopyClipboard(true);
         break;
 
       case "m":
-        setMuted((prev) => !prev);
+        ctx.toggleMute();
         ButtonSounds.onClick();
         break;
     }
@@ -148,30 +140,27 @@ const Home: Component = () => {
 
     const NEW_PAIR = await createNewKeypair();
     await exportKeyPair(NEW_PAIR);
-
-    setKeys({ ...NEW_PAIR, loaded: true });
+    ctx.setKeyPair({ ...NEW_PAIR, loaded: true });
   }
   async function NewList() {
     const NEW_LIST = createNewList();
-    const enc = await encryptJsonObject(pair, NEW_LIST);
-    await writeFile(enc, mime.bin, endings.bin, getListName(), "list");
+    const enc = await encryptJsonObject(ctx.keypair, NEW_LIST);
 
-    setList({ ...NEW_LIST, loaded: true });
+    await writeFile(enc, mime.bin, endings.bin, getListName(), "list");
+    ctx.setList({ ...NEW_LIST, loaded: true });
   }
   async function LoadKeypair() {
-    setKeys({ ...(await loadKeyPair()), loaded: true });
+    ctx.setKeyPair({ ...(await loadKeyPair()), loaded: true });
   }
   async function LoadList() {
-    const list = await loadList(pair);
+    const list = await loadList(ctx.keypair);
     if (list == null) return playErrorSound();
 
-    setList({ ...list, loaded: true });
+    ctx.setList({ ...list, loaded: true });
   }
-  async function AddTodo() {
-    setList("ideas", (prev) => [...prev, "New Todo"]);
-  }
+
   async function Save() {
-    const CIPHER = await encryptList(pair, list);
+    const CIPHER = await encryptList(ctx.keypair, ctx.list);
     const hn: FileSystemFileHandle = await get("list");
 
     if (!hn) {
@@ -194,39 +183,29 @@ const Home: Component = () => {
       playErrorSound();
     }
   }
-  async function Unload() {
-    history.replaceState(null, "", location.origin);
-    batch(() => {
-      setList(defaultListStore());
-      setKeys(defaultKeyPairStore());
-    });
-    delMany(["keypair", "list"])
-  }
-  async function Delete(i: Accessor<number>) {
-    setList("ideas", (prev) => prev.filter((t, ind) => ind != i()));
-  }
   function onSourceChange(e: HTMLVideoElement | HTMLAudioElement) {
-    createEffect(
-      on(SCENE, () => {
-        e.load();
-      })
-    );
+    // createEffect(() => {
+    e.load();
+    // });
   }
   async function copyListToClipboard() {
     const url = new URL(location.href);
     const p = url.searchParams;
-    const s = await serializeKeyPair(pair);
+    const s = await serializeKeyPair(ctx.keypair);
     p.set("key", s.key);
     p.set("iv", s.iv);
-    p.set("list", base58.encode(new Uint8Array(await encryptList(pair, list))));
+    p.set(
+      "list",
+      base58.encode(new Uint8Array(await encryptList(ctx.keypair, ctx.list)))
+    );
 
     navigator.clipboard.writeText(url.href);
   }
   const [text, setText] = createSignal("5");
-
+  const [showTimer, setShowTimer] = createSignal(false);
   let timer: NodeJS.Timer;
   createEffect(() => {
-    if (when()) {
+    if (showTimer()) {
       timer = setInterval(() => {
         const t = text();
         const tt = parseInt(t);
@@ -254,19 +233,19 @@ const Home: Component = () => {
         description={
           <>
             <Description>
-              Serialize the list and the keypair into a shareable link.
+              Serialize the list and the ctx.keypair into a shareable link.
             </Description>
             <Description>
               NOTE: Anyone with the link can access the list.
             </Description>
           </>
         }
-        setWhen={setWhen}
-        when={when()}
+        setWhen={ctx.setCopyClipboard}
+        when={ctx.showCopyClipboard}
       >
         <TextButton
           onClick={() => {
-            setWhen((prev) => !prev);
+            ctx.setCopyClipboard(false);
             ButtonSounds.onClick();
           }}
         >
@@ -274,7 +253,7 @@ const Home: Component = () => {
         </TextButton>
         <TextButton
           onClick={() => {
-            if (when() && text() == "Copy") {
+            if (ctx.showCopyClipboard && text() == "Copy") {
               copyListToClipboard();
               ButtonSounds.onClick();
             }
@@ -290,13 +269,13 @@ const Home: Component = () => {
             <Description>Restore your previous session?</Description>
           </>
         }
-        setWhen={setRestore}
-        when={showRestore()}
+        setWhen={ctx.setRestore}
+        when={ctx.showRestore}
       >
         <TextButton
           onClick={() => {
-            setRestore(false);
-            Unload()
+            ctx.setRestore(false);
+            ctx.resetCredentials();
             ButtonSounds.onClick();
           }}
         >
@@ -305,16 +284,16 @@ const Home: Component = () => {
         <TextButton
           onClick={async () => {
             ButtonSounds.onClick();
-            setRestore(false);
             await LoadKeypair();
             await LoadList();
+            ctx.setRestore(false);
           }}
         >
           Yes
         </TextButton>
       </Backdrop>
 
-      <Show when={showVideo()}>
+      <Show when={ctx.showVideo}>
         <Video
           preload="auto"
           ref={onSourceChange}
@@ -323,24 +302,24 @@ const Home: Component = () => {
           muted
           draggable={false}
         >
-          <source type="video/webm" src={SCENE().video} />
+          <source type="video/webm" src={ctx.scene.video} />
         </Video>
       </Show>
 
-      <Show when={userInteracted() && !muted()}>
+      <Show when={userInteracted() && !ctx.muted}>
         <audio ref={onSourceChange} loop autoplay>
-          <source type="audio/ogg" src={SCENE().audio} />
+          <source type="audio/ogg" src={ctx.scene.audio} />
         </audio>
       </Show>
 
       <TopBar>
-        {!pair.loaded && !list.loaded && (
+        {!ctx.keypair.loaded && !ctx.list.loaded && (
           <GreenButton onClick={() => LoadKeypair() && ButtonSounds.onClick()}>
             Load Keypair
           </GreenButton>
         )}
 
-        {pair.loaded && !list.loaded && (
+        {ctx.keypair.loaded && !ctx.list.loaded && (
           <>
             <GreenButton onClick={() => LoadList() && ButtonSounds.onClick()}>
               Load List
@@ -351,44 +330,58 @@ const Home: Component = () => {
           </>
         )}
 
-        {list.loaded && (
+        {ctx.list.loaded && (
           <>
-            <AdaptiveGreenButton onClick={() => AddTodo() && ButtonSounds.onClick()}>Add</AdaptiveGreenButton>
-            <AdaptiveGreenButton onClick={() => Save() && ButtonSounds.onClick()}>
+            <AdaptiveGreenButton
+              onClick={() => {
+                ctx.newIdea();
+                ButtonSounds.onClick();
+              }}
+            >
+              Add
+            </AdaptiveGreenButton>
+            <AdaptiveGreenButton
+              onClick={() => Save() && ButtonSounds.onClick()}
+            >
               <SaveMargined height="1.2rem" />
               Save
             </AdaptiveGreenButton>
           </>
         )}
 
-        {!pair.loaded && (
-          <GreenButton onClick={() => NewKeypair() && ButtonSounds.onClick()}>New Keypair</GreenButton>
+        {!ctx.keypair.loaded && (
+          <GreenButton onClick={() => NewKeypair() && ButtonSounds.onClick()}>
+            New Keypair
+          </GreenButton>
         )}
 
-        <Show when={pair.loaded && list.loaded}>
+        <Show when={ctx.keypair.loaded && ctx.list.loaded}>
           <TopBarRightWrapper>
             <InputResponsiveWrapper>
               <Input
                 width="100%"
                 margin="0"
-                value={list.name}
+                value={ctx.list.name}
                 placeholder="List name"
-                onInput={(e) => setList("name", e.currentTarget.value)}
+                onInput={(e) => ctx.setListName(e.currentTarget.value)}
               />
             </InputResponsiveWrapper>
             <Icons>
               <Quit
                 {...ButtonSounds}
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => Unload() && ButtonSounds.onClick()}
+                onClick={() => {
+                  ctx.resetCredentials();
+                  ButtonSounds.onClick();
+                }}
               />
             </Icons>
           </TopBarRightWrapper>
         </Show>
       </TopBar>
       <Browser>
-        <Show when={list.loaded}>
-          <For each={list.ideas}>
+        <Show when={ctx.list.loaded}>
+          <For each={ctx.list.ideas}>
             {(todo, i) => (
               <CardWrapper>
                 <Card>
@@ -396,11 +389,15 @@ const Home: Component = () => {
                     cols={30}
                     rows={10}
                     value={todo}
-                    onChange={(e) =>
-                      setList("ideas", i(), e.currentTarget.value)
-                    }
+                    onChange={(e) => ctx.updateIdeaText(i(), e.currentTarget.value)}
                   />
-                  <DeleteButton padding=".5rem 1rem" onClick={() => Delete(i) && ButtonSounds.onClick()}>
+                  <DeleteButton
+                    padding=".5rem 1rem"
+                    onClick={() => {
+                      ctx.deleteIdea(i());
+                      ButtonSounds.onClick();
+                    }}
+                  >
                     Delete
                   </DeleteButton>
                 </Card>

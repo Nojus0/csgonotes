@@ -1,6 +1,6 @@
 import { Component, JSX } from "solid-js";
 import { styled } from "solid-styled-components";
-import { ButtonSounds } from "../common/audio/button";
+import { ButtonSounds } from "../../common/audio/button";
 
 interface IBasicButtonProps {
   padding?: string;
