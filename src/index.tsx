@@ -1,6 +1,13 @@
 /* @refresh reload */
 import { render } from "solid-js/web";
+import { StateContextProvider } from "./components/Context/StateContext";
 import Home from "./pages";
 
-
-render(() => <Home />, document.getElementById("root") as HTMLElement);
+render(
+  () => (
+    <StateContextProvider>
+      <Home />
+    </StateContextProvider>
+  ),
+  document.getElementById("root") as HTMLElement
+);

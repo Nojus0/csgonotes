@@ -20,11 +20,12 @@ export interface KeyPair {
   iv: Uint8Array;
 }
 
+export type KeyPairStore = KeypairFile & ILoaded;
+
 export interface KeypairFile extends KeyPair {
   version: number;
 }
 
-export type KeyPairStore = KeypairFile & ILoaded;
 
 export const defaultKeyPairStore = () =>
   ({

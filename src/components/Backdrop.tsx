@@ -1,13 +1,13 @@
 import { Component, JSX, onCleanup, Setter, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { ButtonSounds } from "../common/audio/button";
-import { TextButton } from "./Button";
+import { TextButton } from "./Primitive/Button";
 import { Transition } from "solid-transition-group";
 import { getFadeAnimation } from "../common/animations/fade";
 
 export interface IBackdrop {
   when: boolean;
-  setWhen: Setter<boolean>;
+  setWhen: (val: boolean) => void
   title: string;
   description: JSX.Element;
 }

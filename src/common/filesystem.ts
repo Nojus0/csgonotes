@@ -1,4 +1,4 @@
-import { playErrorSound } from "../audio/error";
+import { playErrorSound } from "./audio/error";
 
 export type FileExt = ".json" | ".bin";
 
