@@ -13,11 +13,11 @@ import IdeaBrowser from "../components/IdeaBrowser";
 const Home: Component = () => {
   const ctx = useStateContext();
 
-  onMount(async () => {
+  onMount(() => {
+    ctx.setVideo(true);
     preloadPrimitiveAudio();
     preloadAudio(activeScene().audio);
     addEventListener("keyup", onShortcutKey);
-    ctx.setVideo(true);
   });
 
   let i = 0;
