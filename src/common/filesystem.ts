@@ -1,18 +1,23 @@
 import { playErrorSound } from "./audio/error";
+import { READ_ONLY, READ_WRITE } from "./crypto";
 
 export type FileExt = ".json" | ".bin";
 
 export const mime = {
   json: "application/json",
-  bin: "application/octet-stream"
-}
+  bin: "application/octet-stream",
+};
 
 export const endings = {
   json: [".json"],
-  bin: [".bin"]
-}
+  bin: [".bin"],
+};
 
-export async function loadFile(mime: string, endings: string[], id: string): Promise<[ArrayBuffer, FileSystemFileHandle]> {
+export async function loadFile(
+  mime: string,
+  endings: string[],
+  id: string
+): Promise<[ArrayBuffer, FileSystemFileHandle]> {
   const options = {
     multiple: false,
     id,
@@ -20,10 +25,10 @@ export async function loadFile(mime: string, endings: string[], id: string): Pro
       {
         accept: {
           [mime]: endings,
-        }
-      }
+        },
+      },
     ],
-  } as OpenFilePickerOptions
+  } as OpenFilePickerOptions;
 
   try {
     if ("showOpenFilePicker" in window) {
@@ -39,7 +44,6 @@ export async function loadFile(mime: string, endings: string[], id: string): Pro
   }
 }
 
-
 export async function writeFile<T>(
   data: ArrayBuffer | string,
   mime: string,
@@ -54,10 +58,10 @@ export async function writeFile<T>(
       {
         accept: {
           [mime]: endings,
-        }
-      }
+        },
+      },
     ],
-  } as SaveFilePickerOptions
+  } as SaveFilePickerOptions;
 
   try {
     if ("showSaveFilePicker" in window) {
@@ -79,7 +83,7 @@ export async function writeFile<T>(
 async function openBlob(endings: string[]) {
   const a = document.createElement("input");
   a.type = "file";
-  a.accept = endings.join(",")
+  a.accept = endings.join(",");
   a.style.display = "none";
   a.click();
 
@@ -104,4 +108,24 @@ function downloadBlob(blob: Blob, name: string) {
   a.click();
   URL.revokeObjectURL(a.href);
   a.remove();
+}
+
+type QueryPermissionResult = "ALLOWED_PROMPT" | "DENIED" | "ALLOWED_NO_PROMPT";
+
+export async function queryPermission(
+  handle: FileSystemFileHandle,
+  mode: "read" | "readwrite"
+): Promise<QueryPermissionResult> {
+  const MODE = mode == "read" ? READ_ONLY : READ_WRITE;
+
+  const PERM = await handle.queryPermission(MODE);
+
+  if (PERM == "prompt") {
+    const RESPONSE = await handle.requestPermission(MODE);
+    return RESPONSE == "granted" ? "ALLOWED_PROMPT" : "DENIED";
+  } else if (PERM == "granted") {
+    return "ALLOWED_NO_PROMPT";
+  } else {
+    return "DENIED";
+  }
 }

@@ -1,3 +1,5 @@
+import { createSignal } from "solid-js";
+
 export interface IScene {
   name: string;
   audio: string;
@@ -53,7 +55,7 @@ export const Scenes: IScene[] = [
   {
     name: "Apollo",
     video: "/video/apollo540.webm",
-    audio: "/sound/bg_dust2_01.ogg"
+    audio: "/sound/bg_dust2_01.ogg",
   },
 ];
 
@@ -61,3 +63,5 @@ export function getRandomScene(): IScene {
   const randomIndex = Math.floor(Math.random() * Scenes.length);
   return Scenes[randomIndex];
 }
+
+export const [activeScene, setScene] = createSignal(getRandomScene());

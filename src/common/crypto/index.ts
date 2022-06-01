@@ -1,5 +1,9 @@
 import { KeyPair } from "./keypair";
 
+
+export const READ_WRITE: FileSystemHandlePermissionDescriptor = { mode: "readwrite" };
+export const READ_ONLY: FileSystemHandlePermissionDescriptor = { mode: "read" };
+
 export async function decryptJsonObject<T>(pair: KeyPair, f: ArrayBuffer) {
   const a: ArrayBuffer = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv: pair.iv },

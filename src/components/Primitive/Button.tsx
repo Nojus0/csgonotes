@@ -1,6 +1,6 @@
 import { Component, JSX } from "solid-js";
 import { styled } from "solid-styled-components";
-import { ButtonSounds } from "../../common/audio/button";
+import { buttonSounds } from "../../common/audio/button";
 
 interface IBasicButtonProps {
   padding?: string;
@@ -10,7 +10,7 @@ interface IBasicButtonProps {
 export const GreenButton: Component<
   IBasicButtonProps & JSX.ButtonHTMLAttributes<HTMLButtonElement>
 > = (p) => {
-  return <GreenButtonStyle {...ButtonSounds} {...p} />;
+  return <GreenButtonStyle {...buttonSounds} {...p} />;
 };
 
 const GreenButtonStyle = styled.button(
@@ -38,7 +38,7 @@ const GreenButtonStyle = styled.button(
 export const TextButton: Component<
   IBasicButtonProps & JSX.ButtonHTMLAttributes<HTMLButtonElement>
 > = (p) => {
-  return <TextButtonStyle {...ButtonSounds} {...p} />;
+  return <TextButtonStyle {...buttonSounds} {...p} />;
 };
 
 const TextButtonStyle = styled.button(
@@ -55,7 +55,7 @@ const TextButtonStyle = styled.button(
     borderRadius: ".2rem",
     background:
       "linear-gradient(to left, transparent 50%, rgba(0,0,0,0.2) 50%) right",
-    backgroundSize: "200%",
+    backgroundSize: "205%",
     transition: "300ms ease",
     "&:hover": {
       backgroundPosition: "left",
