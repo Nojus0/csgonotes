@@ -10,6 +10,10 @@
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ESNext", "ES2015", "ES5"],
     "jsxImportSource": "solid-js",
+    "baseUrl": "src",
+    "paths": {
+      "@common/*": ["common/*"]
+    },
     "types": ["vite/client", "@types/wicg-file-system-access"],
     "noEmit": true,
     "isolatedModules": true

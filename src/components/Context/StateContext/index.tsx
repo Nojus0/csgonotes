@@ -1,19 +1,9 @@
 import { delMany, get, set } from "idb-keyval";
-import {
-  batch,
-  Component,
-  createContext,
-  createSignal,
-  useContext,
-} from "solid-js";
+import { batch, Component, createContext, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import { buttonSounds } from "../../../common/audio/button";
-import { playErrorSound } from "../../../common/audio/error";
-import {
-  encryptJsonObject,
-  READ_ONLY,
-  READ_WRITE,
-} from "../../../common/crypto";
+import { buttonSounds } from "@common/audio/button";
+import { playErrorSound } from "@common/audio/error";
+import { encryptJsonObject } from "@common/crypto";
 import {
   createNewKeypair,
   decodeSerializedKeypairBuffer,
@@ -29,14 +19,14 @@ import {
   encryptList,
   getListName,
   ListFileStore,
-} from "../../../common/crypto/listfile";
+} from "@common/crypto/listfile";
 import {
   endings,
   loadFile,
   mime,
   queryPermission,
   writeFile,
-} from "../../../common/filesystem";
+} from "@common/filesystem";
 
 export const StateContext =
   createContext<ReturnType<typeof createDefaultStore>>();
