@@ -1,13 +1,13 @@
 import { Component, JSX, onCleanup, Setter, Show } from "solid-js";
 import { styled } from "solid-styled-components";
-import { ButtonSounds } from "../common/audio/button";
+import { buttonSounds } from "../common/audio/button";
 import { TextButton } from "./Primitive/Button";
 import { Transition } from "solid-transition-group";
 import { getFadeAnimation } from "../common/animations/fade";
 
 export interface IBackdrop {
   when: boolean;
-  setWhen: (val: boolean) => void
+  onBackgroundClick: () => void;
   title: string;
   description: JSX.Element;
 }
@@ -22,7 +22,7 @@ const Backdrop: Component<IBackdrop> = (p) => {
             ref={(el) => {
               const onClick = (e: MouseEvent) => {
                 if (el.contains(e.target as Node)) return;
-                p.setWhen(false);
+                p.onBackgroundClick();
               };
 
               document.body.addEventListener("click", onClick);
