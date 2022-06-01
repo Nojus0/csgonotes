@@ -171,11 +171,13 @@ function createDefaultStore() {
         getListName(),
         "list"
       );
+      set("list", handle);
       ctx.setList({ ...NEW_LIST, handle, loaded: true });
     },
     async newKeypair() {
       const NEW_PAIR = await createNewKeypair();
       const handle = await exportKeyPair(NEW_PAIR);
+      set("keypair", handle);
       ctx.setKeyPair({ ...NEW_PAIR, handle, loaded: true });
     },
     setShowTopbar(val: boolean) {
