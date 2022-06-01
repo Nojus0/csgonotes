@@ -43,7 +43,7 @@ const Video = styled.video({
   position: "absolute",
   top: 0,
   left: 0,
-  filter: "brightness(80%)",
+  filter: "brightness(90%)",
   zIndex: 0,
   objectFit: "cover",
   userSelect: "none",
