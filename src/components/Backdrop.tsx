@@ -1,7 +1,5 @@
-import { Component, JSX, onCleanup, Setter, Show } from "solid-js";
+import { Component, JSX, onCleanup, Show } from "solid-js";
 import { styled } from "solid-styled-components";
-import { buttonSounds } from "../common/audio/button";
-import { TextButton } from "./Primitive/Button";
 import { Transition } from "solid-transition-group";
 import { getFadeAnimation } from "../common/animations/fade";
 
