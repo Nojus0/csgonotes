@@ -92,13 +92,17 @@ function createDefaultStore() {
           endings.json,
           "keypair"
         );
-        await set("keypair", handle);
-
-        const keypair = await deserializeKeyPair(
-          decodeSerializedKeypairBuffer(jsonBuffer)
-        );
-        ctx.setKeyPair({ ...keypair, loaded: true, handle });
-        return true;
+        try {
+          const keypair = await deserializeKeyPair(
+            decodeSerializedKeypairBuffer(jsonBuffer)
+          );
+          await set("keypair", handle);
+          ctx.setKeyPair({ ...keypair, loaded: true, handle });
+          return true;
+        } catch (err) {
+          playErrorSound();
+          throw new Error("Incorrect keypair");
+        }
       }
 
       const result = await queryPermission(idbKeypairHandle, "read");
@@ -134,11 +138,15 @@ function createDefaultStore() {
           endings.bin,
           "list"
         );
-        await set("list", handle);
-
-        const list = await decryptList(ctx.keypair, cipherBuffer);
-        ctx.setList({ ...list, loaded: true, handle });
-        return true;
+        try {
+          const list = await decryptList(ctx.keypair, cipherBuffer);
+          await set("list", handle);
+          ctx.setList({ ...list, loaded: true, handle });
+          return true;
+        } catch (err) {
+          playErrorSound();
+          throw new Error("List file does not match keypair.");
+        }
       }
 
       const result = await queryPermission(idbListHandle, "readwrite");
@@ -151,14 +159,19 @@ function createDefaultStore() {
       }
 
       const file = await idbListHandle.getFile();
-      const list = await decryptList(ctx.keypair, await file.arrayBuffer());
 
-      ctx.setList({
-        ...list,
-        handle: idbListHandle,
-        loaded: true,
-      });
-      return true;
+      try {
+        const list = await decryptList(ctx.keypair, await file.arrayBuffer());
+        ctx.setList({
+          ...list,
+          handle: idbListHandle,
+          loaded: true,
+        });
+        return true;
+      } catch (err) {
+        playErrorSound();
+        throw new Error("List file does not match keypair.");
+      }
     },
     async newList() {
       const NEW_LIST = createNewList();
