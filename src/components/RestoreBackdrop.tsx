@@ -1,4 +1,4 @@
-import { get } from "idb-keyval";
+import { del, get } from "idb-keyval";
 import { batch, Component, onMount } from "solid-js";
 import { buttonSounds } from "../common/audio/button";
 import Backdrop, { Description } from "./Backdrop";
@@ -12,6 +12,14 @@ const RestoreBackdrop: Component = (p) => {
   onMount(async () => {
     const [keypair_handle, list_handle]: FileSystemFileHandle[] =
       await Promise.all([get("keypair"), get("list")]);
+
+    if (keypair_handle && !list_handle) {
+      del("keypair");
+    }
+
+    if (!keypair_handle && list_handle) {
+      del("list");
+    }
 
     const { IsSerializedLink } = InspectUri();
     if (keypair_handle && list_handle && !IsSerializedLink) {
