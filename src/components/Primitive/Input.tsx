@@ -35,7 +35,7 @@ export const TextArea = styled.textarea({
   color: "white",
   fontSize: "1.4rem",
   "&::selection": {
-    background: "rgba(82, 82, 82, 0.79)",
+    background: "rgb(76 175 80 / 65%)",
   },
   "&::-webkit-scrollbar": {
     width: "10px",
