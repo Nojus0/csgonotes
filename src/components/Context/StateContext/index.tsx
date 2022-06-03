@@ -11,7 +11,7 @@ import {
   deserializeKeyPair,
   exportKeyPair,
   KeyPairStore,
-} from "../../../common/crypto/keypair";
+} from "@common/crypto/keypair";
 import {
   createNewList,
   decryptList,

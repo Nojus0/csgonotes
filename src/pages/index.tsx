@@ -10,6 +10,7 @@ import MediaPlayer from "../components/MediaPlayer";
 import RestoreBackdrop from "../components/RestoreBackdrop";
 import CopyBackdrop from "../components/CopyBackdrop";
 import IdeaBrowser from "../components/IdeaBrowser";
+import ShortcutManager from "components/ShortcutManager";
 const Home: Component = () => {
   const ctx = useStateContext();
 
@@ -17,44 +18,11 @@ const Home: Component = () => {
     ctx.setVideo(true);
     preloadPrimitiveAudio();
     preloadAudio(activeScene().audio);
-    addEventListener("keyup", onShortcutKey);
   });
-
-  let i = 0;
-
-  function onShortcutKey(e: KeyboardEvent) {
-    if (
-      e.target instanceof HTMLTextAreaElement ||
-      e.target instanceof HTMLInputElement
-    ) {
-      return;
-    }
-    switch (e.key) {
-      case "n":
-        i = (i + 1) % Scenes.length;
-        setScene(Scenes[i]);
-        buttonSounds.onClick();
-        break;
-
-      case "b":
-        i = i < 1 ? Scenes.length - 1 : (i - 1) % Scenes.length;
-        setScene(Scenes[i]);
-        buttonSounds.onClick();
-        break;
-
-      case e.ctrlKey && ctx.keypair.loaded && ctx.list.loaded && "c":
-        ctx.setCopyClipboard(true);
-        break;
-
-      case "m":
-        ctx.toggleMute();
-        buttonSounds.onClick();
-        break;
-    }
-  }
 
   return (
     <Container>
+      <ShortcutManager />
       <CopyBackdrop />
       <RestoreBackdrop />
       <TopBar />

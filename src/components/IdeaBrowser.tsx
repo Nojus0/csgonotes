@@ -13,7 +13,7 @@ const IdeaBrowser: Component = () => {
       <Show when={ctx.list.loaded}>
         <For each={ctx.list.ideas}>
           {(todo, i) => (
-            <CardWrapper>
+            <CardContainer>
               <Card>
                 <TextArea
                   cols={30}
@@ -33,7 +33,7 @@ const IdeaBrowser: Component = () => {
                   Delete
                 </DeleteButton>
               </Card>
-            </CardWrapper>
+            </CardContainer>
           )}
         </For>
       </Show>
@@ -51,7 +51,7 @@ const DeleteButton = styled(TextButton)({
   right: 0,
 });
 
-const CardWrapper = styled.div({
+const CardContainer = styled.div({
   padding: "1rem",
 });
 
@@ -61,6 +61,7 @@ const Card = styled.div({
   minWidth: "calc(100% / 3)",
   padding: "1rem 1rem 2.9rem 1rem",
   position: "relative",
+  borderRadius: ".25rem"
 });
 
 
