@@ -1,6 +1,6 @@
-import { play } from ".";
+import { play } from "./preload";
 
 export const buttonSounds = {
-  onClick: () => play("/sound/generic_press_01.wav"),
-  onMouseEnter: () => play("/sound/itemtile_rollover_09.wav"),
+  onClick: () => play("/static/sound/generic_press_01.wav"),
+  onMouseEnter: () => play("/static/sound/itemtile_rollover_09.wav"),
 };

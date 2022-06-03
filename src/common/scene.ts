@@ -9,53 +9,53 @@ export interface IScene {
 export const Scenes: IScene[] = [
   {
     name: "Nuke",
-    audio: "/sound/bg_nuke_01.ogg",
-    video: "/video/nuke540.webm",
+    audio: "/static/sound/bg_nuke_01.ogg",
+    video: "/static/video/nuke540.webm",
   },
   {
     name: "Vertigo",
-    audio: "/sound/bg_vertigo_01.ogg",
-    video: "/video/vertigo540.webm",
+    audio: "/static/sound/bg_vertigo_01.ogg",
+    video: "/static/video/vertigo540.webm",
   },
   {
     name: "Anubis",
-    audio: "/sound/bg_anubis_01.ogg",
-    video: "/video/anubis540.webm",
+    audio: "/static/sound/bg_anubis_01.ogg",
+    video: "/static/video/anubis540.webm",
   },
   {
     name: "Cobblestone",
-    audio: "/sound/bg_cobble_night_01.ogg",
-    video: "/video/cbble540.webm",
+    audio: "/static/sound/bg_cobble_night_01.ogg",
+    video: "/static/video/cbble540.webm",
   },
   {
     name: "Mutiny",
-    audio: "/sound/bg_mutiny_01.ogg",
-    video: "/video/mutiny540.webm",
+    audio: "/static/sound/bg_mutiny_01.ogg",
+    video: "/static/video/mutiny540.webm",
   },
   {
     name: "Blacksite",
-    audio: "/sound/bg_blacksite_01.ogg",
-    video: "/video/blacksite540.webm",
+    audio: "/static/sound/bg_blacksite_01.ogg",
+    video: "/static/video/blacksite540.webm",
   },
   {
     name: "Swamp",
-    audio: "/sound/bg_swamp_01.ogg",
-    video: "/video/swamp540.webm",
+    audio: "/static/sound/bg_swamp_01.ogg",
+    video: "/static/video/swamp540.webm",
   },
   {
     name: "Ancient",
-    video: "/video/ancient540.webm",
-    audio: "/sound/bg_inferno_01.ogg",
+    video: "/static/video/ancient540.webm",
+    audio: "/static/sound/bg_inferno_01.ogg",
   },
   {
     name: "Sirocco",
-    video: "/video/sirocco_night540.webm",
-    audio: "/sound/bg_chlorine_01.ogg",
+    video: "/static/video/sirocco_night540.webm",
+    audio: "/static/sound/bg_chlorine_01.ogg",
   },
   {
     name: "Apollo",
-    video: "/video/apollo540.webm",
-    audio: "/sound/bg_dust2_01.ogg",
+    video: "/static/video/apollo540.webm",
+    audio: "/static/sound/bg_dust2_01.ogg",
   },
 ];
 

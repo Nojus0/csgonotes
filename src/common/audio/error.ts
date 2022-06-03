@@ -1,5 +1,5 @@
-import { play } from ".";
+import { play } from "./preload";
 
 export function playErrorSound() {
-  play("/sound/mainmenu_press_quit_02.wav");
+  play("/static/sound/mainmenu_press_quit_02.wav");
 }

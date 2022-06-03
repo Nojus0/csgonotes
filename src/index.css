@@ -24,14 +24,14 @@ a {
   font-family: "stratum";
   font-style: normal;
   font-weight: 500;
-  src: url("/stratum2medium.ttf") format("truetype");
+  src: url("/static/font/stratum2medium.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "stratum";
   font-style: normal;
   font-weight: 400;
-  src: url("/stratum2regular.ttf") format("truetype");
+  src: url("/static/font/stratum2regular.ttf") format("truetype");
 }
 
 input,

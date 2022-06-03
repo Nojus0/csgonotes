@@ -1,6 +1,6 @@
 import { Component, createEffect, createMemo, on, Show } from "solid-js";
 import { styled } from "solid-styled-components";
-import { userInteracted } from "../common/audio/chrome";
+import { userInteracted } from "../common/audio/chromeInteraction";
 import { activeScene } from "../common/scene";
 import { useStateContext } from "./Context/StateContext";
 
