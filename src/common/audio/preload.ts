@@ -1,13 +1,13 @@
 import { userInteracted } from "./chromeInteraction";
 
-const audioLoadList = [
+const PrimitiveAudioList = [
   "/static/sound/generic_press_01.wav",
   "/static/sound/mainmenu_press_quit_02.wav",
   "/static/sound/itemtile_rollover_09.wav",
 ];
 
 export async function preloadPrimitiveAudio() {
-  for (const url of audioLoadList) {
+  for (const url of PrimitiveAudioList) {
     preloadAudio(url);
   }
 }

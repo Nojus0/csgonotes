@@ -1,0 +1,29 @@
+[[headers]]
+  for = "*.ttf"
+  [headers.values]
+  Cache-Control = "public, max-age=365000000, immutable"
+
+[[headers]]
+  for = "*.webm"
+  [headers.values]
+  Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "*.ogg"
+  [headers.values]
+  Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "*.wav"
+  [headers.values]
+  Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+  Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+  Cache-Control = "public, max-age=604800, immutable"
