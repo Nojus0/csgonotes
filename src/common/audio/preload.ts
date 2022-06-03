@@ -1,9 +1,9 @@
-import { userInteracted } from "./chrome";
+import { userInteracted } from "./chromeInteraction";
 
 const audioLoadList = [
-  "/sound/generic_press_01.wav",
-  "/sound/mainmenu_press_quit_02.wav",
-  "/sound/itemtile_rollover_09.wav",
+  "/static/sound/generic_press_01.wav",
+  "/static/sound/mainmenu_press_quit_02.wav",
+  "/static/sound/itemtile_rollover_09.wav",
 ];
 
 export async function preloadPrimitiveAudio() {
