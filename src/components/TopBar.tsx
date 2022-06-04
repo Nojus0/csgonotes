@@ -5,7 +5,10 @@ import { useStateContext } from "../common/Context/StateContext";
 import { InspectUri } from "./CopyBackdrop";
 import { GreenButton } from "./Primitive/Button";
 import { Input } from "./Primitive/Input";
+import EditIcon from "./Svg/EditIcon";
+import KeyIcon from "./Svg/KeyIcon";
 import QuitIcon from "./Svg/QuitIcon";
+import SafeIcon from "./Svg/SafeIcon";
 import SaveIcon from "./Svg/SaveIcon";
 
 const TopBar: Component = () => {
@@ -23,52 +26,63 @@ const TopBar: Component = () => {
       <TopBarWrapper>
         {!ctx.keypair.loaded && !ctx.list.loaded && (
           <GreenButton
+            padding=".65rem .85rem .65rem 1.15rem"
             onClick={() => ctx.loadKeyPair() && buttonSounds.onClick()}
           >
-            Load Keypair
+            Load Key
+            <Key height="1.2rem" />
+          </GreenButton>
+        )}
+
+        {!ctx.keypair.loaded && (
+          <GreenButton
+            padding=".65rem .85rem .65rem 1.15rem"
+            onClick={() => ctx.newKeypair() && buttonSounds.onClick()}
+          >
+            New Key
+            <Key height="1.2rem" />
           </GreenButton>
         )}
 
         {ctx.keypair.loaded && !ctx.list.loaded && (
           <>
             <GreenButton
+              padding=".65rem .85rem .65rem 1.15rem"
               onClick={() => ctx.loadList() && buttonSounds.onClick()}
             >
               Load List
+              <Safe height="1.2rem" />
             </GreenButton>
             <GreenButton
+              padding=".65rem .85rem .65rem 1.15rem"
               onClick={() => ctx.newList() && buttonSounds.onClick()}
             >
               New List
+              <Safe height="1.2rem" />
             </GreenButton>
           </>
         )}
 
         {ctx.list.loaded && (
           <>
-            <AdaptiveGreenButton
+            <GreenButton
+              padding=".65rem .5rem .65rem 1.15rem"
               onClick={() => {
                 ctx.newIdea();
                 buttonSounds.onClick();
               }}
             >
               Add
-            </AdaptiveGreenButton>
-            <AdaptiveGreenButton
+              <Edit height="1.2rem" />
+            </GreenButton>
+            <GreenButton
+              padding=".65rem .75rem .65rem 1.15rem"
               onClick={() => ctx.saveList() && buttonSounds.onClick()}
             >
-              <SaveMargined height="1.2rem" />
               Save
-            </AdaptiveGreenButton>
+              <SaveMargined height="1.2rem" />
+            </GreenButton>
           </>
-        )}
-
-        {!ctx.keypair.loaded && (
-          <GreenButton
-            onClick={() => ctx.newKeypair() && buttonSounds.onClick()}
-          >
-            New Keypair
-          </GreenButton>
         )}
 
         <Show when={ctx.keypair.loaded && ctx.list.loaded}>
@@ -101,11 +115,16 @@ const TopBar: Component = () => {
 
 export default TopBar;
 
-const AdaptiveGreenButton = styled(GreenButton)({
-  padding: ".65rem 1.75rem",
-  "@media (max-width: 30rem)": {
-    padding: ".65rem 1rem",
-  },
+const Edit = styled(EditIcon)({
+  margin: "0 0 0 .25rem",
+});
+
+const Safe = styled(SafeIcon)({
+  margin: "0 0 0 .25rem",
+});
+
+const Key = styled(KeyIcon)({
+  margin: "0 0 0 .25rem",
 });
 
 const Icons = styled.div({
@@ -115,7 +134,7 @@ const Icons = styled.div({
 });
 
 const SaveMargined = styled(SaveIcon)({
-  margin: "0 .2rem 0 0",
+  margin: "0 0 0 .25rem",
 });
 
 const Quit = styled(QuitIcon)({
