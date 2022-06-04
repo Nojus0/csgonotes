@@ -1,4 +1,5 @@
 import { createSignal } from "solid-js";
+import SoundSource from "./audio/SoundSource";
 
 export interface IScene {
   name: string;
@@ -9,53 +10,53 @@ export interface IScene {
 export const Scenes: IScene[] = [
   {
     name: "Nuke",
-    audio: "/static/sound/bg_nuke_01.ogg",
-    video: "/static/video/nuke540.webm",
+    video: "https://i.imgur.com/grvpAj3.mp4",
+    audio: SoundSource.Ambience.Nuke,
   },
   {
     name: "Vertigo",
-    audio: "/static/sound/bg_vertigo_01.ogg",
-    video: "/static/video/vertigo540.webm",
+    video: "https://i.imgur.com/1nJ5fPG.mp4",
+    audio: SoundSource.Ambience.Vertigo,
   },
   {
     name: "Anubis",
-    audio: "/static/sound/bg_anubis_01.ogg",
-    video: "/static/video/anubis540.webm",
+    video: "https://i.imgur.com/UhZZVDo.mp4",
+    audio: SoundSource.Ambience.Anubis,
   },
   {
     name: "Cobblestone",
-    audio: "/static/sound/bg_cobble_night_01.ogg",
-    video: "/static/video/cbble540.webm",
+    video: "https://i.imgur.com/DsQUZXi.mp4",
+    audio: SoundSource.Ambience.Cobblestone,
   },
   {
     name: "Mutiny",
-    audio: "/static/sound/bg_mutiny_01.ogg",
-    video: "/static/video/mutiny540.webm",
+    video: "https://i.imgur.com/o0sixra.mp4",
+    audio: SoundSource.Ambience.Mutiny,
   },
   {
     name: "Blacksite",
-    audio: "/static/sound/bg_blacksite_01.ogg",
-    video: "/static/video/blacksite540.webm",
+    video: "https://i.imgur.com/uUNR3Dp.mp4",
+    audio: SoundSource.Ambience.Blacksite,
   },
   {
     name: "Swamp",
-    audio: "/static/sound/bg_swamp_01.ogg",
-    video: "/static/video/swamp540.webm",
+    video: "https://i.imgur.com/24AtgQ6.mp4",
+    audio: SoundSource.Ambience.Swamp,
   },
   {
     name: "Ancient",
-    video: "/static/video/ancient540.webm",
-    audio: "/static/sound/bg_inferno_01.ogg",
+    video: "https://i.imgur.com/NdxvAEF.mp4",
+    audio: SoundSource.Ambience.Inferno,
   },
   {
     name: "Sirocco",
-    video: "/static/video/sirocco_night540.webm",
-    audio: "/static/sound/bg_chlorine_01.ogg",
+    video: "https://i.imgur.com/zRUrtY9.mp4",
+    audio: SoundSource.Ambience.Chlorine,
   },
   {
     name: "Apollo",
-    video: "/static/video/apollo540.webm",
-    audio: "/static/sound/bg_dust2_01.ogg",
+    video: "https://i.imgur.com/fHKiKs4.mp4",
+    audio: SoundSource.Ambience.Dust2,
   },
 ];
 

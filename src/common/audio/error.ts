@@ -1,5 +1,6 @@
 import { play } from "./preload";
+import SoundSource from "./SoundSource";
 
 export function playErrorSound() {
-  play("/static/sound/mainmenu_press_quit_02.wav");
+  play(SoundSource.Button.Quit);
 }

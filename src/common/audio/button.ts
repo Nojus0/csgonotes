@@ -1,6 +1,7 @@
 import { play } from "./preload";
+import SoundSource from "./SoundSource";
 
 export const buttonSounds = {
-  onClick: () => play("/static/sound/generic_press_01.wav"),
-  onMouseEnter: () => play("/static/sound/itemtile_rollover_09.wav"),
+  onClick: () => play(SoundSource.Button.Click),
+  onMouseEnter: () => play(SoundSource.Button.MouseOver),
 };
