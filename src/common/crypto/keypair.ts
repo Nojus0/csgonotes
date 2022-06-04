@@ -149,6 +149,6 @@ export function getKeypairName() {
 
   const id = bs58.encode(a);
   const date = new Date();
-  const name = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-Keypair-${id}.json`;
+  const name = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-Key-${id}.json`;
   return name;
 }
