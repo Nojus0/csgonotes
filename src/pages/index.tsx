@@ -4,7 +4,7 @@ import { styled } from "solid-styled-components";
 import { buttonSounds } from "../common/audio/button";
 import { activeScene, Scenes, setScene } from "../common/scene";
 import { preloadPrimitiveAudio, preloadAudio } from "../common/audio/preload";
-import { useStateContext } from "../components/Context/StateContext";
+import { useStateContext } from "../common/Context/StateContext";
 import TopBar from "../components/TopBar";
 import MediaPlayer from "../components/MediaPlayer";
 import RestoreBackdrop from "../components/RestoreBackdrop";

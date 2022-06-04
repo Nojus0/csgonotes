@@ -16,7 +16,7 @@ import {
 } from "../common/crypto/keypair";
 import { decryptList, encryptList } from "../common/crypto/listfile";
 import Backdrop, { Description } from "./Backdrop";
-import { useStateContext } from "./Context/StateContext";
+import { useStateContext } from "../common/Context/StateContext";
 import { TextButton } from "./Primitive/Button";
 
 export function InspectUri() {

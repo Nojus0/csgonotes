@@ -47,10 +47,10 @@ function createDefaultStore() {
       buttonSounds.onClick();
 
       let success = await ctx.loadKeyPair();
-      if (!success) return;
+      if (!success) return playErrorSound()
 
       success = await ctx.loadList();
-      if (!success) return;
+      if (!success) return playErrorSound()
 
       ctx.setRestore(false);
     },
