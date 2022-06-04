@@ -1,7 +1,7 @@
 import { buttonSounds } from "@common/audio/button";
 import { Scenes, setScene } from "@common/scene";
 import { Component, onMount } from "solid-js";
-import { useStateContext } from "./Context/StateContext";
+import { useStateContext } from "../common/Context/StateContext";
 
 const ShortcutManager: Component = (p) => {
   let i = 0;

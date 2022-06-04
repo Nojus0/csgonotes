@@ -1,7 +1,7 @@
 import { Component, For, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { buttonSounds } from "../common/audio/button";
-import { useStateContext } from "./Context/StateContext";
+import { useStateContext } from "../common/Context/StateContext";
 import { TextButton } from "./Primitive/Button";
 import { TextArea } from "./Primitive/Input";
 

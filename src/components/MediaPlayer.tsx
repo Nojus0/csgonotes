@@ -9,7 +9,7 @@ import {
 import { styled } from "solid-styled-components";
 import { userInteracted } from "../common/audio/chromeInteraction";
 import { activeScene } from "../common/scene";
-import { useStateContext } from "./Context/StateContext";
+import { useStateContext } from "../common/Context/StateContext";
 
 const MediaPlayer: Component = () => {
   const ctx = useStateContext();
