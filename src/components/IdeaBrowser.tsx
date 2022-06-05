@@ -56,8 +56,7 @@ const CardContainer = styled.div({
 });
 
 const Card = styled.div({
-  background: "rgba(82, 82, 82, 0.79)",
-  backdropFilter: "blur(40px)",
+  background: "rgb(82, 82, 82, 0.999)",
   minWidth: "calc(100% / 3)",
   padding: "1rem 1rem 2.9rem 1rem",
   position: "relative",
