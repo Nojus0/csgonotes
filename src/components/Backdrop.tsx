@@ -8,6 +8,7 @@ export interface IBackdrop {
   onBackgroundClick: () => void;
   title: string;
   description: JSX.Element;
+  children: any
 }
 
 // ! UNUSED !

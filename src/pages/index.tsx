@@ -1,7 +1,6 @@
 /* @refresh reload */
-import { Component, onMount } from "solid-js";
+import { Component, createEffect, onMount } from "solid-js";
 import { styled } from "solid-styled-components";
-import { buttonSounds } from "../common/audio/button";
 import { activeScene, Scenes, setScene } from "../common/scene";
 import { preloadPrimitiveAudio, preloadAudio } from "../common/audio/preload";
 import { useStateContext } from "../common/Context/StateContext";
@@ -17,6 +16,10 @@ const Home: Component = () => {
   onMount(() => {
     ctx.setVideo(true);
     preloadPrimitiveAudio();
+
+    // Preload current scene audio in the background, IF the user has not interacted with the page
+    // the audio will not preload, so the audio will start loading when he presses 
+    // somewhere on the page, we preload current scene audio on page load.
     preloadAudio(activeScene().audio);
   });
 
