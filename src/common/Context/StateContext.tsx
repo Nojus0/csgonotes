@@ -1,5 +1,11 @@
 import { delMany, get, set } from "idb-keyval";
-import { batch, Component, createContext, useContext } from "solid-js";
+import {
+  batch,
+  Component,
+  ComponentProps,
+  createContext,
+  useContext,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 import { buttonSounds } from "@common/audio/button";
 import { playErrorSound } from "@common/audio/error";
@@ -47,10 +53,10 @@ function createDefaultStore() {
       buttonSounds.onClick();
 
       let success = await ctx.loadKeyPair();
-      if (!success) return playErrorSound()
+      if (!success) return playErrorSound();
 
       success = await ctx.loadList();
-      if (!success) return playErrorSound()
+      if (!success) return playErrorSound();
 
       ctx.setRestore(false);
     },
@@ -74,93 +80,101 @@ function createDefaultStore() {
       }
     },
     async loadKeyPair(): Promise<boolean> {
-      const idbKeypairHandle: FileSystemFileHandle = await get("keypair");
+      try {
+        const idbKeypairHandle: FileSystemFileHandle = await get("keypair");
 
-      if (!idbKeypairHandle) {
-        const [jsonBuffer, handle] = await loadFile(
-          mime.json,
-          endings.json,
-          "keypair"
-        );
-        try {
-          const keypair = await deserializeKeyPair(
-            decodeSerializedKeypairBuffer(jsonBuffer)
+        if (!idbKeypairHandle) {
+          const [jsonBuffer, handle] = await loadFile(
+            mime.json,
+            endings.json,
+            "keypair"
           );
-          await set("keypair", handle);
-          ctx.setKeyPair({ ...keypair, loaded: true, handle });
-          return true;
-        } catch (err) {
-          playErrorSound();
-          throw new Error("Incorrect keypair");
+          try {
+            const keypair = await deserializeKeyPair(
+              decodeSerializedKeypairBuffer(jsonBuffer)
+            );
+            await set("keypair", handle);
+            ctx.setKeyPair({ ...keypair, loaded: true, handle });
+            return true;
+          } catch (err) {
+            playErrorSound();
+            throw new Error("Incorrect keypair");
+          }
         }
-      }
 
-      const result = await queryPermission(idbKeypairHandle, "read");
+        const result = await queryPermission(idbKeypairHandle, "read");
 
-      if (result == "DENIED") {
+        if (result == "DENIED") {
+          return false;
+        }
+
+        if (result == "ALLOWED_PROMPT") {
+          buttonSounds.onClick();
+        }
+
+        const file = await idbKeypairHandle.getFile();
+
+        const { iv, key, version } = await deserializeKeyPair(
+          decodeSerializedKeypairBuffer(await file.arrayBuffer())
+        );
+
+        ctx.setKeyPair({
+          iv,
+          key,
+          version,
+          handle: idbKeypairHandle,
+          loaded: true,
+        });
+        return true;
+      } catch (err) {
         return false;
       }
-
-      if (result == "ALLOWED_PROMPT") {
-        buttonSounds.onClick();
-      }
-
-      const file = await idbKeypairHandle.getFile();
-
-      const { iv, key, version } = await deserializeKeyPair(
-        decodeSerializedKeypairBuffer(await file.arrayBuffer())
-      );
-
-      ctx.setKeyPair({
-        iv,
-        key,
-        version,
-        handle: idbKeypairHandle,
-        loaded: true,
-      });
-      return true;
     },
     async loadList(): Promise<boolean> {
-      const idbListHandle: FileSystemFileHandle = await get("list");
-      if (!idbListHandle) {
-        const [cipherBuffer, handle] = await loadFile(
-          mime.bin,
-          endings.bin,
-          "list"
-        );
+      try {
+        const idbListHandle: FileSystemFileHandle = await get("list");
+        if (!idbListHandle) {
+          const [cipherBuffer, handle] = await loadFile(
+            mime.bin,
+            endings.bin,
+            "list"
+          );
+          try {
+            const list = await decryptList(ctx.keypair, cipherBuffer);
+            await set("list", handle);
+            ctx.setList({ ...list, loaded: true, handle });
+            return true;
+          } catch (err) {
+            playErrorSound();
+            throw new Error("List file does not match keypair.");
+          }
+        }
+
+        const result = await queryPermission(idbListHandle, "readwrite");
+        if (result == "DENIED") {
+          return false;
+        }
+
+        if (result == "ALLOWED_PROMPT") {
+          buttonSounds.onClick();
+        }
+
+        const file = await idbListHandle.getFile();
+
         try {
-          const list = await decryptList(ctx.keypair, cipherBuffer);
-          await set("list", handle);
-          ctx.setList({ ...list, loaded: true, handle });
+          const list = await decryptList(ctx.keypair, await file.arrayBuffer());
+          ctx.setList({
+            ...list,
+            handle: idbListHandle,
+            loaded: true,
+          });
           return true;
         } catch (err) {
           playErrorSound();
           throw new Error("List file does not match keypair.");
         }
-      }
-
-      const result = await queryPermission(idbListHandle, "readwrite");
-      if (result == "DENIED") {
-        return false;
-      }
-
-      if (result == "ALLOWED_PROMPT") {
-        buttonSounds.onClick();
-      }
-
-      const file = await idbListHandle.getFile();
-
-      try {
-        const list = await decryptList(ctx.keypair, await file.arrayBuffer());
-        ctx.setList({
-          ...list,
-          handle: idbListHandle,
-          loaded: true,
-        });
-        return true;
       } catch (err) {
-        playErrorSound();
-        throw new Error("List file does not match keypair.");
+        return false;
       }
     },
     async newList() {
@@ -230,7 +244,7 @@ function createDefaultStore() {
   return ctx;
 }
 
-export const StateContextProvider: Component = (p) => {
+export const StateContextProvider: Component<{ children: any }> = (p) => {
   const store = createDefaultStore();
 
   return (
