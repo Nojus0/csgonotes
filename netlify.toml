@@ -27,3 +27,8 @@
   for = "*.css"
   [headers.values]
   Cache-Control = "public, max-age=604800, immutable"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
