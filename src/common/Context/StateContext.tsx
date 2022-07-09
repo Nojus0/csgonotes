@@ -7,9 +7,7 @@ import {
   useContext,
 } from "solid-js";
 import { createStore } from "solid-js/store";
-import { buttonSounds } from "@common/audio/button";
-import { playErrorSound } from "@common/audio/error";
-import { encryptJsonObject } from "@common/crypto";
+import { encryptJsonObject } from "@common/Crypto";
 import {
   createNewKeypair,
   decodeSerializedKeypairBuffer,
@@ -17,7 +15,16 @@ import {
   deserializeKeyPair,
   exportKeyPair,
   KeyPairStore,
-} from "@common/crypto/keypair";
+} from "@common/KeyPair";
+
+import {
+  endings,
+  loadFile,
+  mime,
+  queryPermission,
+  writeFile,
+} from "@common/Filesystem";
+import { buttonSounds, playErrorSound } from "@common/audio/AudioSource";
 import {
   createNewList,
   decryptList,
@@ -25,14 +32,7 @@ import {
   encryptList,
   getListName,
   ListFileStore,
-} from "@common/crypto/listfile";
-import {
-  endings,
-  loadFile,
-  mime,
-  queryPermission,
-  writeFile,
-} from "@common/filesystem";
+} from "@common/ListFile";
 
 export const StateContext =
   createContext<ReturnType<typeof createDefaultStore>>();

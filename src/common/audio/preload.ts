@@ -1,7 +1,5 @@
-import { userInteracted } from "./chromeInteraction";
-import SoundSource from "./SoundSource";
-
-const PrimitiveAudioList = Object.values(SoundSource.Button);
+import { userInteracted } from "./ChromeFix";
+import { PrimitiveAudioList } from "./AudioSource";
 
 export async function preloadPrimitiveAudio() {
   for (const url of PrimitiveAudioList) {

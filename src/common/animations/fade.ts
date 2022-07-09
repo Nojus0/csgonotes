@@ -1,4 +1,4 @@
-import { TransitionProps } from "./interfaces";
+import { TransitionProps } from "@common/Utils";
 
 export function getFadeAnimation(duration: number): TransitionProps {
   return {

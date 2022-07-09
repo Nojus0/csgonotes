@@ -1,4 +1,5 @@
-const SoundSource = {
+import { play } from "./Preload";
+const AudioSource = {
   Button: {
     Click: "https://media.vocaroo.com/mp3/1mvXUebjUbYo",
     MouseOver: "https://media.vocaroo.com/mp3/1dAHcxcXWPMz",
@@ -21,4 +22,15 @@ const SoundSource = {
   },
 };
 
-export default SoundSource;
+export const PrimitiveAudioList = Object.values(AudioSource.Button);
+
+export const buttonSounds = {
+  onClick: () => play(AudioSource.Button.Click),
+  onMouseEnter: () => play(AudioSource.Button.MouseOver),
+};
+
+export function playErrorSound() {
+  play(AudioSource.Button.Quit);
+}
+
+export default AudioSource;

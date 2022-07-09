@@ -1,11 +1,8 @@
+import { decryptJsonObject, encryptJsonObject } from "@common/Crypto";
 import base58 from "bs58";
-import { get, set } from "idb-keyval";
-import { decryptJsonObject, encryptJsonObject } from ".";
-import { playErrorSound } from "../audio/error";
-import { DEBUG_ALL_LOADED } from "../debug";
-import { endings, loadFile, mime } from "../filesystem";
-import { ILoaded } from "../utils";
-import { KeyPair } from "./keypair";
+import { DEBUG_ALL_LOADED } from "./debug";
+import { KeyPair } from "./KeyPair";
+import { ILoaded } from "./utils";
 
 export interface List {
   ideas: string[];

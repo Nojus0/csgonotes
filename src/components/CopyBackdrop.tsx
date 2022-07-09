@@ -7,17 +7,17 @@ import {
   onMount,
   Show,
 } from "solid-js";
-import { buttonSounds } from "../common/audio/button";
 import {
   AES_KEY_BITS,
   DetailedKeypair,
   serializeKeyPair,
   VERSION,
-} from "../common/crypto/keypair";
-import { decryptList, encryptList } from "../common/crypto/listfile";
+} from "../common/KeyPair";
 import Backdrop, { Description } from "./Backdrop";
 import { useStateContext } from "../common/Context/StateContext";
 import { TextButton } from "./Primitive/Button";
+import { buttonSounds } from "@common/audio/AudioSource";
+import { decryptList, encryptList } from "@common/ListFile";
 
 export function InspectUri() {
   const url = new URL(location.href);
