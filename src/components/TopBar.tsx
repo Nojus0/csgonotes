@@ -1,6 +1,6 @@
+import { buttonSounds } from "@common/audio/AudioSource";
 import { Component, createEffect, onMount, Show } from "solid-js";
 import { styled } from "solid-styled-components";
-import { buttonSounds } from "../common/audio/button";
 import { useStateContext } from "../common/Context/StateContext";
 import { InspectUri } from "./CopyBackdrop";
 import { GreenButton } from "./Primitive/Button";

@@ -1,6 +1,6 @@
+import { buttonSounds } from "@common/audio/AudioSource";
 import { Component, For, Show } from "solid-js";
 import { styled } from "solid-styled-components";
-import { buttonSounds } from "../common/audio/button";
 import { useStateContext } from "../common/Context/StateContext";
 import { TextButton } from "./Primitive/Button";
 import { TextArea } from "./Primitive/Input";
@@ -60,10 +60,8 @@ const Card = styled.div({
   minWidth: "calc(100% / 3)",
   padding: "1rem 1rem 2.9rem 1rem",
   position: "relative",
-  borderRadius: ".25rem"
+  borderRadius: ".25rem",
 });
-
-
 
 // TODO Seperate file
 

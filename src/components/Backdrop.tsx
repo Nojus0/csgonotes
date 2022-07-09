@@ -1,7 +1,7 @@
 import { Component, JSX, onCleanup, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { Transition } from "solid-transition-group";
-import { getFadeAnimation } from "../common/animations/fade";
+import { getFadeAnimation } from "../common/Animations/Fade";
 
 export interface IBackdrop {
   when: boolean;
@@ -11,7 +11,6 @@ export interface IBackdrop {
   children: any
 }
 
-// ! UNUSED !
 const Backdrop: Component<IBackdrop> = (p) => {
   return (
     <Transition {...getFadeAnimation(150)}>

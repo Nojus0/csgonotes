@@ -1,6 +1,6 @@
-import { DEBUG_ALL_LOADED } from "../debug";
-import { endings, loadFile, mime, writeFile } from "../filesystem";
-import { ILoaded } from "../utils";
+import { DEBUG_ALL_LOADED } from "./debug";
+import { endings, loadFile, mime, writeFile } from "./Filesystem";
+import { ILoaded } from "./utils";
 import bs58 from "bs58";
 
 export const AES_IV_BYTES = 32;
@@ -52,41 +52,6 @@ export const createNewKeypair = async () => {
 
   return a;
 };
-
-// async function resolveKeyPair(): Promise<ArrayBuffer> {
-//   const idbKeypair: FileSystemFileHandle = await get("keypair");
-
-//   if (!idbKeypair) {
-//     console.log(`Keypair file handle not found.`);
-//     const [jsonBuffer, handle] = await loadFile(
-//       mime.json,
-//       endings.json,
-//       "keypair"
-//     );
-//     await set("keypair", handle);
-//     return jsonBuffer;
-//   }
-
-//   const IDB_KEYPAIR_PERM = await idbKeypair.queryPermission({ mode: "read" });
-
-//   if (IDB_KEYPAIR_PERM == "prompt") {
-//     await idbKeypair.requestPermission({ mode: "read" });
-//   }
-
-//   // * If does not have permission exception will be thrown. *
-//   const f = await idbKeypair.getFile();
-//   const bin = await f.arrayBuffer();
-//   return bin;
-// }
-
-// export async function OpenSerializedKeyPair(): Promise<DetailedKeypair> {
-//   const keypairBuffer = await resolveKeyPair();
-
-//   const keypair = deserializeKeyPair(
-//     decodeSerializedKeypairBuffer(keypairBuffer)
-//   );
-//   return keypair;
-// }
 
 export async function serializeKeyPair(keypair: DetailedKeypair) {
   const KEY_BUF = new Uint8Array(

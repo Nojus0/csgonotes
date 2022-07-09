@@ -1,5 +1,4 @@
-import { KeyPair } from "./keypair";
-
+import { KeyPair } from "./KeyPair";
 
 export const READ_WRITE: FileSystemHandlePermissionDescriptor = { mode: "readwrite" };
 export const READ_ONLY: FileSystemHandlePermissionDescriptor = { mode: "read" };

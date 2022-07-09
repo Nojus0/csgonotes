@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import SoundSource from "./audio/SoundSource";
+import AudioSource from "./Audio/AudioSource";
 
 export interface IScene {
   name: string;
@@ -11,52 +11,52 @@ export const Scenes: IScene[] = [
   {
     name: "Nuke",
     video: "https://i.imgur.com/grvpAj3.mp4",
-    audio: SoundSource.Ambience.Nuke,
+    audio: AudioSource.Ambience.Nuke,
   },
   {
     name: "Vertigo",
     video: "https://i.imgur.com/1nJ5fPG.mp4",
-    audio: SoundSource.Ambience.Vertigo,
+    audio: AudioSource.Ambience.Vertigo,
   },
   {
     name: "Anubis",
     video: "https://i.imgur.com/UhZZVDo.mp4",
-    audio: SoundSource.Ambience.Anubis,
+    audio: AudioSource.Ambience.Anubis,
   },
   {
     name: "Cobblestone",
     video: "https://i.imgur.com/DsQUZXi.mp4",
-    audio: SoundSource.Ambience.Cobblestone,
+    audio: AudioSource.Ambience.Cobblestone,
   },
   {
     name: "Mutiny",
     video: "https://i.imgur.com/o0sixra.mp4",
-    audio: SoundSource.Ambience.Mutiny,
+    audio: AudioSource.Ambience.Mutiny,
   },
   {
     name: "Blacksite",
     video: "https://i.imgur.com/uUNR3Dp.mp4",
-    audio: SoundSource.Ambience.Blacksite,
+    audio: AudioSource.Ambience.Blacksite,
   },
   {
     name: "Swamp",
     video: "https://i.imgur.com/24AtgQ6.mp4",
-    audio: SoundSource.Ambience.Swamp,
+    audio: AudioSource.Ambience.Swamp,
   },
   {
     name: "Ancient",
     video: "https://i.imgur.com/NdxvAEF.mp4",
-    audio: SoundSource.Ambience.Inferno,
+    audio: AudioSource.Ambience.Inferno,
   },
   {
     name: "Sirocco",
     video: "https://i.imgur.com/zRUrtY9.mp4",
-    audio: SoundSource.Ambience.Chlorine,
+    audio: AudioSource.Ambience.Chlorine,
   },
   {
     name: "Apollo",
     video: "https://i.imgur.com/fHKiKs4.mp4",
-    audio: SoundSource.Ambience.Dust2,
+    audio: AudioSource.Ambience.Dust2,
   },
 ];
 
