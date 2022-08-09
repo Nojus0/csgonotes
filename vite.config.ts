@@ -3,7 +3,11 @@ import solidPlugin from "vite-plugin-solid";
 import pathsPlugin from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [pathsPlugin(), solidPlugin(), splitVendorChunkPlugin()],
+  plugins: [
+    pathsPlugin({ extensions: [".tsx", ".ts"], root: "./" }),
+    solidPlugin(),
+    splitVendorChunkPlugin(),
+  ],
   build: {
     target: "esnext",
   },

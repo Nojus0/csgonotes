@@ -1,7 +1,7 @@
 import { Component, JSX, onCleanup, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { Transition } from "solid-transition-group";
-import { getFadeAnimation } from "../common/Animations/Fade";
+import { getFadeAnimation } from "@common/Animations/Fade";
 
 export interface IBackdrop {
   when: boolean;

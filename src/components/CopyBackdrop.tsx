@@ -14,7 +14,7 @@ import {
   VERSION,
 } from "../common/KeyPair";
 import Backdrop, { Description } from "./Backdrop";
-import { useStateContext } from "../common/Context/StateContext";
+import { useStateContext } from "@common/Context/StateContext";
 import { TextButton } from "./Primitive/Button";
 import { buttonSounds } from "@common/audio/AudioSource";
 import { decryptList, encryptList } from "@common/ListFile";
