@@ -4,7 +4,7 @@ import pathsPlugin from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [
-    pathsPlugin({ extensions: [".tsx", ".ts"], root: "./" }),
+    pathsPlugin(),
     solidPlugin(),
     splitVendorChunkPlugin(),
   ],
