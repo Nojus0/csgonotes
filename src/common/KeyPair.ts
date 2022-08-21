@@ -1,5 +1,5 @@
 import { DEBUG_ALL_LOADED } from "./debug";
-import { endings, loadFile, mime, writeFile } from "./Filesystem";
+import { endings, mime, writeFile } from "./Filesystem";
 import { ILoaded } from "./utils";
 import bs58 from "bs58";
 
