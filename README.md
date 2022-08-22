@@ -7,12 +7,12 @@ A CS:GO Themed Notes Web App with *AES256* Encryption.
 You may already know from which game the user interface was imitated, I was trying to make the user interface look as similar to the CS:GO menu interface as possible.
 
 # Setup
-You start by creating a new key that contains a key, IV, and the version of the key.
-You can do so by pressing the *New Key* button and preferably storing it on a USB or in another secure place.
+Start by creating a new key, a key is a file that contains the 2 values that are used to decrypt and encrypt the notes file.
+Create a key by pressing the *New Key* button and preferably storing it on a USB or in another secure place.
 
-You now need to create the list. This is where your encrypted notes are stored. You can do so by pressing the *New List* button when you load your key.
+You now can create a notes file. This is where your encrypted notes are stored. You can do so by pressing the *New List* button when you load your key.
 
-Now you can add a new note by pressing the *Add* button and rename the list by changing the text in the textbox near the *Add* button,
+Now you can add a new note by pressing the *Add* button, and name the notes file by changing the text in the textbox near the *Add* button,
 after you add your notes save them by pressing the *Save* button.
 
 # Future Improvements
