@@ -1,9 +1,9 @@
 import { buttonSounds } from "@common/audio/AudioSource";
 import { Scenes, setScene } from "@common/Scene";
 import { Component, onMount } from "solid-js";
-import { useStateContext } from "../common/Context/StateContext";
+import { useStateContext } from "@common/Context/StateContext";
 
-const ShortcutManager: Component = (p) => {
+const ShortcutManager: Component = () => {
   let i = 0;
   const ctx = useStateContext();
 
@@ -31,7 +31,7 @@ const ShortcutManager: Component = (p) => {
         buttonSounds.onClick();
         break;
 
-      case e.ctrlKey && ctx.keypair.loaded && ctx.list.loaded && "c":
+      case e.ctrlKey && ctx.keypair.loaded && ctx.notes.loaded && "c":
         ctx.setCopyClipboard(true);
         break;
 

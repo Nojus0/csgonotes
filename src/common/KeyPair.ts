@@ -1,6 +1,6 @@
-import { DEBUG_ALL_LOADED } from "./debug";
-import { endings, mime, writeFile } from "./Filesystem";
-import { ILoaded } from "./utils";
+import {DEBUG_ALL_LOADED} from "./debug";
+import {endings, mime, writeFile} from "./Filesystem";
+import {ILoaded} from "./utils";
 import bs58 from "bs58";
 
 export const AES_IV_BYTES = 32;
@@ -103,10 +103,10 @@ export async function deserializeKeyPair(
 export function decodeSerializedKeypairBuffer(
   keypairBuffer: ArrayBuffer
 ): KeyPairSerialized {
-  const serializedKeypair: KeyPairSerialized = JSON.parse(
-    new TextDecoder().decode(keypairBuffer)
+
+  return JSON.parse(
+      new TextDecoder().decode(keypairBuffer)
   );
-  return serializedKeypair;
 }
 
 export function getKeypairName() {
@@ -114,6 +114,5 @@ export function getKeypairName() {
 
   const id = bs58.encode(a);
   const date = new Date();
-  const name = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-Key-${id}.json`;
-  return name;
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-Key-${id}.json`;
 }

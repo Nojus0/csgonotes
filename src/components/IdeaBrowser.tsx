@@ -10,8 +10,8 @@ const IdeaBrowser: Component = () => {
 
   return (
     <Browser>
-      <Show when={ctx.list.loaded}>
-        <For each={ctx.list.ideas}>
+      <Show when={ctx.notes.loaded}>
+        <For each={ctx.notes.ideas}>
           {(todo, i) => (
             <CardContainer>
               <Card>

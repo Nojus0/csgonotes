@@ -2,7 +2,6 @@ import { delMany, get, set } from "idb-keyval";
 import {
   batch,
   Component,
-  ComponentProps,
   createContext,
   useContext,
 } from "solid-js";
@@ -26,13 +25,13 @@ import {
 } from "@common/Filesystem";
 import { buttonSounds, playErrorSound } from "@common/audio/AudioSource";
 import {
-  createNewList,
-  decryptList,
-  defaultListStore,
-  encryptList,
-  getListName,
-  ListFileStore,
-} from "@common/ListFile";
+  createNewNotes,
+  decryptNotes,
+  defaultNotesStore,
+  encryptNotes,
+  getNotesName,
+  NotesFileStore,
+} from "@common/Notes";
 
 export const StateContext =
   createContext<ReturnType<typeof createDefaultStore>>();
@@ -40,7 +39,7 @@ export const StateContext =
 function createDefaultStore() {
   const [ctx, s] = createStore({
     keypair: defaultKeyPairStore(),
-    list: defaultListStore(),
+    notes: defaultNotesStore(),
     muted: false,
     showRestore: false,
     showVideo: false,
@@ -55,28 +54,28 @@ function createDefaultStore() {
       let success = await ctx.loadKeyPair();
       if (!success) return playErrorSound();
 
-      success = await ctx.loadList();
+      success = await ctx.loadNotes();
       if (!success) return playErrorSound();
 
       ctx.setRestore(false);
     },
-    async saveList() {
-      const cipher = await encryptList(ctx.keypair, ctx.list);
+    async saveNotes() {
+      const cipher = await encryptNotes(ctx.keypair, ctx.notes);
 
-      if (ctx.list.handle) {
-        const result = await queryPermission(ctx.list.handle, "readwrite");
+      if (ctx.notes.handle) {
+        const result = await queryPermission(ctx.notes.handle, "readwrite");
 
         if (result == "DENIED") {
           return playErrorSound();
         }
 
-        const w = await ctx.list.handle.createWritable();
+        const w = await ctx.notes.handle.createWritable();
         await w.write(cipher);
         await w.close();
         console.log(`Successfully saved`);
       } else {
         console.log(`List handle not found.`);
-        await writeFile(cipher, mime.bin, endings.bin, getListName(), "list");
+        await writeFile(cipher, mime.bin, endings.bin, getNotesName(), "list");
       }
     },
     async loadKeyPair(): Promise<boolean> {
@@ -130,7 +129,7 @@ function createDefaultStore() {
         return false;
       }
     },
-    async loadList(): Promise<boolean> {
+    async loadNotes(): Promise<boolean> {
       try {
         const idbListHandle: FileSystemFileHandle = await get("list");
         if (!idbListHandle) {
@@ -140,9 +139,9 @@ function createDefaultStore() {
             "list"
           );
           try {
-            const list = await decryptList(ctx.keypair, cipherBuffer);
+            const list = await decryptNotes(ctx.keypair, cipherBuffer);
             await set("list", handle);
-            ctx.setList({ ...list, loaded: true, handle });
+            ctx.setNotes({ ...list, loaded: true, handle });
             return true;
           } catch (err) {
             playErrorSound();
@@ -162,8 +161,8 @@ function createDefaultStore() {
         const file = await idbListHandle.getFile();
 
         try {
-          const list = await decryptList(ctx.keypair, await file.arrayBuffer());
-          ctx.setList({
+          const list = await decryptNotes(ctx.keypair, await file.arrayBuffer());
+          ctx.setNotes({
             ...list,
             handle: idbListHandle,
             loaded: true,
@@ -177,19 +176,19 @@ function createDefaultStore() {
         return false;
       }
     },
-    async newList() {
-      const NEW_LIST = createNewList();
+    async newNotes() {
+      const NEW_LIST = createNewNotes();
       const enc = await encryptJsonObject(ctx.keypair, NEW_LIST);
 
       const handle = await writeFile(
         enc,
         mime.bin,
         endings.bin,
-        getListName(),
+        getNotesName(),
         "list"
       );
       set("list", handle);
-      ctx.setList({ ...NEW_LIST, handle, loaded: true });
+      ctx.setNotes({ ...NEW_LIST, handle, loaded: true });
     },
     async newKeypair() {
       const NEW_PAIR = await createNewKeypair();
@@ -215,29 +214,29 @@ function createDefaultStore() {
     setKeyPair(keypair: KeyPairStore) {
       s("keypair", keypair);
     },
-    setList(list: ListFileStore) {
-      s("list", list);
+    setNotes(list: NotesFileStore) {
+      s("notes", list);
     },
-    setListName(name: string) {
-      s("list", "name", name);
+    setNotesName(name: string) {
+      s("notes", "name", name);
     },
     newIdea() {
-      s("list", "ideas", (prev) => [...prev, "New Todo"]);
+      s("notes", "ideas", (prev) => [...prev, "New Note."]);
     },
     updateIdeaText(idx: number, text: string) {
-      s("list", "ideas", idx, text);
+      s("notes", "ideas", idx, text);
     },
     resetCredentials(replaceUrl: boolean = true) {
       if (replaceUrl) history.replaceState(null, "", location.origin);
 
       batch(() => {
         ctx.setKeyPair(defaultKeyPairStore());
-        ctx.setList(defaultListStore());
+        ctx.setNotes(defaultNotesStore());
       });
       delMany(["keypair", "list"]);
     },
     deleteIdea(delIdx: number) {
-      s("list", "ideas", (prev) => prev.filter((t, idx) => idx != delIdx));
+      s("notes", "ideas", (prev) => prev.filter((t, idx) => idx != delIdx));
     },
   });
 

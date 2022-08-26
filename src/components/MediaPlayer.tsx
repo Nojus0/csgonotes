@@ -1,7 +1,7 @@
 import { Component, createEffect, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { activeScene } from "@common/Scene";
-import { useStateContext } from "../common/Context/StateContext";
+import { useStateContext } from "@common/Context/StateContext";
 import { userInteracted } from "@common/Audio/ChromeFix";
 
 const MediaPlayer: Component = () => {

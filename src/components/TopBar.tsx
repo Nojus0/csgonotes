@@ -24,7 +24,7 @@ const TopBar: Component = () => {
     // No flicker because ideas and show top bar is applied at once
     <Show when={ctx.showTopbar}>
       <TopBarWrapper>
-        {!ctx.keypair.loaded && !ctx.list.loaded && (
+        {!ctx.keypair.loaded && !ctx.notes.loaded && (
           <GreenButton
             padding=".65rem .85rem .65rem 1.15rem"
             onClick={() => ctx.loadKeyPair() && buttonSounds.onClick()}
@@ -44,26 +44,26 @@ const TopBar: Component = () => {
           </GreenButton>
         )}
 
-        {ctx.keypair.loaded && !ctx.list.loaded && (
+        {ctx.keypair.loaded && !ctx.notes.loaded && (
           <>
             <GreenButton
               padding=".65rem .85rem .65rem 1.15rem"
-              onClick={() => ctx.loadList() && buttonSounds.onClick()}
+              onClick={() => ctx.loadNotes() && buttonSounds.onClick()}
             >
-              Load List
+              Load Notes
               <Safe height="1.2rem" />
             </GreenButton>
             <GreenButton
               padding=".65rem .85rem .65rem 1.15rem"
-              onClick={() => ctx.newList() && buttonSounds.onClick()}
+              onClick={() => ctx.newNotes() && buttonSounds.onClick()}
             >
-              New List
+              New Notes
               <Safe height="1.2rem" />
             </GreenButton>
           </>
         )}
 
-        {ctx.list.loaded && (
+        {ctx.notes.loaded && (
           <>
             <GreenButton
               padding=".65rem .5rem .65rem 1.15rem"
@@ -77,7 +77,7 @@ const TopBar: Component = () => {
             </GreenButton>
             <GreenButton
               padding=".65rem .75rem .65rem 1.15rem"
-              onClick={() => ctx.saveList() && buttonSounds.onClick()}
+              onClick={() => ctx.saveNotes() && buttonSounds.onClick()}
             >
               Save
               <SaveMargined height="1.2rem" />
@@ -85,15 +85,15 @@ const TopBar: Component = () => {
           </>
         )}
 
-        <Show when={ctx.keypair.loaded && ctx.list.loaded}>
+        <Show when={ctx.keypair.loaded && ctx.notes.loaded}>
           <TopBarRightWrapper>
             <InputResponsiveWrapper>
               <Input
                 width="100%"
                 margin="0"
-                value={ctx.list.name}
+                value={ctx.notes.name}
                 placeholder="List name"
-                onInput={(e) => ctx.setListName(e.currentTarget.value)}
+                onInput={(e) => ctx.setNotesName(e.currentTarget.value)}
               />
             </InputResponsiveWrapper>
             <Icons>

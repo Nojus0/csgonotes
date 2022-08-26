@@ -1,7 +1,7 @@
 import { del, get } from "idb-keyval";
 import { batch, Component, onMount } from "solid-js";
 import Backdrop, { Description } from "./Backdrop";
-import { useStateContext } from "../common/Context/StateContext";
+import { useStateContext } from "@common/Context/StateContext";
 import { InspectUri } from "./CopyBackdrop";
 import { TextButton } from "./Primitive/Button";
 import { buttonSounds } from "@common/audio/AudioSource";
