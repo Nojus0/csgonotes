@@ -1,6 +1,6 @@
 import {decryptJsonObject, encryptJsonObject} from "@common/Crypto";
 import base58 from "bs58";
-import {DEBUG_ALL_LOADED} from "./debug";
+import {DEBUG_ALL_LOADED} from "./Debug";
 import {KeyPair} from "./KeyPair";
 import {ILoaded} from "./Utils";
 
