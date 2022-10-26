@@ -1,6 +1,6 @@
 import {DEBUG_ALL_LOADED} from "./debug";
 import {endings, mime, writeFile} from "./Filesystem";
-import {ILoaded} from "./utils";
+import {ILoaded} from "./Utils";
 import bs58 from "bs58";
 
 export const AES_IV_BYTES = 32;

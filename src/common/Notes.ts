@@ -2,7 +2,7 @@ import {decryptJsonObject, encryptJsonObject} from "@common/Crypto";
 import base58 from "bs58";
 import {DEBUG_ALL_LOADED} from "./debug";
 import {KeyPair} from "./KeyPair";
-import {ILoaded} from "./utils";
+import {ILoaded} from "./Utils";
 
 export interface Notes {
   ideas: string[];
