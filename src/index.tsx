@@ -1,5 +1,5 @@
 /* @refresh reload */
-import { preloadAudio, preloadPrimitiveAudio } from "@common/audio/Preload";
+import { preloadAudio, preloadPrimitiveAudio } from "@common/Audio/Preload";
 import { activeScene } from "@common/Scene";
 import CopyBackdrop from "components/CopyBackdrop";
 import IdeaBrowser from "components/IdeaBrowser";

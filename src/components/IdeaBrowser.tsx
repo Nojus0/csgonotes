@@ -1,4 +1,4 @@
-import { buttonSounds } from "@common/audio/AudioSource";
+import { buttonSounds } from "@common/Audio/AudioSource";
 import { Component, For, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { useStateContext } from "@common/Context/StateContext";

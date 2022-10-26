@@ -15,7 +15,7 @@ import {
 import Backdrop, {Description} from "./Backdrop";
 import {useStateContext} from "@common/Context/StateContext";
 import {TextButton} from "./Primitive/Button";
-import {buttonSounds} from "@common/audio/AudioSource";
+import {buttonSounds} from "@common/Audio/AudioSource";
 import {decryptNotes, encryptNotes} from "@common/Notes";
 
 export function InspectUri() {

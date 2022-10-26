@@ -23,7 +23,7 @@ import {
   queryPermission,
   writeFile,
 } from "@common/Filesystem";
-import { buttonSounds, playErrorSound } from "@common/audio/AudioSource";
+import { buttonSounds, playErrorSound } from "@common/Audio/AudioSource";
 import {
   createNewNotes,
   decryptNotes,
