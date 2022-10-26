@@ -12,7 +12,7 @@
     "jsxImportSource": "solid-js",
     "baseUrl": "src",
     "paths": {
-      "@common/*": ["common/*"]
+      "@common/*": ["common/*"],
     },
     "types": ["vite/client", "@types/wicg-file-system-access"],
     "noEmit": true,

@@ -15,6 +15,12 @@ You now can create a notes file. This is where your encrypted notes are stored. 
 Now you can add a new note by pressing the *Add* button, and name the notes file by changing the text in the textbox near the *Add* button,
 after you add your notes save them by pressing the *Save* button.
 
+# Disable Third Party Server Assets
+If you don't want the Web App to be communicating with third party server's like _Voocaro_, _Imgur_, _Github_.
+
+Change the `.env.local` file and set an environment variable `VITE_NO_THIRD_PARTY_SERVER_MODE=true` and build the project, be sure to test it in
+chrome dev-tools network tab!
+
 # Future Improvements
 Make the web app a PWA.
 
