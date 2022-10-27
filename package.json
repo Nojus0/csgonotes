@@ -8,6 +8,13 @@
     "solidhack",
     "best_app"
   ],
+  "stackblitz": {
+    "startCommand": "pnpm install && npm run dev",
+    "installDependencies": false,
+    "env": {
+      "VITE_NO_THIRD_PARTY_SERVER_MODE": "true"
+    }
+  },
   "scripts": {
     "start": "vite",
     "dev": "vite",
