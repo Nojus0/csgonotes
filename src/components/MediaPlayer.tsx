@@ -1,4 +1,4 @@
-import { Component, createEffect, Show } from "solid-js";
+import { Component, createEffect, on, Show } from "solid-js";
 import { styled } from "solid-styled-components";
 import { activeScene } from "@common/Scene";
 import { useStateContext } from "@common/Context/StateContext";
@@ -8,10 +8,9 @@ const MediaPlayer: Component = () => {
   const ctx = useStateContext();
 
   function refCapture(e: HTMLVideoElement | HTMLAudioElement) {
-    createEffect(() => {
-      activeScene();
-      e.load();
-    });
+    createEffect(on(activeScene, ()=> {
+        e.load()        
+    }));
   }
 
   return (
