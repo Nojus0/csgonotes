@@ -1,4 +1,6 @@
 # CS:GO Notes
+[![Open in Codeflow](https://developer.stackblitz.com/img/open_in_codeflow.svg)](https:///pr.new/Nojus0/csgonotes)
+
 A CS:GO Themed Notes Web App with *AES256* Encryption.
 
 [Website / Web App](https://csgonotes.netlify.app/)
