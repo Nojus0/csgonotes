@@ -35,6 +35,11 @@ Make the web app a PWA.
 
 *CTRL + C* Serialize the list and the keypair into a shareable link.
 
+# Notes
+This GitHub Repo was cleaned using _bfg_ to reduce repository size from 200MB to 73MB
+
+Sound and Video Assets are not included before this [Commit](https://github.com/Nojus0/csgonotes/commit/c18df23fbeb08406bb3458485c0f9a15b16e5d61)
+
 # Images
 ![NukeHome](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeHome.png)
 ![NukeList](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeList.png)
