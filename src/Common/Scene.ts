@@ -1,6 +1,6 @@
 import {createSignal} from "solid-js";
-import AudioSource from "./Audio/AudioSource";
-import VideoSource from "@common/VideoSource";
+import AudioSource from "@Common/Audio/AudioSource";
+import VideoSource from "@Common/VideoSource";
 
 export interface IScene {
     name: string;

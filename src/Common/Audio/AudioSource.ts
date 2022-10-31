@@ -1,4 +1,4 @@
-import {play} from "./Preload";
+import {play} from "@Common/Audio/Preload";
 
 const S = import.meta.env.VITE_NO_THIRD_PARTY_SERVER_MODE == "true"
 const AudioSource = {

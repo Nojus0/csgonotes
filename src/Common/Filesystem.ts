@@ -1,5 +1,5 @@
-import { playErrorSound } from "./Audio/AudioSource";
-import { READ_ONLY, READ_WRITE } from "./Crypto";
+import { playErrorSound } from "@Common/Audio/AudioSource";
+import { READ_ONLY, READ_WRITE } from "@Common/Crypto";
 
 export type FileExt = ".json" | ".bin";
 

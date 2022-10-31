@@ -1,22 +1,11 @@
 import base58 from "bs58";
-import {
-    batch,
-    Component,
-    createEffect,
-    createSignal,
-    onMount,
-} from "solid-js";
-import {
-    AES_KEY_BITS,
-    DetailedKeypair,
-    serializeKeyPair,
-    VERSION,
-} from "@common/KeyPair";
+import {batch, Component, createEffect, createSignal, onMount,} from "solid-js";
+import {AES_KEY_BITS, DetailedKeypair, serializeKeyPair, VERSION,} from "@Common/KeyPair";
 import Backdrop, {Description} from "./Backdrop";
-import {useStateContext} from "@common/Context/StateContext";
+import {useStateContext} from "@Common/Context/StateContext";
 import {TextButton} from "./Primitive/Button";
-import {buttonSounds} from "@common/Audio/AudioSource";
-import {decryptNotes, encryptNotes} from "@common/Notes";
+import {buttonSounds} from "@Common/Audio/AudioSource";
+import {decryptNotes, encryptNotes} from "@Common/Notes";
 
 export function InspectUri() {
     const url = new URL(location.href);

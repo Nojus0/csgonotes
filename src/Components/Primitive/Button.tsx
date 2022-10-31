@@ -1,4 +1,4 @@
-import { buttonSounds } from "@common/Audio/AudioSource";
+import { buttonSounds } from "@Common/Audio/AudioSource";
 import { Component, JSX } from "solid-js";
 import { styled } from "solid-styled-components";
 
