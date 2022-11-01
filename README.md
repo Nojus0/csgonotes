@@ -3,6 +3,8 @@
 
 A CS:GO Themed Notes Web App with *AES256* Encryption.
 
+![NukeHome](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeHome.png)
+
 [Website / Web App](https://csgonotes.netlify.app/)
 
 # User Interface
@@ -41,7 +43,6 @@ This GitHub Repo was cleaned using _bfg_ to reduce repository size from 200MB to
 Sound and Video Assets are not included before this [Commit](https://github.com/Nojus0/csgonotes/commit/c18df23fbeb08406bb3458485c0f9a15b16e5d61)
 
 # Images
-![NukeHome](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeHome.png)
 ![NukeList](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeList.png)
 ![NukeRestore](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeRestore.png)
 ![NukeCopyToClipboard](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeCopyToClipboard.png)
