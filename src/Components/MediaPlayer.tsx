@@ -1,16 +1,18 @@
-import { Component, createEffect, on, Show } from "solid-js";
-import { styled } from "solid-styled-components";
-import { activeScene } from "@Common/Scene";
-import { useStateContext } from "@Common/Context/StateContext";
-import { userInteracted } from "@Common/Audio/ChromeFix";
+import { Component, createEffect, on, Show } from "solid-js"
+import { styled } from "solid-styled-components"
+import { activeScene } from "@Common/Scene"
+import { useStateContext } from "@Common/Context/StateContext"
+import { userInteracted } from "@Common/Audio/ChromeFix"
 
 const MediaPlayer: Component = () => {
-  const ctx = useStateContext();
+  const ctx = useStateContext()
 
   function refCapture(e: HTMLVideoElement | HTMLAudioElement) {
-    createEffect(on(activeScene, ()=> {
-        e.load()        
-    }));
+    createEffect(
+      on(activeScene, () => {
+        e.load()
+      })
+    )
   }
 
   return (
@@ -33,10 +35,10 @@ const MediaPlayer: Component = () => {
         </audio>
       </Show>
     </>
-  );
-};
+  )
+}
 
-export default MediaPlayer;
+export default MediaPlayer
 
 const Video = styled.video({
   position: "absolute",
@@ -47,4 +49,4 @@ const Video = styled.video({
   userSelect: "none",
   height: "100%",
   width: "100%",
-});
+})

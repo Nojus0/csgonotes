@@ -1,9 +1,9 @@
-import { TransitionProps } from "@Common/Utils";
+import { TransitionProps } from "@Common/Utils"
 
 export function getFadeAnimation(duration: number): TransitionProps {
   return {
     onEnter: (e, done) => {
-      e.animate(
+      const a = e.animate(
         [
           {
             opacity: 0,
@@ -13,10 +13,11 @@ export function getFadeAnimation(duration: number): TransitionProps {
           },
         ],
         { duration, easing: "ease-in-out" }
-      ).finished.then(done);
+      )
+      a.finished.then(done)
     },
     onExit: (e, done) => {
-      e.animate(
+      const a = e.animate(
         [
           {
             opacity: 1,
@@ -26,7 +27,8 @@ export function getFadeAnimation(duration: number): TransitionProps {
           },
         ],
         { duration, easing: "ease-in-out" }
-      ).finished.then(done);
+      )
+      a.finished.then(done)
     },
-  };
+  }
 }
