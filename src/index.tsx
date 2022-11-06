@@ -22,7 +22,6 @@ function Index() {
     // Load video after render
     ctx.setVideo(true)
     preloadPrimitiveAudio()
-
     // Preload current scene audio in the background, IF the user has not interacted with the page
     // the audio will not preload, so the audio will start loading when he presses
     // somewhere on the page, we preload current scene audio on page load.
