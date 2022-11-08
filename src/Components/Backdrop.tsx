@@ -1,10 +1,12 @@
 import {
+  children,
   Component,
   createMemo,
   createSignal,
   JSX,
   onCleanup,
   Show,
+  untrack,
 } from "solid-js"
 import { styled } from "solid-styled-components"
 
@@ -17,7 +19,7 @@ export interface IBackdrop {
   children: any
 }
 
-const BACKDROP_FADE_DURATION = 150
+export const BACKDROP_FADE_DURATION = 150
 
 const Backdrop: Component<IBackdrop> = p => {
   const [isShown, setShown] = createSignal(false)
