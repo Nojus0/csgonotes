@@ -45,11 +45,8 @@ function createDefaultStore() {
     async restoreSession() {
       buttonSounds.onClick()
 
-      let success = await ctx.loadKeyPair()
-      if (!success) return playErrorSound()
-
-      success = await ctx.loadNotes()
-      if (!success) return playErrorSound()
+      await ctx.loadKeyPair()
+      await ctx.loadNotes()
 
       ctx.setRestore(false)
     },
@@ -72,103 +69,99 @@ function createDefaultStore() {
         await writeFile(cipher, mime.bin, endings.bin, getNotesName(), "list")
       }
     },
-    async loadKeyPair(): Promise<boolean> {
+    async loadKeyPairNoIDB() {
+      const [jsonBuffer, handle] = await loadFile(
+        mime.json,
+        endings.json,
+        "keypair"
+      )
       try {
-        const idbKeypairHandle: FileSystemFileHandle = await get("keypair")
-
-        if (!idbKeypairHandle) {
-          const [jsonBuffer, handle] = await loadFile(
-            mime.json,
-            endings.json,
-            "keypair"
-          )
-          try {
-            const keypair = await deserializeKeyPair(
-              decodeSerializedKeypairBuffer(jsonBuffer)
-            )
-            await set("keypair", handle)
-            ctx.setKeyPair({ ...keypair, loaded: true, handle })
-            return true
-          } catch (err) {
-            playErrorSound()
-            throw new Error("Incorrect keypair")
-          }
-        }
-
-        const result = await queryPermission(idbKeypairHandle, "read")
-
-        if (result == "DENIED") {
-          return false
-        }
-
-        if (result == "ALLOWED_PROMPT") {
-          buttonSounds.onClick()
-        }
-
-        const file = await idbKeypairHandle.getFile()
-
-        const { iv, key, version } = await deserializeKeyPair(
-          decodeSerializedKeypairBuffer(await file.arrayBuffer())
+        const keypair = await deserializeKeyPair(
+          decodeSerializedKeypairBuffer(jsonBuffer)
         )
-
-        ctx.setKeyPair({
-          iv,
-          key,
-          version,
-          handle: idbKeypairHandle,
-          loaded: true,
-        })
-        return true
+        await set("keypair", handle)
+        ctx.setKeyPair({ ...keypair, loaded: true, handle })
       } catch (err) {
-        return false
+        throw new Error("Incorrect keypair")
       }
     },
-    async loadNotes(): Promise<boolean> {
-      try {
-        const idbListHandle: FileSystemFileHandle = await get("list")
-        if (!idbListHandle) {
-          const [cipherBuffer, handle] = await loadFile(
-            mime.bin,
-            endings.bin,
-            "list"
-          )
-          try {
-            const list = await decryptNotes(ctx.keypair, cipherBuffer)
-            await set("list", handle)
-            ctx.setNotes({ ...list, loaded: true, handle })
-            return true
-          } catch (err) {
-            playErrorSound()
-            throw new Error("List file does not match keypair.")
-          }
-        }
+    async loadKeyPairViaIDB(idbKeypairHandle: FileSystemFileHandle) {
+      const result = await queryPermission(idbKeypairHandle, "read")
 
-        const result = await queryPermission(idbListHandle, "readwrite")
-        if (result == "DENIED") {
-          return false
-        }
+      if (result == "DENIED") throw new Error("Denied access to keypair handle")
 
-        if (result == "ALLOWED_PROMPT") {
-          buttonSounds.onClick()
-        }
-
-        const file = await idbListHandle.getFile()
-
-        try {
-          const list = await decryptNotes(ctx.keypair, await file.arrayBuffer())
-          ctx.setNotes({
-            ...list,
-            handle: idbListHandle,
-            loaded: true,
-          })
-          return true
-        } catch (err) {
-          playErrorSound()
-          throw new Error("List file does not match keypair.")
-        }
-      } catch (err) {
-        return false
+      if (result == "ALLOWED_PROMPT") {
+        buttonSounds.onClick()
       }
+
+      const file = await idbKeypairHandle.getFile()
+
+      const { iv, key, version } = await deserializeKeyPair(
+        decodeSerializedKeypairBuffer(await file.arrayBuffer())
+      )
+
+      ctx.setKeyPair({
+        iv,
+        key,
+        version,
+        handle: idbKeypairHandle,
+        loaded: true,
+      })
+    },
+    async loadKeyPair() {
+      const idbKeypairHandle: FileSystemFileHandle = await get("keypair")
+      if (!idbKeypairHandle) {
+        return await ctx.loadKeyPairNoIDB()
+      }
+
+      return await ctx.loadKeyPairViaIDB(idbKeypairHandle)
+    },
+    async loadNotesNoIDB() {
+      const [cipherBuffer, handle] = await loadFile(
+        mime.bin,
+        endings.bin,
+        "list"
+      )
+      try {
+        const notes = await decryptNotes(ctx.keypair, cipherBuffer)
+        await set("list", handle)
+        ctx.setNotes({ ...notes, loaded: true, handle })
+      } catch (err) {
+        throw new Error("List file does not match keypair.")
+      }
+    },
+    async loadNotesViaIDB(idbNotesHandle: FileSystemFileHandle) {
+      const result = await queryPermission(idbNotesHandle, "readwrite")
+
+      if (result == "DENIED") {
+        throw new Error("Denied access to file handle.")
+      }
+
+      if (result == "ALLOWED_PROMPT") {
+        buttonSounds.onClick()
+      }
+
+      const file = await idbNotesHandle.getFile()
+
+      try {
+        const notes = await decryptNotes(ctx.keypair, await file.arrayBuffer())
+        ctx.setNotes({
+          ...notes,
+          handle: idbNotesHandle,
+          loaded: true,
+        })
+      } catch (err) {
+        throw new Error("List file does not match keypair.")
+      }
+    },
+    async loadNotes() {
+      const idbNotesHandle: FileSystemFileHandle = await get("list")
+
+      if (!idbNotesHandle) {
+        return await ctx.loadNotesNoIDB()
+      }
+
+      return await ctx.loadNotesViaIDB(idbNotesHandle)
     },
     async newNotes() {
       const NEW_LIST = createNewNotes()

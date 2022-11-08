@@ -1,4 +1,4 @@
-import { buttonSounds } from "@Common/Audio/AudioSource"
+import { buttonSounds, playErrorSound } from "@Common/Audio/AudioSource"
 import { Component, Show } from "solid-js"
 import { styled } from "solid-styled-components"
 import { useStateContext } from "@Common/Context/StateContext"
@@ -20,70 +20,105 @@ const TopBar: Component = () => {
     ctx.setShowTopbar(false)
   }
 
+  async function onLoadKeypairClicked() {
+    buttonSounds.onClick()
+    try {
+      return await ctx.loadKeyPair()
+    } catch (err) {
+      playErrorSound()
+    }
+  }
+
+  async function onNewKeyPairClicked() {
+    buttonSounds.onClick()
+    await ctx.newKeypair()
+  }
+
+  async function onNewNotesClicked() {
+    buttonSounds.onClick()
+    await ctx.newNotes()
+  }
+
+  async function onLoadNotesClicked() {
+    buttonSounds.onClick()
+    try {
+      return await ctx.loadNotes()
+    } catch (err) {
+      playErrorSound()
+    }
+  }
+
+  async function onAddNoteClicked() {
+    buttonSounds.onClick()
+    await ctx.newIdea()
+  }
+
+  async function onSaveClicked() {
+    buttonSounds.onClick()
+    await ctx.saveNotes()
+  }
+
+  async function onQuitClicked() {
+    buttonSounds.onClick()
+    await ctx.resetCredentials()
+  }
+
   return (
-    // No flicker because ideas and show top bar is applied at once
     <Show when={ctx.showTopbar}>
       <TopBarWrapper>
-        {!ctx.keypair.loaded && !ctx.notes.loaded && (
+        <Show when={!ctx.keypair.loaded && !ctx.notes.loaded}>
           <GreenButton
             padding=".65rem .85rem .65rem 1.15rem"
-            onClick={() => ctx.loadKeyPair() && buttonSounds.onClick()}
+            onClick={onLoadKeypairClicked}
           >
             Load Key
             <Key height="1.2rem" />
           </GreenButton>
-        )}
+        </Show>
 
-        {!ctx.keypair.loaded && (
+        <Show when={!ctx.keypair.loaded}>
           <GreenButton
             padding=".65rem .85rem .65rem 1.15rem"
-            onClick={() => ctx.newKeypair() && buttonSounds.onClick()}
+            onClick={onNewKeyPairClicked}
           >
             New Key
             <Key height="1.2rem" />
           </GreenButton>
-        )}
+        </Show>
 
-        {ctx.keypair.loaded && !ctx.notes.loaded && (
-          <>
-            <GreenButton
-              padding=".65rem .85rem .65rem 1.15rem"
-              onClick={() => ctx.loadNotes() && buttonSounds.onClick()}
-            >
-              Load Notes
-              <Safe height="1.2rem" />
-            </GreenButton>
-            <GreenButton
-              padding=".65rem .85rem .65rem 1.15rem"
-              onClick={() => ctx.newNotes() && buttonSounds.onClick()}
-            >
-              New Notes
-              <Safe height="1.2rem" />
-            </GreenButton>
-          </>
-        )}
+        <Show when={ctx.keypair.loaded && !ctx.notes.loaded}>
+          <GreenButton
+            padding=".65rem .85rem .65rem 1.15rem"
+            onClick={onLoadNotesClicked}
+          >
+            Load Notes
+            <Safe height="1.2rem" />
+          </GreenButton>
+          <GreenButton
+            padding=".65rem .85rem .65rem 1.15rem"
+            onClick={onNewNotesClicked}
+          >
+            New Notes
+            <Safe height="1.2rem" />
+          </GreenButton>
+        </Show>
 
-        {ctx.notes.loaded && (
-          <>
-            <GreenButton
-              padding=".65rem .5rem .65rem 1.15rem"
-              onClick={() => {
-                ctx.newIdea()
-                buttonSounds.onClick()
-              }}
-            >
-              Add
-              <Edit height="1.2rem" />
-            </GreenButton>
-            <GreenButton
-              padding=".65rem .75rem .65rem 1.15rem"
-              onClick={() => ctx.saveNotes() && buttonSounds.onClick()}
-            >
-              Save
-              <SaveMargined height="1.2rem" />
-            </GreenButton>
-          </>
-        )}
+        <Show when={ctx.notes.loaded}>
+          <GreenButton
+            padding=".65rem .5rem .65rem 1.15rem"
+            onClick={onAddNoteClicked}
+          >
+            Add
+            <Edit height="1.2rem" />
+          </GreenButton>
+          <GreenButton
+            padding=".65rem .75rem .65rem 1.15rem"
+            onClick={onSaveClicked}
+          >
+            Save
+            <SaveMargined height="1.2rem" />
+          </GreenButton>
+        </Show>
 
         <Show when={ctx.keypair.loaded && ctx.notes.loaded}>
           <TopBarRightWrapper>
@@ -100,10 +135,7 @@ const TopBar: Component = () => {
               <Quit
                 {...buttonSounds}
                 onMouseDown={e => e.preventDefault()}
-                onClick={() => {
-                  ctx.resetCredentials()
-                  buttonSounds.onClick()
-                }}
+                onClick={onQuitClicked}
               />
             </Icons>
           </TopBarRightWrapper>
