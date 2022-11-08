@@ -1,6 +1,6 @@
-import { Component, JSX } from "solid-js";
+import { Component, JSX } from "solid-js"
 
-const KeyIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
+const KeyIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = p => {
   return (
     <svg
       width="24"
@@ -15,7 +15,7 @@ const KeyIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
         fill="white"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default KeyIcon;
+export default KeyIcon

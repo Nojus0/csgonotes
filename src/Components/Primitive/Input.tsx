@@ -1,8 +1,8 @@
-import { styled } from "solid-styled-components";
+import { styled } from "solid-styled-components"
 
 export interface IInput {
-  margin?: string;
-  width?: string;
+  margin?: string
+  width?: string
 }
 
 export const Input = styled.input(
@@ -21,7 +21,7 @@ export const Input = styled.input(
       color: "#b6b6b6",
     },
   })
-);
+)
 
 export const TextArea = styled.textarea({
   resize: "none",
@@ -52,4 +52,4 @@ export const TextArea = styled.textarea({
     backgroundClip: "content-box",
     border: "1px solid transparent",
   },
-});
+})

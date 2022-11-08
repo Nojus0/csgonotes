@@ -1,1 +1,1 @@
-export const DEBUG_ALL_LOADED = false;
+export const DEBUG_ALL_LOADED = false

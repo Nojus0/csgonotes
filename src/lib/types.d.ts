@@ -1,4 +1,4 @@
-declare module 'service-worker:*' {
-    const url: string
-    export default url
+declare module "service-worker:*" {
+  const url: string
+  export default url
 }

@@ -1,6 +1,6 @@
-import { Component, JSX } from "solid-js";
+import { Component, JSX } from "solid-js"
 
-const SafeIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
+const SafeIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = p => {
   return (
     <svg
       width="27"
@@ -23,7 +23,7 @@ const SafeIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
         fill="white"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default SafeIcon;
+export default SafeIcon

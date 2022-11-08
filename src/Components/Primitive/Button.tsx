@@ -1,17 +1,17 @@
-import { buttonSounds } from "@Common/Audio/AudioSource";
-import { Component, JSX } from "solid-js";
-import { styled } from "solid-styled-components";
+import { buttonSounds } from "@Common/Audio/AudioSource"
+import { Component, JSX } from "solid-js"
+import { styled } from "solid-styled-components"
 
 interface IBasicButtonProps {
-  padding?: string;
-  margin?: string;
+  padding?: string
+  margin?: string
 }
 
 export const GreenButton: Component<
   IBasicButtonProps & JSX.ButtonHTMLAttributes<HTMLButtonElement>
-> = (p) => {
-  return <GreenButtonStyle {...buttonSounds} {...p} />;
-};
+> = p => {
+  return <GreenButtonStyle {...buttonSounds} {...p} />
+}
 
 const GreenButtonStyle = styled.button(
   ({ margin = ".5rem", padding = ".65rem 1.15rem" }: IBasicButtonProps) => ({
@@ -33,13 +33,13 @@ const GreenButtonStyle = styled.button(
       backgroundColor: "#52C55F",
     },
   })
-);
+)
 
 export const TextButton: Component<
   IBasicButtonProps & JSX.ButtonHTMLAttributes<HTMLButtonElement>
-> = (p) => {
-  return <TextButtonStyle {...buttonSounds} {...p} />;
-};
+> = p => {
+  return <TextButtonStyle {...buttonSounds} {...p} />
+}
 
 const TextButtonStyle = styled.button(
   ({ margin = ".5rem", padding = ".75rem 1.15rem" }: IBasicButtonProps) => ({
@@ -61,4 +61,4 @@ const TextButtonStyle = styled.button(
       backgroundPosition: "left",
     },
   })
-);
+)

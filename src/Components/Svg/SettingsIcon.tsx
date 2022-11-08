@@ -1,6 +1,6 @@
-import { Component, JSX } from "solid-js";
+import { Component, JSX } from "solid-js"
 
-const SettingsIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
+const SettingsIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = p => {
   return (
     <svg
       width="30"
@@ -15,7 +15,7 @@ const SettingsIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
         fill="white"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default SettingsIcon;
+export default SettingsIcon

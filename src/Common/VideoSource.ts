@@ -1,4 +1,4 @@
-import createVideoSource from "@Common/createVideoSource";
+import createVideoSource from "@Common/createVideoSource"
 
 const S = import.meta.env.VITE_NO_THIRD_PARTY_SERVER_MODE == "true"
 

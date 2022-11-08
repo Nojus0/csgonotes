@@ -1,6 +1,6 @@
-import { Component, JSX } from "solid-js";
+import { Component, JSX } from "solid-js"
 
-const EditIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
+const EditIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = p => {
   return (
     <svg
       width="29"
@@ -21,7 +21,7 @@ const EditIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
         fill="#FCFCFC"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default EditIcon;
+export default EditIcon

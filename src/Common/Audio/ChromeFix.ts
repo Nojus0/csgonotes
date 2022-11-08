@@ -1,12 +1,12 @@
-import { createSignal } from "solid-js";
+import { createSignal } from "solid-js"
 
-export const [userInteracted, setInteracted] = createSignal(false);
+export const [userInteracted, setInteracted] = createSignal(false)
 function handleInteraction() {
   if (!userInteracted()) {
-    setInteracted(true);
+    setInteracted(true)
   } else {
-    removeEventListener("mousedown", handleInteraction);
+    removeEventListener("mousedown", handleInteraction)
   }
 }
 
-addEventListener("mousedown", handleInteraction);
+addEventListener("mousedown", handleInteraction)

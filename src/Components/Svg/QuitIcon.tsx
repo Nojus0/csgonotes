@@ -1,6 +1,6 @@
-import { Component, JSX } from "solid-js";
+import { Component, JSX } from "solid-js"
 
-const QuitIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
+const QuitIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = p => {
   return (
     <svg
       width="30"
@@ -16,7 +16,7 @@ const QuitIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
         fill="white"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default QuitIcon;
+export default QuitIcon

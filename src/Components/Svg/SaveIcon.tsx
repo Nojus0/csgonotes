@@ -1,6 +1,6 @@
-import { Component, JSX } from "solid-js";
+import { Component, JSX } from "solid-js"
 
-const SaveIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
+const SaveIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = p => {
   return (
     <svg
       width="24"
@@ -31,7 +31,7 @@ const SaveIcon: Component<JSX.SvgSVGAttributes<SVGSVGElement>> = (p) => {
         fill="#F9F9FA"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default SaveIcon;
+export default SaveIcon
