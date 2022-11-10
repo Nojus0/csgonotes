@@ -26,7 +26,7 @@ Change the `.env.local` file and set an environment variable `VITE_NO_THIRD_PART
 chrome dev-tools network tab!
 
 # Future Improvements
-Make the web app a PWA.
+- [X] Make the web app a PWA.
 
 # Shortcuts
 *M* Mute audio
