@@ -12,12 +12,12 @@ const CompatabilityBackdrop: Component = p => {
   const ctx = useStateContext()
 
   onMount(async () => {
-    const isDontShowAgain = await get(KEY)
-
-    if (!isDontShowAgain || JSON.parse(isDontShowAgain)) return
+    const isDontShowAgain = JSON.parse((await get(KEY)) || "false")
 
     const isCompatible =
       "showOpenFilePicker" in window && "showSaveFilePicker" in window
+
+    if (isDontShowAgain) return
 
     ctx.setCompatability(isCompatible)
   })
@@ -42,11 +42,10 @@ const CompatabilityBackdrop: Component = p => {
       description={
         <>
           <Description>
-          Your browser is not fully supported. As a result,
-          you will need to manually load your keys and notes
-          each time you visit the site. You will not be able
-          to use the restore previous session feature. Consider
-          using a Chromium-based browser.
+            Your browser is not fully supported. As a result, you will need to
+            manually load your keys and notes each time you visit the site. You
+            will not be able to use the restore previous session feature.
+            Consider using a Chromium-based browser.
           </Description>
         </>
       }
