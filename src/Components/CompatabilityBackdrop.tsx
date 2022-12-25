@@ -19,7 +19,7 @@ const CompatabilityBackdrop: Component = p => {
 
     if (isDontShowAgain) return
 
-    ctx.setCompatability(isCompatible)
+    ctx.setCompatability(!isCompatible)
   })
 
   async function dontShowAgain() {
