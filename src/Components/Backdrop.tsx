@@ -40,27 +40,23 @@ const Backdrop: Component<IBackdrop> = p => {
       .finished.then(e => setShown(false))
   }
 
+  function onClick(e: MouseEvent) {
+    e.target == e.currentTarget && p.onBackgroundClick()
+  }
+
   function onBackdropRef(ref: HTMLDivElement) {
     if (p.when) onShow(ref)
     else onHide(ref)
+
+    ref.addEventListener("click", onClick)
+
+    onCleanup(() => ref.removeEventListener("click", onClick))
   }
 
   return (
     <Show when={shouldShow()}>
       <Darken ref={onBackdropRef}>
-        <PopupWrapper
-          width={p.width}
-          ref={el => {
-            const onClick = (e: MouseEvent) => {
-              if (el.contains(e.target as Node)) return
-              p.onBackgroundClick()
-            }
-
-            document.body.addEventListener("click", onClick)
-
-            onCleanup(() => document.body.removeEventListener("click", onClick))
-          }}
-        >
+        <PopupWrapper width={p.width}>
           <Header>
             <HeaderText>{p.title}</HeaderText>
           </Header>
@@ -100,7 +96,6 @@ const Header = styled.div({
   width: "100%",
   background: "#252525",
 })
-
 
 interface IDescription {
   fontWeight?: string | number

@@ -51,11 +51,13 @@ const Container = styled.div({
   flexDirection: "column",
 })
 
+export const MOUNT_ELEMENT = document.getElementById("root") as HTMLElement
+
 render(
   () => (
     <StateContextProvider>
       <Index />
     </StateContextProvider>
   ),
-  document.getElementById("root") as HTMLElement
+  MOUNT_ELEMENT
 )
