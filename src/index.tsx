@@ -15,6 +15,7 @@ import {
   useStateContext,
 } from "@Common/Context/StateContext"
 import ServiceWorker from "@Components/ServiceWorker"
+import CompatabilityBackdrop from "@Components/CompatabilityBackdrop"
 
 function Index() {
   const ctx = useStateContext()
@@ -33,6 +34,7 @@ function Index() {
       <ShortcutManager />
       <CopyBackdrop />
       <RestoreBackdrop />
+      <CompatabilityBackdrop/>
       <TopBar />
       <MediaPlayer />
       <IdeaBrowser />

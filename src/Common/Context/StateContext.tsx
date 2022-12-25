@@ -36,11 +36,15 @@ function createDefaultStore() {
     notes: defaultNotesStore(),
     muted: false,
     showRestore: false,
+    showCompatibility: false,
     showVideo: false,
     showTopbar: true,
     showCopyClipboard: false,
     mute() {
       s("muted", true)
+    },
+    setCompatability(val: boolean) {
+      s("showCompatibility", val)
     },
     async restoreSession() {
       buttonSounds.onClick()

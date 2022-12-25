@@ -101,12 +101,18 @@ const Header = styled.div({
   background: "#252525",
 })
 
-export const Description = styled.p({
+
+interface IDescription {
+  fontWeight?: string | number
+  margin?: string
+}
+export const Description = styled.p((p: IDescription) => ({
   lineHeight: "24px",
   color: "#CCCCCC",
+  fontWeight: p.fontWeight || 400,
   userSelect: "none",
-  margin: ".25rem 0",
-})
+  margin: p.margin || ".25rem 0",
+}))
 
 interface IPopupWrapper {
   width?: string
