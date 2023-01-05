@@ -13,10 +13,9 @@
     "installDependencies": false
   },
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
+    "dev": "vite --port 5173",
     "build": "vite build",
-    "serve": "vite preview",
+    "serve": "vite preview --port 5173",
     "build:serve": "vite build && vite preview"
   },
   "license": "AGPL-3.0",
