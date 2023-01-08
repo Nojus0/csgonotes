@@ -49,7 +49,7 @@ const TopBarLoadedActions = () => {
             width="100%"
             margin="0"
             value={ctx.notes.name}
-            placeholder="List name"
+            placeholder="Notes name"
             onInput={e => ctx.setNotesName(e.currentTarget.value)}
           />
         </InputResponsiveWrapper>

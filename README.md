@@ -16,7 +16,7 @@ You may already know from which game the user interface was imitated, I was tryi
 Start by creating a new key, a key is a file that contains the 2 values that are used to decrypt and encrypt the notes file.
 Create a key by pressing the *New Key* button and preferably storing it on a USB or in another secure place.
 
-You now can create a notes file. This is where your encrypted notes are stored. You can do so by pressing the *New List* button when you load your key.
+You now can create a notes file. This is where your encrypted notes are stored. You can do so by pressing the *New Notes* button when you load your key.
 
 Now you can add a new note by pressing the *Add* button, and name the notes file by changing the text in the textbox near the *Add* button,
 after you add your notes save them by pressing the *Save* button.
@@ -37,7 +37,7 @@ chrome dev-tools network tab!
 
 *B* Previous scene
 
-*CTRL + C* Serialize the list and the keypair into a shareable link.
+*CTRL + C* Serialize the notes and the keypair into a shareable link.
 
 # Notes
 This GitHub Repo was cleaned using _bfg_ to reduce repository size from 200MB to 73MB

@@ -69,8 +69,8 @@ function createDefaultStore() {
         await w.close()
         console.log(`Successfully saved`)
       } else {
-        console.log(`List handle not found.`)
-        await writeFile(cipher, mime.bin, endings.bin, getNotesName(), "list")
+        console.log(`Notes handle not found.`)
+        await writeFile(cipher, mime.bin, endings.bin, getNotesName(), "notes")
       }
     },
     async loadKeyPairNoIDB() {
@@ -124,14 +124,14 @@ function createDefaultStore() {
       const [cipherBuffer, handle] = await loadFile(
         mime.bin,
         endings.bin,
-        "list"
+        "notes"
       )
       try {
         const notes = await decryptNotes(ctx.keypair, cipherBuffer)
-        await set("list", handle)
+        await set("notes", handle)
         ctx.setNotes({ ...notes, loaded: true, handle })
       } catch (err) {
-        throw new Error("List file does not match keypair.")
+        throw new Error("Notes file does not match keypair.")
       }
     },
     async loadNotesViaIDB(idbNotesHandle: FileSystemFileHandle) {
@@ -155,11 +155,11 @@ function createDefaultStore() {
           loaded: true,
         })
       } catch (err) {
-        throw new Error("List file does not match keypair.")
+        throw new Error("Notes file does not match keypair.")
       }
     },
     async loadNotes() {
-      const idbNotesHandle: FileSystemFileHandle = await get("list")
+      const idbNotesHandle: FileSystemFileHandle = await get("notes")
 
       if (!idbNotesHandle) {
         return await ctx.loadNotesNoIDB()
@@ -176,9 +176,9 @@ function createDefaultStore() {
         mime.bin,
         endings.bin,
         getNotesName(),
-        "list"
+        "notes"
       )
-      set("list", handle)
+      set("notes", handle)
       ctx.setNotes({ ...NEW_LIST, handle, loaded: true })
     },
     async newKeypair() {
@@ -205,8 +205,8 @@ function createDefaultStore() {
     setKeyPair(keypair: KeyPairStore) {
       s("keypair", keypair)
     },
-    setNotes(list: NotesFileStore) {
-      s("notes", list)
+    setNotes(notes: NotesFileStore) {
+      s("notes", notes)
     },
     setNotesName(name: string) {
       s("notes", "name", name)
@@ -224,7 +224,7 @@ function createDefaultStore() {
         ctx.setKeyPair(defaultKeyPairStore())
         ctx.setNotes(defaultNotesStore())
       })
-      delMany(["keypair", "list"])
+      delMany(["keypair", "notes"])
     },
     deleteIdea(delIdx: number) {
       s("notes", "ideas", prev => prev.filter((t, idx) => idx != delIdx))

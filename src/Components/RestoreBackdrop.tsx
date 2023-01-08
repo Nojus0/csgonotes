@@ -11,14 +11,14 @@ const RestoreBackdrop: Component = p => {
 
   onMount(async () => {
     const [keypairHandle, notesHandle]: FileSystemFileHandle[] =
-      await Promise.all([get("keypair"), get("list")])
+      await Promise.all([get("keypair"), get("notes")])
 
     if (keypairHandle && !notesHandle) {
       del("keypair")
     }
 
     if (!keypairHandle && notesHandle) {
-      del("list")
+      del("notes")
     }
 
     const { IsSerializedLink } = InspectUri()
