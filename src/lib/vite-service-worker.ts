@@ -4,8 +4,8 @@ import { loadEnv, PluginOption } from "vite"
 import { OutputChunk } from "rollup"
 import { createHash } from "crypto"
 import { posix } from "path"
-import createAudioSource from "../Common/Audio/createAudioSource"
-import createVideoSource from "../Common/createVideoSource"
+import { StaticAudioSource, ThirdPartyAudioSource } from "../Common/Audio/AudioSources"
+import { StaticVideoSource, ThirdPartyVideoSource } from "../Common/VideoSources"
 import * as fs from "fs"
 
 const importPrefix = "service-worker:"
@@ -116,8 +116,9 @@ export const serviceWorker = ({
       const env = loadEnv(null, ".")
       const S = env.VITE_NO_THIRD_PARTY_SERVER_MODE == "true"
 
-      const AudioSource = createAudioSource(S)
-      const VideoSource = createVideoSource(S)
+      const AudioSource = S ? StaticAudioSource : ThirdPartyAudioSource
+
+      const VideoSource = S ? StaticVideoSource : ThirdPartyVideoSource
       const FontsSource = fs
         .readdirSync("public/static/font")
         .map(f => `/static/font/${f}`)

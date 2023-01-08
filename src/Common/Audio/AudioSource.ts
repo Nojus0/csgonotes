@@ -1,9 +1,7 @@
 import { play } from "@Common/Audio/Preload"
-import createAudioSource from "@Common/Audio/createAudioSource"
+import { StaticAudioSource, ThirdPartyAudioSource } from "@Common/Audio/AudioSources"
 
-const S = import.meta.env.VITE_NO_THIRD_PARTY_SERVER_MODE == "true"
-
-const AudioSource = createAudioSource(S)
+const AudioSource = import.meta.env.VITE_NO_THIRD_PARTY_SERVER_MODE == "true" ? StaticAudioSource : ThirdPartyAudioSource
 
 export const PrimitiveAudioList = Object.values(AudioSource.Button)
 
