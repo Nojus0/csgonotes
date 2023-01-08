@@ -36,5 +36,5 @@ export function getExportTime() {
 
   const hourPm = (hour % 12) || 12; // if hour is 0, use 12 instead
   const amPm = (hour < 12) ? "AM" : "PM";
-  return `${year} ${month} ${day} @ ${hourPm}'${minute} ${amPm}`
+  return `${year} ${month} ${day} @ ${hourPm}'${minute.toString().padStart(2, "0")} ${amPm}`
 }
