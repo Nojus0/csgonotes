@@ -5,7 +5,7 @@ import { useStateContext } from "@Common/Context/StateContext"
 import { TextButton } from "./Primitive/Button"
 import { TextArea } from "./Primitive/Input"
 
-const IdeaBrowser: Component = () => {
+const NotesBrowser: Component = () => {
   const ctx = useStateContext()
 
   return (
@@ -39,7 +39,7 @@ const IdeaBrowser: Component = () => {
   )
 }
 
-export default IdeaBrowser
+export default NotesBrowser
 
 const DeleteButton = styled(TextButton)({
   position: "absolute",

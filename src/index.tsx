@@ -2,7 +2,7 @@
 import { preloadAudio, preloadPrimitiveAudio } from "@Common/Audio/Preload"
 import { activeScene } from "@Common/Scene"
 import CopyBackdrop from "@Components/CopyBackdrop"
-import IdeaBrowser from "@Components/IdeaBrowser"
+import NotesBrowser from "@Components/NotesBrowser"
 import MediaPlayer from "@Components/MediaPlayer"
 import RestoreBackdrop from "@Components/RestoreBackdrop"
 import ShortcutManager from "@Components/ShortcutManager"
@@ -37,7 +37,7 @@ function Index() {
       <CompatabilityBackdrop/>
       <TopBar />
       <MediaPlayer />
-      <IdeaBrowser />
+      <NotesBrowser />
       <ServiceWorker />
     </Container>
   )
