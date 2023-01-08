@@ -16,7 +16,9 @@ const TopBarSecondStage = () => {
   async function onLoadNotesClicked() {
     buttonSounds.onClick()
     try {
-      return await ctx.loadNotes()
+      const notes = await ctx.loadNotes()
+      buttonSounds.onClick()
+      return notes
     } catch (err) {
       playErrorSound()
     }

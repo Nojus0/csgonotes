@@ -109,5 +109,5 @@ export function decodeSerializedKeypairBuffer(
 export function getKeypairName() {
   const a = crypto.getRandomValues(new Uint8Array(2))
   const id = bs58.encode(a)
-  return `${getExportTime()} Keys [${id}].bin`
+  return `${getExportTime()} Keys [${id}].json`
 }

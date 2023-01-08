@@ -16,7 +16,9 @@ const TopBarFirstStage = () => {
   async function onLoadKeypairClicked() {
     buttonSounds.onClick()
     try {
-      return await ctx.loadKeyPair()
+      const keypair = await ctx.loadKeyPair()
+      buttonSounds.onClick()
+      return keypair
     } catch (err) {
       playErrorSound()
     }
