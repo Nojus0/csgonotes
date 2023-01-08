@@ -21,3 +21,20 @@ export type TransitionProps = {
   appear?: boolean
   mode?: "inout" | "outin"
 }
+
+/**
+ * Example `2020 January 5 @ 7'40 PM` 
+ */
+export function getExportTime() {
+  const currentTime = new Date();
+
+  const year = currentTime.getFullYear();
+  const month = currentTime.toLocaleString("en-US", { month: "long" });
+  const day = currentTime.getDate();
+  const hour = currentTime.getHours();
+  const minute = currentTime.getMinutes();
+
+  const hourPm = (hour % 12) || 12; // if hour is 0, use 12 instead
+  const amPm = (hour < 12) ? "AM" : "PM";
+  return `${year} ${month} ${day} @ ${hourPm}'${minute} ${amPm}`
+}

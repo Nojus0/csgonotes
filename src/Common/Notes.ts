@@ -1,8 +1,8 @@
 import { decryptJsonObject, encryptJsonObject } from "@Common/Crypto"
-import base58 from "bs58"
 import { DEBUG_ALL_LOADED } from "@Common/Debug"
 import { KeyPair } from "@Common/KeyPair"
-import { ILoaded } from "@Common/Utils"
+import { getExportTime, ILoaded } from "@Common/Utils"
+import base58 from "bs58"
 
 export interface Notes {
   ideas: string[]
@@ -47,8 +47,8 @@ export function defaultNotesStore(): NotesFileStore {
 }
 
 export function getNotesName() {
-  const date = new Date()
-  const a = crypto.getRandomValues(new Uint8Array(4))
+  const a = crypto.getRandomValues(new Uint8Array(2))
   const id = base58.encode(a)
-  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-Notes-${id}.bin`
+
+  return `${getExportTime()} Notes [${id}].bin`
 }

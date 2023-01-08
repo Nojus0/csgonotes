@@ -1,6 +1,6 @@
 import { DEBUG_ALL_LOADED } from "@Common/Debug"
 import { endings, mime, writeFile } from "@Common/Filesystem"
-import { ILoaded } from "@Common/Utils"
+import { getExportTime, ILoaded } from "@Common/Utils"
 import bs58 from "bs58"
 
 export const AES_IV_BYTES = 32
@@ -107,9 +107,7 @@ export function decodeSerializedKeypairBuffer(
 }
 
 export function getKeypairName() {
-  const a = crypto.getRandomValues(new Uint8Array(4))
-
+  const a = crypto.getRandomValues(new Uint8Array(2))
   const id = bs58.encode(a)
-  const date = new Date()
-  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}-Key-${id}.json`
+  return `${getExportTime()} Keys [${id}].bin`
 }
