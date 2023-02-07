@@ -2,7 +2,7 @@ import { del, get } from "idb-keyval"
 import { batch, Component, onMount } from "solid-js"
 import Backdrop, { Description } from "./Backdrop"
 import { useStateContext } from "@Common/Context/StateContext"
-import { InspectUri } from "./CopyBackdrop"
+import { isHashSerialized, parseLocationHash } from "./CopyBackdrop"
 import { TextButton } from "./Primitive/Button"
 import { buttonSounds } from "@Common/Audio/AudioSource"
 
@@ -21,8 +21,10 @@ const RestoreBackdrop: Component = p => {
       del("notes")
     }
 
-    const { IsSerializedLink } = InspectUri()
-    if (keypairHandle && notesHandle && !IsSerializedLink) {
+    const values = isHashSerialized()
+
+    // dont show restore if serialized url
+    if (keypairHandle && notesHandle && !values) {
       ctx.setRestore(true)
     }
   })

@@ -19,20 +19,40 @@ import { TextButton } from "./Primitive/Button"
 import { buttonSounds } from "@Common/Audio/AudioSource"
 import { decryptNotes, encryptNotes } from "@Common/Notes"
 
-export function InspectUri() {
-  const url = new URL(location.href)
-  const params = url.searchParams
 
-  const key = params.get("key")
-  const iv = params.get("iv")
-  const notes = params.get("notes") || params.get("list")
+export function parseLocationHash(): Map<string, string> {
+  let urlWithoutHash = location.hash.substring(1);
+  const dirtyExpressions = urlWithoutHash.split("|")
+  const expressions = dirtyExpressions.filter(item => item != "")
 
-  return {
-    key,
-    iv,
-    notes,
-    IsSerializedLink: key && iv && notes,
+  var arrayKeyVals = expressions.map((stringExpression) => stringExpression && stringExpression.split("="))
+
+  const keyVals = new Map<string, string>([])
+
+  arrayKeyVals.forEach(item => {
+
+    if (item.length < 2) return;
+
+    keyVals.set(item[0], item[1])
+  })
+
+  return keyVals
+}
+
+export function isHashSerialized() {
+  const values = parseLocationHash()
+
+  if (values.size < 3) return
+
+  const key = values.get("key")
+  const iv = values.get("iv")
+  const notes = values.get("notes")
+
+  if (!key || !iv || !notes) {
+    return null
   }
+
+  return { key, iv, notes }
 }
 
 const CopyBackdrop: Component = () => {
@@ -62,13 +82,15 @@ const CopyBackdrop: Component = () => {
   })
 
   onMount(async () => {
-    const { iv, key, notes, IsSerializedLink } = InspectUri()
-    if (!IsSerializedLink) return
+    const values = isHashSerialized()
+
+    if(!values) return
+
 
     const keypair: DetailedKeypair = {
       key: await crypto.subtle.importKey(
         "raw",
-        base58.decode(key),
+        base58.decode(values.key),
         {
           name: "AES-GCM",
           hash: "SHA-512",
@@ -77,11 +99,11 @@ const CopyBackdrop: Component = () => {
         true,
         ["encrypt", "decrypt"]
       ),
-      iv: base58.decode(iv),
+      iv: base58.decode(values.iv),
       version: VERSION,
     }
 
-    const listStore = await decryptNotes(keypair, base58.decode(notes))
+    const listStore = await decryptNotes(keypair, base58.decode(values.notes))
 
     // * VERY IMPORTANT *
     batch(() => {
@@ -93,14 +115,10 @@ const CopyBackdrop: Component = () => {
 
   async function copyToClipboard() {
     const url = new URL(location.href)
-    const p = url.searchParams
+    
+    const notes = base58.encode(new Uint8Array(await encryptNotes(ctx.keypair, ctx.notes)))
     const s = await serializeKeyPair(ctx.keypair)
-    p.set("key", s.key)
-    p.set("iv", s.iv)
-    p.set(
-      "notes",
-      base58.encode(new Uint8Array(await encryptNotes(ctx.keypair, ctx.notes)))
-    )
+    url.hash = `#|key=${s.key}|iv=${s.iv}|notes=${notes}|`
 
     await navigator.clipboard.writeText(url.href)
   }

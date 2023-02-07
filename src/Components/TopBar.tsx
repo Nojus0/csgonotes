@@ -1,17 +1,18 @@
 import { Component, Show } from "solid-js"
 import { styled } from "solid-styled-components"
 import { useStateContext } from "@Common/Context/StateContext"
-import { InspectUri } from "./CopyBackdrop"
 import TopBarFirstStage from "@Components/TopBarFirstStage"
 import TopBarSecondStage from "@Components/TopBarSecondStage"
 import TopBarLoadedActions from "@Components/TopBarLoadedActions"
+import { parseLocationHash } from "./CopyBackdrop"
 
 const TopBar: Component = () => {
   const ctx = useStateContext()
 
-  const { IsSerializedLink } = InspectUri()
+  const values = parseLocationHash()
 
-  if (IsSerializedLink) {
+  // Avoid flicker because parsing is done onMount and async
+  if (values != null) {
     ctx.setShowTopbar(false)
   }
 
