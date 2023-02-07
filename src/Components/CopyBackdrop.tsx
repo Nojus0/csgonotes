@@ -42,7 +42,6 @@ export function parseLocationHash(): Map<string, string> {
 // Improve this function and the code that calls it 3 calls same result same computation
 export function isHashSerialized() {
   const values = parseLocationHash()
-  console.log("call")
   if (values.size < 3) return
 
   const key = values.get("key")
@@ -83,40 +82,49 @@ const CopyBackdrop: Component = () => {
   })
 
   onMount(async () => {
-    const values = isHashSerialized()
+    cond: try {
+      const values = isHashSerialized()
+      if (!values) break cond;
 
-    if(!values) return ctx.setShowTopbar(true)
+      const keypair: DetailedKeypair = {
+        key: await crypto.subtle.importKey(
+          "raw",
+          base58.decode(values.key),
+          {
+            name: "AES-GCM",
+            hash: "SHA-512",
+            length: AES_KEY_BITS,
+          },
+          true,
+          ["encrypt", "decrypt"]
+        )
+        ,
+        iv: base58.decode(values.iv),
+        version: VERSION,
+      }
 
+      const listStore = await decryptNotes(keypair, base58.decode(values.notes))
 
-    const keypair: DetailedKeypair = {
-      key: await crypto.subtle.importKey(
-        "raw",
-        base58.decode(values.key),
-        {
-          name: "AES-GCM",
-          hash: "SHA-512",
-          length: AES_KEY_BITS,
-        },
-        true,
-        ["encrypt", "decrypt"]
-      ),
-      iv: base58.decode(values.iv),
-      version: VERSION,
+      // * VERY IMPORTANT *
+      batch(() => {
+        ctx.setShowTopbar(true)
+        ctx.setKeyPair({ ...keypair, handle: null, loaded: true })
+        ctx.setNotes({ ...listStore, handle: null, loaded: true })
+      })
+
+    }
+    catch (err) {
+      console.log("Failed to decode the data in the URL")
+    }
+    finally {
+      ctx.setShowTopbar(true)
     }
 
-    const listStore = await decryptNotes(keypair, base58.decode(values.notes))
-
-    // * VERY IMPORTANT *
-    batch(() => {
-      ctx.setShowTopbar(true)
-      ctx.setKeyPair({ ...keypair, handle: null, loaded: true })
-      ctx.setNotes({ ...listStore, handle: null, loaded: true })
-    })
   })
 
   async function copyToClipboard() {
     const url = new URL(location.href)
-    
+
     const notes = base58.encode(new Uint8Array(await encryptNotes(ctx.keypair, ctx.notes)))
     const s = await serializeKeyPair(ctx.keypair)
     url.hash = `#|key=${s.key}|iv=${s.iv}|notes=${notes}|`
