@@ -85,7 +85,7 @@ const CopyBackdrop: Component = () => {
   onMount(async () => {
     const values = isHashSerialized()
 
-    if(!values) return
+    if(!values) return ctx.setShowTopbar(true)
 
 
     const keypair: DetailedKeypair = {
