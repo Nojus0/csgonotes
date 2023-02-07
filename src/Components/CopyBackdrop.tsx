@@ -115,6 +115,7 @@ const CopyBackdrop: Component = () => {
     }
     catch (err) {
       console.log("Failed to decode the data in the URL")
+      location.hash = "#invalid"
     }
     finally {
       ctx.setShowTopbar(true)
