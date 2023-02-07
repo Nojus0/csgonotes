@@ -4,12 +4,12 @@ import { useStateContext } from "@Common/Context/StateContext"
 import TopBarFirstStage from "@Components/TopBarFirstStage"
 import TopBarSecondStage from "@Components/TopBarSecondStage"
 import TopBarLoadedActions from "@Components/TopBarLoadedActions"
-import { parseLocationHash } from "./CopyBackdrop"
+import { isHashSerialized } from "./CopyBackdrop"
 
 const TopBar: Component = () => {
   const ctx = useStateContext()
 
-  const values = parseLocationHash()
+  const values = isHashSerialized()
 
   // Avoid flicker because parsing is done onMount and async
   if (values != null) {
