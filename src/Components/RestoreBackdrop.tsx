@@ -2,7 +2,7 @@ import { del, get } from "idb-keyval"
 import { batch, Component, onMount } from "solid-js"
 import Backdrop, { Description } from "./Backdrop"
 import { useStateContext } from "@Common/Context/StateContext"
-import { isHashSerialized, parseLocationHash } from "./CopyBackdrop"
+import { isHashSerialized } from "./CopyBackdrop"
 import { TextButton } from "./Primitive/Button"
 import { buttonSounds } from "@Common/Audio/AudioSource"
 

@@ -39,9 +39,10 @@ export function parseLocationHash(): Map<string, string> {
   return keyVals
 }
 
+// Improve this function and the code that calls it 3 calls same result same computation
 export function isHashSerialized() {
   const values = parseLocationHash()
-
+  console.log("call")
   if (values.size < 3) return
 
   const key = values.get("key")

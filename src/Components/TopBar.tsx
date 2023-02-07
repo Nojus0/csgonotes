@@ -9,13 +9,8 @@ import { isHashSerialized } from "./CopyBackdrop"
 const TopBar: Component = () => {
   const ctx = useStateContext()
 
-  const values = isHashSerialized()
-
   // Avoid flicker because parsing is done onMount and async
-  if (values != null) {
-    ctx.setShowTopbar(false)
-  }
-
+  
   return (
     <Show when={ctx.showTopbar}>
       <TopBarWrapper>

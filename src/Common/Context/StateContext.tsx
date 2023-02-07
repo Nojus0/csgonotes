@@ -26,6 +26,7 @@ import {
   getNotesName,
   NotesFileStore,
 } from "@Common/Notes"
+import { isHashSerialized } from "@Components/CopyBackdrop"
 
 export const StateContext =
   createContext<ReturnType<typeof createDefaultStore>>()
@@ -38,7 +39,7 @@ function createDefaultStore() {
     showRestore: false,
     showCompatibility: false,
     showVideo: false,
-    showTopbar: true,
+    showTopbar: isHashSerialized() == null,
     showCopyClipboard: false,
     mute() {
       s("muted", true)
