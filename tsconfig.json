@@ -13,7 +13,9 @@
     "baseUrl": "src",
     "paths": {
       "@Common/*": ["Common/*"],
-      "@Components/*": ["Components/*"]
+      "@Components/*": ["Components/*"],
+      "@Assets/*": ["Assets/*"],
+      "@Styles/*": ["Styles/*"]
     },
     "types": ["vite/client", "@types/wicg-file-system-access"],
     "noEmit": true,

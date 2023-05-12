@@ -1,11 +1,12 @@
 import { defineConfig, splitVendorChunkPlugin } from "vite"
 import solidPlugin from "vite-plugin-solid"
-import pathsPlugin from "vite-tsconfig-paths"
+import viteTsconfigPaths from "vite-tsconfig-paths"
 import { serviceWorker } from "./src/lib/vite-service-worker"
+import path from "path"
 
 export default defineConfig({
   plugins: [
-    pathsPlugin(),
+    viteTsconfigPaths(),
     solidPlugin(),
     splitVendorChunkPlugin(),
     serviceWorker({
@@ -39,5 +40,10 @@ export default defineConfig({
   ],
   build: {
     target: "esnext",
+  },
+  resolve: {
+    alias: {
+      "@Assets": path.join(__dirname, "./src/Assets"),
+    },
   },
 })

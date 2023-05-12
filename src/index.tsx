@@ -1,4 +1,5 @@
 /* @refresh reload */
+import "@Styles/index.css"
 import { preloadAudio, preloadPrimitiveAudio } from "@Common/Audio/Preload"
 import { activeScene } from "@Common/Scene"
 import CopyBackdrop from "@Components/CopyBackdrop"
@@ -34,7 +35,7 @@ function Index() {
       <ShortcutManager />
       <CopyBackdrop />
       <RestoreBackdrop />
-      <CompatabilityBackdrop/>
+      <CompatabilityBackdrop />
       <TopBar />
       <MediaPlayer />
       <NotesBrowser />

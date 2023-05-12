@@ -1,5 +1,5 @@
-import { StaticVideoSource, ThirdPartyVideoSource } from "@Common/VideoSources"
+import { StaticVideoSource } from "@Common/VideoSources"
 
-const VideoSource = import.meta.env.VITE_NO_THIRD_PARTY_SERVER_MODE == "true" ? StaticVideoSource : ThirdPartyVideoSource
+const VideoSource = StaticVideoSource
 
 export default VideoSource
