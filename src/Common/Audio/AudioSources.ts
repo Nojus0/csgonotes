@@ -11,9 +11,9 @@ import Overpass from "@Assets/audio/bg_overpass_01.ogg"
 import Phoenix from "@Assets/audio/bg_phoenixfacility_01.ogg"
 import Swamp from "@Assets/audio/bg_swamp_01.ogg"
 import Vertigo from "@Assets/audio/bg_vertigo_01.ogg"
-import ButtonClick from "@Assets/audio/generic_press_01.wav"
-import ItemTileRollover from "@Assets/audio/itemtile_rollover_09.wav"
-import MainMenuPressQuit from "@Assets/audio/mainmenu_press_quit_02.wav"
+import ButtonClick from "@Assets/audio/generic_press_01.mp3"
+import ItemTileRollover from "@Assets/audio/itemtile_rollover_09.mp3"
+import MainMenuPressQuit from "@Assets/audio/mainmenu_press_quit_02.mp3"
 
 export interface AudioSource {
   Button: {

@@ -48,9 +48,10 @@ export default defineConfig({
       minify: true,
     }),
   ],
+  assetsInclude: ["**.woff2"],
   build: {
     target: "esnext",
-    assetsInlineLimit: 4096 * 6,
+    assetsInlineLimit: 15150,
     cssCodeSplit: false,
   },
   resolve: {
