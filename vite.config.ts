@@ -44,13 +44,13 @@ export default defineConfig({
       inlinePattern: ["assets/*.css", "assets/*.js"],
       useRecommendedBuildConfig: false,
     }),
-    // createHtmlPlugin({
-    //   minify: true,
-    // }),
+    createHtmlPlugin({
+      minify: true,
+    }),
   ],
   build: {
     target: "esnext",
-    assetsInlineLimit: 1000000,
+    assetsInlineLimit: 4096 * 6,
     cssCodeSplit: false,
   },
   resolve: {
