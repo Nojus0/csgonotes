@@ -3,6 +3,7 @@ import { styled } from "solid-styled-components"
 import { activeScene } from "@Common/Scene"
 import { useStateContext } from "@Common/Context/StateContext"
 import { userInteracted } from "@Common/Audio/ChromeFix"
+import styles from "./MediaPlayer.module.css"
 
 const MediaPlayer: Component = () => {
   const ctx = useStateContext()
@@ -18,7 +19,8 @@ const MediaPlayer: Component = () => {
   return (
     <>
       <Show when={ctx.showVideo}>
-        <Video
+        <video
+          class={styles.video}
           preload="auto"
           ref={refCapture}
           loop
@@ -27,7 +29,7 @@ const MediaPlayer: Component = () => {
           draggable={false}
         >
           <source type="video/webm" src={activeScene().video} />
-        </Video>
+        </video>
       </Show>
       <Show when={userInteracted() && !ctx.muted}>
         <audio ref={refCapture} loop autoplay>
@@ -38,15 +40,5 @@ const MediaPlayer: Component = () => {
   )
 }
 
-export default MediaPlayer
+export default MediaPlayer;
 
-const Video = styled.video({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  zIndex: 0,
-  objectFit: "cover",
-  userSelect: "none",
-  height: "100%",
-  width: "100%",
-})

@@ -1,0 +1,16 @@
+.topbarWrapper {
+    background: rgba(82, 82, 82, 0.5);
+    backdrop-filter: blur(40px);
+    display: flex;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    align-items: center;
+    padding: .45rem 2rem;
+}
+
+@media (max-width: 30rem) {
+    .topbarWrapper {
+        padding: .45rem .5rem;
+    }
+}

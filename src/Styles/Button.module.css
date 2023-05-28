@@ -1,5 +1,7 @@
 .greenButton {
     background-color: #4caf50;
+    margin: .5rem;
+    padding: .65rem 1.15rem;
     color: white;
     border: none;
     font-weight: 500;
@@ -18,7 +20,8 @@
 
 
 .textButton {
-
+    margin: .5rem;
+    padding: .75rem 1.15rem;
     border: none;
     user-select: none;
     font-size: 1rem;

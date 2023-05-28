@@ -15,23 +15,24 @@ import {
 } from "@Common/KeyPair"
 import Backdrop, { Description } from "./Backdrop"
 import { useStateContext } from "@Common/Context/StateContext"
-import { TextButton } from "./Primitive/Button"
+import styles from "@Styles/Button.module.css"
 import { buttonSounds } from "@Common/Audio/AudioSource"
 import { decryptNotes, encryptNotes } from "@Common/Notes"
-
+import TextButton from "@Components/Primitive/TextButton"
 
 export function parseLocationHash(): Map<string, string> {
-  let urlWithoutHash = location.hash.substring(1);
+  let urlWithoutHash = location.hash.substring(1)
   const dirtyExpressions = urlWithoutHash.split("|")
   const expressions = dirtyExpressions.filter(item => item != "")
 
-  var arrayKeyVals = expressions.map((stringExpression) => stringExpression && stringExpression.split("="))
+  var arrayKeyVals = expressions.map(
+    stringExpression => stringExpression && stringExpression.split("=")
+  )
 
   const keyVals = new Map<string, string>([])
 
   arrayKeyVals.forEach(item => {
-
-    if (item.length < 2) return;
+    if (item.length < 2) return
 
     keyVals.set(item[0], item[1])
   })
@@ -84,7 +85,7 @@ const CopyBackdrop: Component = () => {
   onMount(async () => {
     cond: try {
       const values = isHashSerialized()
-      if (!values) break cond;
+      if (!values) break cond
 
       const keypair: DetailedKeypair = {
         key: await crypto.subtle.importKey(
@@ -97,8 +98,7 @@ const CopyBackdrop: Component = () => {
           },
           true,
           ["encrypt", "decrypt"]
-        )
-        ,
+        ),
         iv: base58.decode(values.iv),
         version: VERSION,
       }
@@ -111,22 +111,20 @@ const CopyBackdrop: Component = () => {
         ctx.setKeyPair({ ...keypair, handle: null, loaded: true })
         ctx.setNotes({ ...listStore, handle: null, loaded: true })
       })
-
-    }
-    catch (err) {
+    } catch (err) {
       console.log("Failed to decode the data in the URL")
       location.hash = "#invalid"
-    }
-    finally {
+    } finally {
       ctx.setShowTopbar(true)
     }
-
   })
 
   async function copyToClipboard() {
     const url = new URL(location.href)
 
-    const notes = base58.encode(new Uint8Array(await encryptNotes(ctx.keypair, ctx.notes)))
+    const notes = base58.encode(
+      new Uint8Array(await encryptNotes(ctx.keypair, ctx.notes))
+    )
     const s = await serializeKeyPair(ctx.keypair)
     url.hash = `#|key=${s.key}|iv=${s.iv}|notes=${notes}|`
 
@@ -150,14 +148,14 @@ const CopyBackdrop: Component = () => {
       onBackgroundClick={() => ctx.setCopyClipboard(false)}
       when={ctx.showCopyClipboard}
     >
-      <TextButton
+      <button
         onClick={() => {
           buttonSounds.onClick()
           ctx.setCopyClipboard(false)
         }}
       >
         Close
-      </TextButton>
+      </button>
       <TextButton
         onClick={() => {
           if (ctx.showCopyClipboard && text() == "Copy") {

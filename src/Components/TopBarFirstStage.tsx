@@ -1,9 +1,8 @@
 import { buttonSounds, playErrorSound } from "@Common/Audio/AudioSource"
 import { useStateContext } from "@Common/Context/StateContext"
-import { GreenButton } from "@Components/Primitive/Button"
 import { Show } from "solid-js"
 import KeyIcon from "./Svg/KeyIcon"
-import { styled } from "solid-styled-components"
+import GreenButton from "@Components/Primitive/GreenButton"
 
 const TopBarFirstStage = () => {
   const ctx = useStateContext()
@@ -28,21 +27,21 @@ const TopBarFirstStage = () => {
     <>
       <Show when={!ctx.keypair.loaded && !ctx.notes.loaded}>
         <GreenButton
-          padding=".65rem .85rem .65rem 1.15rem"
+          style={{ padding: ".65rem .85rem .65rem 1.15rem" }}
           onClick={onLoadKeypairClicked}
         >
           Load Key
-          <Key height="1.2rem" />
+          <KeyIcon style={{ margin: "0 0 0 .25rem" }} height="1.2rem" />
         </GreenButton>
       </Show>
 
       <Show when={!ctx.keypair.loaded}>
         <GreenButton
-          padding=".65rem .85rem .65rem 1.15rem"
+          style={{ padding: ".65rem .85rem .65rem 1.15rem" }}
           onClick={onNewKeyPairClicked}
         >
           New Key
-          <Key height="1.2rem" />
+          <KeyIcon style={{ margin: "0 0 0 .25rem" }} height="1.2rem" />
         </GreenButton>
       </Show>
     </>
@@ -50,7 +49,3 @@ const TopBarFirstStage = () => {
 }
 
 export default TopBarFirstStage
-
-const Key = styled(KeyIcon)({
-  margin: "0 0 0 .25rem",
-})

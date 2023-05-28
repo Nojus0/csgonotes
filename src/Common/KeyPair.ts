@@ -25,11 +25,10 @@ export interface DetailedKeypair extends KeyPair {
   version: number
 }
 
-export const defaultKeyPairStore = () =>
-  ({
-    loaded: DEBUG_ALL_LOADED,
-    version: VERSION,
-  } as KeyPairStore)
+export const defaultKeyPairStore: any = () => ({
+  loaded: DEBUG_ALL_LOADED,
+  version: VERSION,
+})
 
 export const createNewKeypair = async () => {
   const CRYPTO_KEY = await crypto.subtle.generateKey(

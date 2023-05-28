@@ -4,14 +4,6 @@ import { loadEnv, PluginOption } from "vite"
 import { OutputChunk } from "rollup"
 import { createHash } from "crypto"
 import { posix } from "path"
-import {
-  StaticAudioSource,
-  ThirdPartyAudioSource,
-} from "../Common/Audio/AudioSources"
-import {
-  StaticVideoSource,
-  ThirdPartyVideoSource,
-} from "../Common/VideoSources"
 import * as fs from "fs"
 
 const importPrefix = "service-worker:"

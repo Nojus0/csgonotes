@@ -1,0 +1,22 @@
+.icons {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.quitIcon {
+    margin: 0 .5rem;
+    cursor: pointer;
+}
+
+.inputResponsiveWrapper {
+    margin: .5rem;
+    max-width: 14rem;
+    display: flex;
+}
+
+.topbarRightWrapper {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+}

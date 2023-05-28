@@ -1,0 +1,53 @@
+.descriptionContainer {
+    margin: 1rem 1.5rem .1rem 1.5rem;
+}
+
+.buttonRow {
+    display: flex;
+    align-self: flex-end;
+    flex-wrap: wrap;
+    margin: .35rem;
+}
+
+.headerText {
+    letter-spacing: 0.095em;
+    color: #9A9A9A;
+    user-select: none;
+    font-weight: bold;
+    margin: .75rem 1.5rem;
+    font-size: 1.5rem;
+}
+.header {
+    display: flex;
+    width: 100%;
+    background: #252525;
+}
+
+.description {
+    line-height: 24px;
+    color: #CCCCCC;
+    font-weight: 400;
+    user-select: none;
+    margin: .25rem 0;
+}
+
+.popupWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+    background: #2C2C2C;
+    border: .1rem solid #444444;
+}
+
+.darken {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1020;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.6);
+}

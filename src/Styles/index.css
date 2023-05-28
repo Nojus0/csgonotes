@@ -30,7 +30,7 @@ a {
     font-style: normal;
     font-display: swap;
     font-weight: 500;
-    src: url(@Assets/font/stratum2medium.ttf) format("truetype");
+    src: url(@Assets/font/stratum2medium.woff2) format("woff2");
 }
 
 @font-face {
@@ -38,7 +38,7 @@ a {
     font-style: normal;
     font-display: swap;
     font-weight: 400;
-    src: url(@Assets/font/stratum2regular.ttf) format("truetype");
+    src: url(@Assets/font/stratum2regular.woff2) format("woff2");
 }
 
 input,
