@@ -23,7 +23,6 @@ export const registerServiceWorker = async (options: Options) => {
 
   const { serviceWorker } = navigator
   const registration = await serviceWorker.register(swURL)
-
   const needsRefresh = (reg: ServiceWorkerRegistration) => {
     const updateSw = () => {
       const { waiting } = reg

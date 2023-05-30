@@ -1,5 +1,4 @@
 /// <reference lib='WebWorker' />
-
 // IMPORTANT! This file cannot use any code also imported
 // in other parts of the app or bundling into single file will fail.
 declare const self: ServiceWorkerGlobalScope
@@ -40,16 +39,14 @@ self.addEventListener("fetch", event => {
   event.respondWith(respondToRequest())
 })
 
-/**
- * After Register
- */
 self.addEventListener("install", event => {
-  console.log("Installed Service Worker")
-  const addToCachePromise = caches
-    .open(VERSION)
-    .then(cache => cache.addAll(ASSETS))
+  console.log("Installing Service Worker...")
+  const createAddToCachePromise = () =>
+    caches.open(VERSION).then(cache => cache.addAll(ASSETS))
 
-  event.waitUntil(addToCachePromise)
+  const cachePromise = createAddToCachePromise()
+  cachePromise.then(() => console.log("Installed Service Worker!"))
+  event.waitUntil(cachePromise)
 })
 
 /**

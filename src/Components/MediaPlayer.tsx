@@ -1,5 +1,4 @@
 import { Component, createEffect, on, Show } from "solid-js"
-import { styled } from "solid-styled-components"
 import { activeScene } from "@Common/Scene"
 import { useStateContext } from "@Common/Context/StateContext"
 import { userInteracted } from "@Common/Audio/ChromeFix"
@@ -40,5 +39,4 @@ const MediaPlayer: Component = () => {
   )
 }
 
-export default MediaPlayer;
-
+export default MediaPlayer

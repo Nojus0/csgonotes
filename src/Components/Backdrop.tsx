@@ -58,8 +58,6 @@ const Backdrop: Component<IBackdrop> = p => {
   function onBackdropElementRefBeforeMount(ref: HTMLDivElement) {
     onMount(() => {
       createEffect(() => {
-        console.log(p.when)
-
         if (p.when) {
           setStayMounted(true)
           playFadeInAnimation(ref)
