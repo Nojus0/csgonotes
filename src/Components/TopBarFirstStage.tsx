@@ -3,7 +3,7 @@ import { useStateContext } from "@Common/Context/StateContext"
 import { Show } from "solid-js"
 import KeyIcon from "./Svg/KeyIcon"
 import GreenButton from "@Components/Primitive/GreenButton"
-
+import styles from "./TopBar.module.css"
 const TopBarFirstStage = () => {
   const ctx = useStateContext()
 
@@ -27,7 +27,7 @@ const TopBarFirstStage = () => {
     <>
       <Show when={!ctx.keypair.loaded && !ctx.notes.loaded}>
         <GreenButton
-          style={{ padding: ".65rem .85rem .65rem 1.15rem" }}
+          class={styles.topbarButtonPadding}
           onClick={onLoadKeypairClicked}
         >
           Load Key
@@ -37,7 +37,7 @@ const TopBarFirstStage = () => {
 
       <Show when={!ctx.keypair.loaded}>
         <GreenButton
-          style={{ padding: ".65rem .85rem .65rem 1.15rem" }}
+          class={styles.topbarButtonPadding}
           onClick={onNewKeyPairClicked}
         >
           New Key

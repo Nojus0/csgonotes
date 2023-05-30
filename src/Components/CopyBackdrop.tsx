@@ -148,19 +148,18 @@ const CopyBackdrop: Component = () => {
       onBackgroundClick={() => ctx.setCopyClipboard(false)}
       when={ctx.showCopyClipboard}
     >
-      <button
+      <TextButton
         onClick={() => {
           buttonSounds.onClick()
           ctx.setCopyClipboard(false)
         }}
       >
         Close
-      </button>
+      </TextButton>
       <TextButton
         onClick={() => {
           if (ctx.showCopyClipboard && text() == "Copy") {
-            copyToClipboard()
-            buttonSounds.onClick()
+            copyToClipboard().finally(() => buttonSounds.onClick())
           }
         }}
       >

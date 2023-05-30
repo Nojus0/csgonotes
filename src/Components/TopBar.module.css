@@ -14,3 +14,7 @@
         padding: .45rem .5rem;
     }
 }
+
+.topbarButtonPadding {
+    padding: .65rem .85rem .65rem 1.15rem;
+}
