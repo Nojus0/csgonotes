@@ -1,12 +1,16 @@
 import {
   Component,
+  createDeferred,
+  createEffect,
   createMemo,
+  createRenderEffect,
   createSignal,
   JSX,
   onCleanup,
+  onMount,
   Show,
 } from "solid-js"
-import { styled } from "solid-styled-components"
+import styles from "./Backdrop.module.css"
 
 export interface IBackdrop {
   when: boolean
@@ -19,118 +23,94 @@ export interface IBackdrop {
 
 export const BACKDROP_FADE_DURATION = 150
 
+// BETER FUNC ARCHITECTURE
 const Backdrop: Component<IBackdrop> = p => {
-  const [isShown, setShown] = createSignal(false)
-  const shouldShow = createMemo(() => isShown() || p.when)
-
-  function onShow(ref: HTMLDivElement) {
-    setShown(true)
-    ref.animate([{ opacity: 0 }, { opacity: 1 }], {
-      easing: "ease-in-out",
-      duration: BACKDROP_FADE_DURATION,
-    })
-  }
-
-  function onHide(ref: HTMLDivElement) {
-    ref
-      .animate([{ opacity: 1 }, { opacity: 0 }], {
-        duration: BACKDROP_FADE_DURATION,
-        easing: "ease-in-out",
-      })
-      .finished.then(e => setShown(false))
-  }
+  const [shouldStayMounted, setStayMounted] = createSignal(false)
 
   function onClick(e: MouseEvent) {
     e.target == e.currentTarget && p.onBackgroundClick()
   }
 
-  function onBackdropRef(ref: HTMLDivElement) {
-    if (p.when) onShow(ref)
-    else onHide(ref)
+  function getStyle() {
+    const style: JSX.CSSProperties = {}
+    p.width && (style.width = p.width)
+    return style
+  }
 
-    ref.addEventListener("click", onClick)
+  createEffect(() => {
+    // console.log(p.when, inTransition())
+  })
 
-    onCleanup(() => ref.removeEventListener("click", onClick))
+  function playFadeInAnimation(ref: HTMLDivElement) {
+    return ref.animate([{ opacity: 0 }, { opacity: 1 }], {
+      easing: "ease-in-out",
+      duration: BACKDROP_FADE_DURATION,
+    })
+  }
+
+  function playFadeOutAnimation(ref: HTMLDivElement) {
+    return ref.animate([{ opacity: 1 }, { opacity: 0 }], {
+      easing: "ease-in-out",
+      duration: BACKDROP_FADE_DURATION,
+    })
+  }
+
+  function onBackdropElementRefBeforeMount(ref: HTMLDivElement) {
+    onMount(() => {
+      createEffect(() => {
+        console.log(p.when)
+
+        if (p.when) {
+          setStayMounted(true)
+          playFadeInAnimation(ref)
+          return
+        }
+
+        setStayMounted(true)
+        playFadeOutAnimation(ref).finished.then(() => setStayMounted(false))
+      })
+    })
   }
 
   return (
-    <Show when={shouldShow()}>
-      <Darken ref={onBackdropRef}>
-        <PopupWrapper width={p.width}>
-          <Header>
-            <HeaderText>{p.title}</HeaderText>
-          </Header>
-          <DescriptionContainer>
-            <Description>{p.description}</Description>
-          </DescriptionContainer>
-          <ButtonRow>{p.children}</ButtonRow>
-        </PopupWrapper>
-      </Darken>
+    <Show when={p.when || shouldStayMounted()}>
+      <div
+        ref={onBackdropElementRefBeforeMount}
+        onClick={onClick}
+        class={styles.backdropDimBackground}
+      >
+        <div class={styles.popupWrapper} style={getStyle()}>
+          <div class={styles.header}>
+            <h2 class={styles.headerText}>{p.title}</h2>
+          </div>
+          <div class={styles.descriptionContainer}>{p.description}</div>
+          <div class={styles.buttonRow}>{p.children}</div>
+        </div>
+      </div>
     </Show>
+  )
+}
+// if (whenSignal()) {
+//   ref.animate([{ opacity: 0 }, { opacity: 1 }], {
+//     easing: "ease-in-out",
+//     duration: 500,
+//   })
+// } else {
+//   setTransition(true)
+//   ref
+//     .animate([{ opacity: 1 }, { opacity: 0 }], {
+//       easing: "ease-in-out",
+//       duration: 500,
+//     })
+//     .finished.then(() => setTransition(false))
+// }
+export function Description(p: JSX.HTMLAttributes<HTMLParagraphElement>) {
+  return (
+    <p
+      {...p}
+      class={styles.description + (p.class != null ? " " + p.class : "")}
+    ></p>
   )
 }
 
 export default Backdrop
-
-const DescriptionContainer = styled.div({
-  margin: "1rem 1.5rem .1rem 1.5rem",
-})
-
-const ButtonRow = styled.div({
-  display: "flex",
-  alignSelf: "flex-end",
-  flexWrap: "wrap",
-  margin: ".35rem",
-})
-
-const HeaderText = styled.h2({
-  letterSpacing: "0.095em",
-  color: "#9A9A9A",
-  userSelect: "none",
-  fontWeight: "bold",
-  margin: ".75rem 1.5rem",
-  fontSize: "1.5rem",
-})
-const Header = styled.div({
-  display: "flex",
-  width: "100%",
-  background: "#252525",
-})
-
-interface IDescription {
-  fontWeight?: string | number
-  margin?: string
-}
-export const Description = styled.p((p: IDescription) => ({
-  lineHeight: "24px",
-  color: "#CCCCCC",
-  fontWeight: p.fontWeight || 400,
-  userSelect: "none",
-  margin: p.margin || ".25rem 0",
-}))
-
-interface IPopupWrapper {
-  width?: string
-}
-
-const PopupWrapper = styled.div((p: IPopupWrapper) => ({
-  display: "flex",
-  flexDirection: "column",
-  width: p.width || "30rem",
-  background: "#2C2C2C",
-  border: ".1rem solid #444444",
-}))
-
-const Darken = styled.div({
-  height: "100vh",
-  width: "100vw",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  zIndex: 1020,
-  position: "absolute",
-  // transition: "500ms opacity ease-in-out",
-  top: 0,
-  left: 0,
-  background: "rgba(0, 0, 0, 0.6)",
-})

@@ -1,4 +1,5 @@
 /* @refresh reload */
+import "@Styles/index.css"
 import { preloadAudio, preloadPrimitiveAudio } from "@Common/Audio/Preload"
 import { activeScene } from "@Common/Scene"
 import CopyBackdrop from "@Components/CopyBackdrop"
@@ -9,13 +10,15 @@ import ShortcutManager from "@Components/ShortcutManager"
 import TopBar from "@Components/TopBar"
 import { onMount } from "solid-js"
 import { render } from "solid-js/web"
-import { styled } from "solid-styled-components"
 import {
   StateContextProvider,
   useStateContext,
 } from "@Common/Context/StateContext"
 import ServiceWorker from "@Components/ServiceWorker"
 import CompatabilityBackdrop from "@Components/CompatabilityBackdrop"
+import styles from "./index.module.css"
+import Backdrop, { Description } from "@Components/Backdrop"
+import TextButton from "@Components/Primitive/TextButton"
 
 function Index() {
   const ctx = useStateContext()
@@ -30,26 +33,18 @@ function Index() {
   })
 
   return (
-    <Container>
+    <div class={styles.container}>
       <ShortcutManager />
       <CopyBackdrop />
       <RestoreBackdrop />
-      <CompatabilityBackdrop/>
+      <CompatabilityBackdrop />
       <TopBar />
       <MediaPlayer />
       <NotesBrowser />
       <ServiceWorker />
-    </Container>
+    </div>
   )
 }
-
-const Container = styled.div({
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  position: "relative",
-  flexDirection: "column",
-})
 
 export const MOUNT_ELEMENT = document.getElementById("root") as HTMLElement
 

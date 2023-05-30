@@ -1,8 +1,8 @@
 import { registerServiceWorker } from "lib/registerSw"
 import { createSignal, onMount } from "solid-js"
 import Backdrop, { Description } from "@Components/Backdrop"
-import { TextButton } from "@Components/Primitive/Button"
 import { buttonSounds } from "@Common/Audio/AudioSource"
+import TextButton from "@Components/Primitive/TextButton"
 
 function ServiceWorker() {
   const [pwa, setPwa] = createSignal({

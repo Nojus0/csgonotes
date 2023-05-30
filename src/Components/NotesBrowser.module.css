@@ -1,0 +1,58 @@
+
+.deleteButton {
+    position: absolute;
+    bottom: 0;
+    font-weight: 400;
+    font-size: 1.15rem;
+    right: 0;
+}
+
+
+.browser {
+    display: flex;
+    overflow-y: auto;
+    position: relative;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    z-index: 10;
+    padding: 0 1.5rem;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+@media (max-width: 30rem) {
+    .browser {
+        padding: 0;
+    }
+}
+
+.browser::-webkit-scrollbar {
+    width: 14px;
+}
+
+.browser::-webkit-scrollbar-track {
+    background: rgba(82, 82, 82, 0.5);
+}
+
+.browser::-webkit-scrollbar-thumb {
+    border-radius: 5rem;
+    background: #2e2e2e;
+    background-clip: content-box;
+    border: 4px solid transparent;
+}
+
+.browser::-webkit-scrollbar-thumb:hover {
+    background: #2e2e2e;
+    background-clip: content-box;
+    border: 3px solid transparent;
+}
+
+
+.card {
+    background: rgb(82, 82, 82, 0.999);
+    min-width: calc(100% / 3);
+    padding: 1rem 1rem 2.9rem 1rem;
+    position: relative;
+    border-radius: .25rem;
+}

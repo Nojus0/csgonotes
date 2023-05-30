@@ -1,9 +1,9 @@
-import { del, get, set } from "idb-keyval"
-import { batch, Component, onMount } from "solid-js"
+import { get, set } from "idb-keyval"
+import { Component, createSignal, onMount } from "solid-js"
 import Backdrop, { Description } from "./Backdrop"
 import { useStateContext } from "@Common/Context/StateContext"
-import { TextButton } from "./Primitive/Button"
 import { buttonSounds } from "@Common/Audio/AudioSource"
+import TextButton from "@Components/Primitive/TextButton"
 
 const KEY = "dontShowAgain"
 
@@ -31,6 +31,11 @@ const CompatabilityBackdrop: Component = p => {
     ctx.setCompatability(false)
     buttonSounds.onClick()
   }
+
+  // const [a, sA] = createSignal(false)
+  // setInterval(() => {
+  //   sA(p => !p)
+  // }, 1000)
 
   return (
     <Backdrop
