@@ -11,6 +11,11 @@ export default defineConfig({
   plugins: [
     viteTsconfigPaths(),
     solidPlugin(),
+    viteMangleClassNames(),
+    viteSingleFile({
+      inlinePattern: ["assets/*.css", "assets/*.js"],
+      useRecommendedBuildConfig: false,
+    }),
     serviceWorker({
       manifest: {
         short_name: "Notes",
@@ -38,11 +43,6 @@ export default defineConfig({
         ],
         screenshots: [],
       },
-    }),
-    viteMangleClassNames(),
-    viteSingleFile({
-      inlinePattern: ["assets/*.css", "assets/*.js"],
-      useRecommendedBuildConfig: false,
     }),
     createHtmlPlugin({
       minify: true,
