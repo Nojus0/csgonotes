@@ -17,6 +17,7 @@
 .textarea {
     resize: none;
     height: 100%;
+    scrollbar-width: thin;
     max-width: 100%;
     width: 100%;
     background: transparent;

@@ -11,6 +11,8 @@
 .browser {
     display: flex;
     overflow-y: auto;
+    scrollbar-color: #2e2e2e rgba(82, 82, 82, 0.5);
+    scrollbar-width: thin;
     position: relative;
     flex-wrap: wrap;
     flex-grow: 1;

@@ -4,6 +4,7 @@ import {
   Component,
   createEffect,
   createSignal,
+  onCleanup,
   onMount,
   untrack,
 } from "solid-js"
@@ -82,7 +83,8 @@ const CopyBackdrop: Component = () => {
     }, 1000)
   })
 
-  onMount(async () => {
+  async function loadFromHash() {
+    console.log("caleld")
     cond: try {
       const values = isHashSerialized()
       if (!values) break cond
@@ -117,6 +119,14 @@ const CopyBackdrop: Component = () => {
     } finally {
       ctx.setShowTopbar(true)
     }
+  }
+
+  onMount(async () => {
+    await loadFromHash()
+
+    // This could be done better, might get stuck in a loop in a really obscure case.
+    window.addEventListener("hashchange", loadFromHash)
+    onCleanup(() => window.removeEventListener("hashchange", loadFromHash))
   })
 
   async function copyToClipboard() {

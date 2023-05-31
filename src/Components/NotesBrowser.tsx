@@ -1,6 +1,5 @@
 import { buttonSounds } from "@Common/Audio/AudioSource"
 import { Component, For, Show } from "solid-js"
-import { styled } from "solid-styled-components"
 import { useStateContext } from "@Common/Context/StateContext"
 import TextArea from "@Components/Primitive/TextArea"
 import TextButton from "@Components/Primitive/TextButton"
