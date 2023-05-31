@@ -7,7 +7,7 @@ A CS:GO Themed Notes Web App with *AES256* Encryption.
 
 ![NukeHome](https://raw.githubusercontent.com/Nojus0/csgonotes/main/images/NukeHome.png)
 
-[Website / Web App](https://csgonotes.netlify.app/)
+[Website / Web App](https://csgonotes.com)
 
 # User Interface
 You may already know from which game the user interface was imitated, I was trying to make the user interface look as similar to the CS:GO menu interface as possible.
