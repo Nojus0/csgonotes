@@ -12,11 +12,11 @@ export default defineConfig({
     viteTsconfigPaths(),
     solidPlugin(),
     viteMangleClassNames(),
-    viteSingleFile({
-      inlinePattern: ["assets/*.css", "assets/*.js"],
-      useRecommendedBuildConfig: false,
-      deleteInlinedFiles: true,
-    }),
+    // viteSingleFile({
+    //   inlinePattern: ["assets/*.css", "assets/*.js"],
+    //   useRecommendedBuildConfig: false,
+    //   deleteInlinedFiles: true,
+    // }),
     // serviceWorker({
     //   manifest: {
     //     short_name: "Notes",

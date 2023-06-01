@@ -84,7 +84,6 @@ const CopyBackdrop: Component = () => {
   })
 
   async function loadFromHash() {
-    console.log("caleld")
     cond: try {
       const values = isHashSerialized()
       if (!values) break cond
