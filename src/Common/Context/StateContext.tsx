@@ -71,7 +71,13 @@ function createDefaultStore() {
         console.log(`Successfully saved`)
       } else {
         console.log(`Notes handle not found.`)
-        await writeFile(cipher, mime.bin, endings.bin, getNotesName(), "notes")
+        await writeFile(
+          cipher,
+          mime.json,
+          endings.json,
+          getNotesName(),
+          "notes"
+        )
       }
     },
     async loadKeyPairNoIDB() {
@@ -123,8 +129,8 @@ function createDefaultStore() {
     },
     async loadNotesNoIDB() {
       const [cipherBuffer, handle] = await loadFile(
-        mime.bin,
-        endings.bin,
+        mime.json,
+        endings.json,
         "notes"
       )
       try {
@@ -174,8 +180,8 @@ function createDefaultStore() {
 
       const handle = await writeFile(
         enc,
-        mime.bin,
-        endings.bin,
+        mime.json,
+        endings.json,
         getNotesName(),
         "notes"
       )

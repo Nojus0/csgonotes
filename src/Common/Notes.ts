@@ -50,5 +50,5 @@ export function getNotesName() {
   const a = crypto.getRandomValues(new Uint8Array(2))
   const id = base58.encode(a)
 
-  return `${getExportTime()} Notes [${id}].bin`
+  return `${getExportTime()} Notes [${id}].json`
 }
