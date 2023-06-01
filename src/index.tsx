@@ -41,7 +41,7 @@ function Index() {
       <TopBar />
       <MediaPlayer />
       <NotesBrowser />
-      <ServiceWorker />
+      {/*<ServiceWorker />*/}
     </div>
   )
 }
