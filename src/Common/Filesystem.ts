@@ -76,6 +76,7 @@ export async function writeFile<T>(
     }
   } catch (err) {
     playErrorSound()
+    console.log(err)
     throw new Error("User cancelled")
   }
 }
