@@ -40,7 +40,7 @@ export async function loadFile(
     }
   } catch (err) {
     playErrorSound()
-    throw new Error("User cancelled")
+    throw new Error("Error Caught: " + err)
   }
 }
 
