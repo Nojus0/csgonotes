@@ -16,34 +16,34 @@ export default defineConfig({
       inlinePattern: ["assets/*.css", "assets/*.js"],
       useRecommendedBuildConfig: false,
     }),
-    serviceWorker({
-      manifest: {
-        short_name: "Notes",
-        name: "CS:GO Notes",
-        start_url: "/",
-        scope: "/",
-        theme_color: "#4caf50",
-        background_color: "#4caf50",
-        display: "fullscreen",
-        orientation: "portrait",
-        description: "A CS:GO Themed Notes Web App with AES256 Encryption.",
-        icons: [
-          {
-            src: "/static/icons/icon.svg",
-            type: "image/svg+xml",
-            sizes: "any",
-            purpose: "any",
-          },
-          {
-            src: "/static/icons/icon.png",
-            type: "image/png",
-            sizes: "128x128",
-            purpose: "any",
-          },
-        ],
-        screenshots: [],
-      },
-    }),
+    // serviceWorker({
+    //   manifest: {
+    //     short_name: "Notes",
+    //     name: "CS:GO Notes",
+    //     start_url: "/",
+    //     scope: "/",
+    //     theme_color: "#4caf50",
+    //     background_color: "#4caf50",
+    //     display: "fullscreen",
+    //     orientation: "portrait",
+    //     description: "A CS:GO Themed Notes Web App with AES256 Encryption.",
+    //     icons: [
+    //       {
+    //         src: "/static/icons/icon.svg",
+    //         type: "image/svg+xml",
+    //         sizes: "any",
+    //         purpose: "any",
+    //       },
+    //       {
+    //         src: "/static/icons/icon.png",
+    //         type: "image/png",
+    //         sizes: "128x128",
+    //         purpose: "any",
+    //       },
+    //     ],
+    //     screenshots: [],
+    //   },
+    // }),
     createHtmlPlugin({
       minify: true,
     }),
