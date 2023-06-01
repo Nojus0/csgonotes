@@ -38,9 +38,9 @@ export async function loadFile(
     } else {
       return [await openBlob(endings), null]
     }
-  } catch (err) {
+  } catch (err: any) {
     playErrorSound()
-    throw new Error("Error Caught: " + err)
+    throw new Error("Error Caught: " + err.toString())
   }
 }
 
