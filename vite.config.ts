@@ -15,6 +15,7 @@ export default defineConfig({
     viteSingleFile({
       inlinePattern: ["assets/*.css", "assets/*.js"],
       useRecommendedBuildConfig: false,
+      deleteInlinedFiles: true,
     }),
     // serviceWorker({
     //   manifest: {
@@ -44,9 +45,9 @@ export default defineConfig({
     //     screenshots: [],
     //   },
     // }),
-    createHtmlPlugin({
-      minify: true,
-    }),
+    // createHtmlPlugin({
+    //   minify: false,
+    // }),
   ],
   assetsInclude: ["**.woff2"],
   build: {
