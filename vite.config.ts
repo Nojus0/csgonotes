@@ -54,6 +54,7 @@ export default defineConfig({
     target: "esnext",
     assetsInlineLimit: 15150,
     cssCodeSplit: false,
+    sourcemap: true,
   },
   resolve: {
     alias: {
