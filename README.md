@@ -9,6 +9,9 @@ A CS:GO Themed Notes Web App with *AES256* Encryption.
 
 [Website / Web App](https://csgonotes.com)
 
+# Change Log
+`2023-06-01` Notes file extension changed to `.json` from `.bin` because of *Safe Browsing* in order to avoid `"AbortError: Blocked by Safe Browsing." when using the Filesystem Access API` on recently registered domains.
+
 # User Interface
 You may already know from which game the user interface was imitated, I was trying to make the user interface look as similar to the CS:GO menu interface as possible.
 
