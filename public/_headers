@@ -1,6 +1,8 @@
-/*
-    test: hello
-
 /assets/*.webm
-    video-asset: very
-    Cache-Control: public, max-age=604800, immutable
+    Cache-Control: public, max-age=2592000, immutable
+
+/assets/*.ogg
+    Cache-Control: public, max-age=2592000, immutable
+
+/assets/*.mp3
+    Cache-Control: public, max-age=2592000, immutable
