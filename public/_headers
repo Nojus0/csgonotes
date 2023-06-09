@@ -1,9 +1,10 @@
-/assets/**.webm
+/assets/*.webm
     Cache-Control: public, max-age=2592000, immutable
 
-/assets/**.ogg
+/assets/*.ogg
     Cache-Control: public, max-age=2592000, immutable
 
-/assets/**.mp3
+/assets/*.mp3
     Cache-Control: public, max-age=2592000, immutable
+
 
