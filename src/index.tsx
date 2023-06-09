@@ -14,11 +14,8 @@ import {
   StateContextProvider,
   useStateContext,
 } from "@Common/Context/StateContext"
-import ServiceWorker from "@Components/ServiceWorker"
 import CompatabilityBackdrop from "@Components/CompatabilityBackdrop"
 import styles from "./index.module.css"
-import Backdrop, { Description } from "@Components/Backdrop"
-import TextButton from "@Components/Primitive/TextButton"
 
 function Index() {
   const ctx = useStateContext()
@@ -41,7 +38,6 @@ function Index() {
       <TopBar />
       <MediaPlayer />
       <NotesBrowser />
-      {/*<ServiceWorker />*/}
     </div>
   )
 }
