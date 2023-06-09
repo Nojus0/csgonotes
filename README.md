@@ -10,6 +10,8 @@ A CS:GO Themed Notes Web App with *AES256* Encryption.
 [Website / Web App](https://csgonotes.com)
 
 # Change Log
+`2023-06-01` to `2023-06-09` If you are using Chrome and getting `ERR_FAILED` this is due to a corrupted service worker, to fix this hold _ctrl_ while clicking refresh or clear `Cookie and other site data` and `Cached images and files` in order to remove the service worker.
+
 `2023-06-09` Completely remove the service worker, too much hassle and obscure bugs, rely on http caching instead.
 
 `2023-06-01` Notes file extension changed to `.json` from `.bin` because of *Safe Browsing* in order to avoid `"AbortError: Blocked by Safe Browsing." when using the Filesystem Access API` on recently registered domains.
