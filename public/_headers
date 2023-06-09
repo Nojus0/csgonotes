@@ -1,8 +1,9 @@
-*.webm
-  cache-control: public, max-age=604800, immutable
+**.webm
+  x-set: true
+  Cache-Control: public, max-age=604800, immutable
 
-*.ogg
-  cache-control: public, max-age=604800, immutable
+**.ogg
+  Cache-Control: public, max-age=604800, immutable
 
-*.mp3
-  cache-control: public, max-age=604800, immutable
+**.mp3
+  Cache-Control: public, max-age=604800, immutable
