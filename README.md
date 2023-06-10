@@ -28,9 +28,6 @@ You now can create a notes file. This is where your encrypted notes are stored. 
 Now you can add a new note by pressing the *Add* button, and name the notes file by changing the text in the textbox near the *Add* button,
 after you add your notes save them by pressing the *Save* button.
 
-# Future Improvements
-- [X] Make the web app a PWA.
-
 # Shortcuts
 *M* Mute audio
 
