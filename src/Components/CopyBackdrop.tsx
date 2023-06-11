@@ -1,3 +1,4 @@
+/* @refresh reload */
 import base58 from "bs58"
 import {
   batch,
@@ -120,12 +121,16 @@ const CopyBackdrop: Component = () => {
     }
   }
 
+  function onHashChange() {
+    loadFromHash().then(buttonSounds.onClick)
+  }
+
   onMount(async () => {
     await loadFromHash()
 
     // This could be done better, might get stuck in a loop in a really obscure case.
-    window.addEventListener("hashchange", loadFromHash)
-    onCleanup(() => window.removeEventListener("hashchange", loadFromHash))
+    window.addEventListener("hashchange", onHashChange)
+    onCleanup(() => window.removeEventListener("hashchange", onHashChange))
   })
 
   async function copyToClipboard() {
