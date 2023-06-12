@@ -113,6 +113,7 @@ const CopyBackdrop: Component = () => {
         ctx.setKeyPair({ ...keypair, handle: null, loaded: true })
         ctx.setNotes({ ...listStore, handle: null, loaded: true })
       })
+      buttonSounds.onClick()
     } catch (err) {
       console.log("Failed to decode the data in the URL")
       location.hash = "#invalid"
@@ -121,16 +122,12 @@ const CopyBackdrop: Component = () => {
     }
   }
 
-  function onHashChange() {
-    loadFromHash().then(buttonSounds.onClick)
-  }
-
   onMount(async () => {
     await loadFromHash()
 
     // This could be done better, might get stuck in a loop in a really obscure case.
-    window.addEventListener("hashchange", onHashChange)
-    onCleanup(() => window.removeEventListener("hashchange", onHashChange))
+    window.addEventListener("hashchange", loadFromHash)
+    onCleanup(() => window.removeEventListener("hashchange", loadFromHash))
   })
 
   async function copyToClipboard() {

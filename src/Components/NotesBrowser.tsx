@@ -23,7 +23,6 @@ const NotesBrowser: Component = () => {
                 />
                 <TextButton
                   class={styles.deleteButton}
-                  style={{ padding: ".5rem 1rem" }}
                   onClick={() => {
                     ctx.deleteIdea(i())
                     buttonSounds.onClick()

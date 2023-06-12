@@ -3,6 +3,7 @@
     position: absolute;
     bottom: 0;
     /*font-weight: 400;*/
+    padding: .5rem 1rem;
     /*font-size: 1.15rem;*/
     right: 0;
 }
